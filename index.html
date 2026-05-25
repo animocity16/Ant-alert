@@ -40,7 +40,6 @@ body {
   max-width: 440px; margin: 0 auto;
 }
 
-/* Header */
 .header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
 .app-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
 .location-row { display: flex; align-items: center; gap: 5px; margin-top: 3px; cursor: pointer; }
@@ -54,11 +53,9 @@ body {
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; font-size: 16px; flex-shrink: 0;
   -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
-  user-select: none;
 }
 .icon-btn:active { opacity: 0.5; }
 
-/* Location permission screen */
 .location-screen {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 32px 24px;
@@ -84,7 +81,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Score card */
 .score-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 20px 16px 16px;
@@ -101,22 +97,80 @@ body {
 .verdict { font-size: 19px; font-weight: 600; }
 .time-window { font-size: 12px; color: var(--text-2); margin-top: 4px; }
 
-/* Alert banner */
 .alert-banner {
   border-radius: var(--radius-sm); padding: 13px 15px;
   margin-bottom: 12px; font-size: 14px; font-weight: 500;
   line-height: 1.45; display: none;
 }
-.alert-go { background: var(--green-light); color: var(--green-dark); border-left: 3px solid var(--green); }
+.alert-go  { background: var(--green-light); color: var(--green-dark); border-left: 3px solid var(--green); }
 .alert-mid { background: var(--amber-light); color: var(--amber-dark); border-left: 3px solid var(--amber); }
 
-/* Weather stats */
 .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 10px 8px; }
 .stat-label { font-size: 10px; color: var(--text-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
-.stat-val { font-size: 14px; font-weight: 600; margin-top: 2px; letter-spacing: -0.3px; }
+.stat-val { font-size: 14px; font-weight: 600; margin-top: 2px; }
 
-/* Notifications toggle */
+/* ── HUNTING SPOTS ─────────────────────────────────────── */
+.spots-section { display: none; margin-bottom: 12px; }
+.spots-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+}
+.spots-title { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
+.spots-sub { font-size: 11px; color: var(--text-3); }
+
+.spot-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 8px; text-decoration: none; color: inherit;
+  -webkit-tap-highlight-color: transparent; cursor: pointer;
+  transition: border-color 0.15s;
+}
+.spot-card:active { border-color: var(--green); }
+.spot-rank {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--green-light); color: var(--green-dark);
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.spot-rank.gold   { background: #FEF3C7; color: #92400E; }
+.spot-rank.silver { background: #F1F5F9; color: #475569; }
+.spot-rank.bronze { background: #FEF2F2; color: #991B1B; }
+.spot-info { flex: 1; min-width: 0; }
+.spot-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.spot-type { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.spot-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.spot-dist { font-size: 12px; font-weight: 600; color: var(--green); }
+.spot-walk { font-size: 11px; color: var(--text-3); }
+.spot-nav {
+  flex-shrink: 0; background: var(--green); color: white;
+  border: none; border-radius: var(--radius-xs);
+  padding: 8px 12px; font-size: 12px; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.spot-nav:active { opacity: 0.8; }
+.spot-tip {
+  font-size: 11px; color: var(--text-2); margin-top: 3px;
+  font-style: italic;
+}
+
+/* Minimap */
+.minimap-wrap {
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid var(--border); margin-bottom: 12px;
+  height: 160px; position: relative; display: none;
+}
+#minimap { width: 100%; height: 100%; border: none; }
+.minimap-overlay {
+  position: absolute; top: 8px; left: 8px;
+  background: white; border-radius: var(--radius-xs);
+  padding: 4px 8px; font-size: 11px; font-weight: 600; color: var(--green-dark);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* ── Notifications ─────────────────────────────────────── */
 .notif-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 14px 16px;
@@ -141,21 +195,19 @@ body {
 }
 .toggle.on::after { transform: translateX(19px); }
 
-/* Score factors */
 .section-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 7px; }
 .factor-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
 .factor-row {
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
 }
 .factor-row:last-child { border-bottom: none; }
 .factor-name { flex: 1; color: var(--text-2); font-size: 12px; }
 .factor-bar-bg { width: 70px; height: 4px; background: var(--bg); border-radius: 99px; }
-.factor-bar { height: 4px; border-radius: 99px; transition: width 0.7s ease; min-width: 0; }
+.factor-bar { height: 4px; border-radius: 99px; transition: width 0.7s ease; }
 .factor-val { font-size: 11px; color: var(--text-3); width: 42px; text-align: right; }
 .factor-pts { font-size: 13px; font-weight: 600; width: 24px; text-align: right; }
 
-/* Hourly forecast */
 .hourly-scroll { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .hourly-scroll::-webkit-scrollbar { display: none; }
 .hour-pill {
@@ -168,461 +220,500 @@ body {
 .hour-score { font-size: 15px; font-weight: 700; margin: 2px 0 1px; }
 .hour-rain  { font-size: 10px; color: var(--text-3); }
 
-/* GPS accuracy badge */
-.accuracy-pill {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 11px; padding: 3px 8px; border-radius: 99px;
-  background: var(--gray-light); color: var(--text-2);
-  margin-top: 4px;
-}
-
-/* Install hint */
 .install-hint {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-xs); padding: 11px 14px;
   font-size: 12px; color: var(--text-2); margin-bottom: 12px;
   line-height: 1.5; display: none;
 }
-
 .footer { text-align: center; font-size: 11px; color: var(--text-3); margin-top: 12px; line-height: 1.6; }
 
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin   { to { transform: rotate(360deg); } }
 .spinning { animation: spin 1s linear infinite; display: inline-block; }
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <div class="header">
   <div>
     <div class="app-name">🐜 Ant Alert</div>
-    <div class="location-row" onclick="requestLocation()" title="Tap to refresh location">
+    <div class="location-row" onclick="requestLocation()">
       <div class="location-dot searching" id="loc-dot"></div>
       <span class="location-name" id="loc-name">Locating you...</span>
     </div>
-    <div id="acc-pill" class="accuracy-pill" style="display:none">
-      📍 <span id="acc-text"></span>
-    </div>
   </div>
-  <div style="display:flex;gap:8px;align-items:center;">
-    <div class="icon-btn" id="refresh-btn" onclick="fullRefresh()" title="Refresh">↻</div>
-  </div>
+  <div class="icon-btn" id="refresh-btn" onclick="fullRefresh()">↻</div>
 </div>
 
-<!-- Location permission screen (shown when GPS not yet granted) -->
+<!-- GPS permission screen -->
 <div id="location-screen" class="location-screen" style="display:none">
   <div class="big-icon">📍</div>
   <h2>Allow location access</h2>
-  <p>Ant Alert uses your GPS to check real-time weather conditions exactly where you are — whether you're at East Coast Park, Bukit Timah, or anywhere in Singapore.</p>
+  <p>Ant Alert uses your GPS to check conditions exactly where you are and guide you to the best nearby hunting spots.</p>
   <button class="btn-primary" onclick="requestLocation()">📍 Use my location</button>
   <button class="btn-secondary" onclick="useDefault()">Use Novena (default)</button>
 </div>
 
-<!-- Alert banner -->
 <div id="alert-banner" class="alert-banner"></div>
 
-<!-- Score card -->
 <div id="main-content" style="display:none">
 
-<div class="score-card">
-  <div class="score-ring-wrap">
-    <svg width="140" height="140" viewBox="0 0 140 140" style="position:absolute;inset:0;">
-      <circle cx="70" cy="70" r="56" fill="none" stroke="var(--bg)" stroke-width="11"/>
-      <circle cx="70" cy="70" r="56" fill="none" id="score-ring"
-        stroke="#1D9E75" stroke-width="11"
-        stroke-dasharray="352" stroke-dashoffset="352"
-        stroke-linecap="round" transform="rotate(-90 70 70)"/>
-    </svg>
-    <div class="score-center">
-      <div class="score-big" id="score-num" style="color:var(--green)">–</div>
-      <div class="score-sub">/ 100</div>
+  <div class="score-card">
+    <div class="score-ring-wrap">
+      <svg width="140" height="140" viewBox="0 0 140 140" style="position:absolute;inset:0;">
+        <circle cx="70" cy="70" r="56" fill="none" stroke="var(--bg)" stroke-width="11"/>
+        <circle cx="70" cy="70" r="56" fill="none" id="score-ring"
+          stroke="#1D9E75" stroke-width="11"
+          stroke-dasharray="352" stroke-dashoffset="352"
+          stroke-linecap="round" transform="rotate(-90 70 70)"/>
+      </svg>
+      <div class="score-center">
+        <div class="score-big" id="score-num" style="color:var(--green)">–</div>
+        <div class="score-sub">/ 100</div>
+      </div>
     </div>
+    <div class="verdict" id="verdict-text">Checking conditions...</div>
+    <div class="time-window" id="time-window"></div>
   </div>
-  <div class="verdict" id="verdict-text">Checking conditions...</div>
-  <div class="time-window" id="time-window"></div>
-</div>
 
-<div class="grid4">
-  <div class="stat-card"><div class="stat-label">🌡 Temp</div><div class="stat-val" id="w-temp">–</div></div>
-  <div class="stat-card"><div class="stat-label">💧 Humid</div><div class="stat-val" id="w-humid">–</div></div>
-  <div class="stat-card"><div class="stat-label">💨 Wind</div><div class="stat-val" id="w-wind">–</div></div>
-  <div class="stat-card"><div class="stat-label">🌧 Rain</div><div class="stat-val" id="w-rain">–</div></div>
-</div>
-
-<div class="notif-card" onclick="toggleNotifications()">
-  <div class="notif-icon" id="notif-icon">🔔</div>
-  <div style="flex:1">
-    <div class="notif-title" id="notif-title">Enable alerts</div>
-    <div class="notif-sub" id="notif-sub">Notify when flight chance ≥ 60/100</div>
+  <div class="grid4">
+    <div class="stat-card"><div class="stat-label">🌡 Temp</div><div class="stat-val" id="w-temp">–</div></div>
+    <div class="stat-card"><div class="stat-label">💧 Humid</div><div class="stat-val" id="w-humid">–</div></div>
+    <div class="stat-card"><div class="stat-label">💨 Wind</div><div class="stat-val" id="w-wind">–</div></div>
+    <div class="stat-card"><div class="stat-label">🌧 Rain</div><div class="stat-val" id="w-rain">–</div></div>
   </div>
-  <div class="toggle" id="notif-toggle"></div>
+
+  <!-- HUNTING SPOTS — shown when score >= 35 -->
+  <div class="spots-section" id="spots-section">
+    <div class="spots-header">
+      <div>
+        <div class="spots-title">🗺 Nearest hunting spots</div>
+        <div class="spots-sub" id="spots-sub">Finding parks near you...</div>
+      </div>
+    </div>
+    <div id="minimap-wrap" class="minimap-wrap">
+      <iframe id="minimap" loading="lazy"></iframe>
+      <div class="minimap-overlay" id="minimap-label">Your area</div>
+    </div>
+    <div id="spot-list"></div>
+  </div>
+
+  <div class="notif-card" onclick="toggleNotifications()">
+    <div class="notif-icon" id="notif-icon">🔔</div>
+    <div style="flex:1">
+      <div class="notif-title" id="notif-title">Enable alerts</div>
+      <div class="notif-sub" id="notif-sub">Notify when flight chance ≥ 60/100</div>
+    </div>
+    <div class="toggle" id="notif-toggle"></div>
+  </div>
+
+  <div class="section-label">Score breakdown</div>
+  <div class="factor-list" id="factor-list"></div>
+
+  <div class="section-label">Next 12 hours</div>
+  <div class="hourly-scroll" id="hourly-row"></div>
+
+  <div id="install-hint" class="install-hint">
+    📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"
+  </div>
+
+  <div class="footer">
+    Auto-refreshes every 15 min · Weather: Open-Meteo · Spots: OpenStreetMap
+  </div>
+
 </div>
-
-<div class="section-label">Score breakdown</div>
-<div class="factor-list" id="factor-list"></div>
-
-<div class="section-label">Next 12 hours</div>
-<div class="hourly-scroll" id="hourly-row"></div>
-
-<div id="install-hint" class="install-hint">
-  📲 <strong>Add to Home Screen</strong> for background alerts: tap the Share button → "Add to Home Screen"
-</div>
-
-<div class="footer">
-  Auto-refreshes every 15 min when open<br>
-  GPS updates your location each time<br>
-  Weather: Open-Meteo · Location: Nominatim
-</div>
-
-</div><!-- end main-content -->
 
 <script>
 const CIRC = 2 * Math.PI * 56;
 const FALLBACK = { lat: 1.3200, lng: 103.8440, name: 'Novena, Singapore' };
-const SCORE_THRESHOLD = 60;
 
-let state = {
-  lat: null, lng: null, locationName: 'Getting location...',
-  accuracy: null, notifEnabled: false, gpsGranted: false
-};
+let state = { lat: null, lng: null, locationName: '', notifEnabled: false };
 let refreshTimer;
 
-// ── Score engine ──────────────────────────────────────────────────────────────
-function calcScore(temp, humidity, windspeed, precip, isEvening) {
-  const rainPts = precip >= 5 ? 35 : precip >= 1 ? 25 : precip >= 0.1 ? 12 : 0;
-  const humPts  = humidity >= 85 ? 25 : humidity >= 75 ? 18 : humidity >= 65 ? 8 : 0;
-  const tempPts = (temp >= 26 && temp <= 33) ? 20 : (temp >= 24 && temp < 26) ? 10 : 0;
-  const windPts = windspeed <= 8 ? 12 : windspeed <= 15 ? 6 : 0;
-  const evenPts = isEvening ? 8 : 0;
-  const score   = Math.min(100, rainPts + humPts + tempPts + windPts + evenPts);
+// ── Score ────────────────────────────────────────────────
+function calcScore(temp, humidity, wind, precip, eve) {
+  const r = precip >= 5 ? 35 : precip >= 1 ? 25 : precip >= 0.1 ? 12 : 0;
+  const h = humidity >= 85 ? 25 : humidity >= 75 ? 18 : humidity >= 65 ? 8 : 0;
+  const t = (temp >= 26 && temp <= 33) ? 20 : (temp >= 24) ? 10 : 0;
+  const w = wind <= 8 ? 12 : wind <= 15 ? 6 : 0;
+  const e = eve ? 8 : 0;
+  const score = Math.min(100, r+h+t+w+e);
   return { score, factors: [
-    { name: 'Recent rain',  pts: rainPts, max: 35, val: precip.toFixed(1) + 'mm' },
-    { name: 'Humidity',     pts: humPts,  max: 25, val: Math.round(humidity) + '%' },
-    { name: 'Temperature',  pts: tempPts, max: 20, val: temp.toFixed(1) + '°C' },
-    { name: 'Low wind',     pts: windPts, max: 12, val: windspeed.toFixed(0) + 'km/h' },
-    { name: 'Evening 6–11pm', pts: evenPts, max: 8, val: isEvening ? '✓ active' : 'not yet' },
+    { name: 'Recent rain',    pts: r, max: 35, val: precip.toFixed(1)+'mm' },
+    { name: 'Humidity',       pts: h, max: 25, val: Math.round(humidity)+'%' },
+    { name: 'Temperature',    pts: t, max: 20, val: temp.toFixed(1)+'°C' },
+    { name: 'Low wind',       pts: w, max: 12, val: wind.toFixed(0)+'km/h' },
+    { name: 'Evening 6–11pm', pts: e, max: 8,  val: eve ? '✓ active' : 'not yet' },
   ]};
 }
 
 function verdict(score) {
-  if (score >= 70) return { text: '🔥 Get outside NOW!',  color: '#1D9E75', ring: '#1D9E75' };
-  if (score >= 55) return { text: '✅ Good conditions',   color: '#1D9E75', ring: '#5DCAA5' };
-  if (score >= 35) return { text: '🟡 Possible flights',  color: '#BA7517', ring: '#EF9F27' };
-  return              { text: '⬜ Low chance',            color: '#888780', ring: '#B4B2A9' };
+  if (score >= 70) return { text: '🔥 Get outside NOW!', color: '#1D9E75', ring: '#1D9E75' };
+  if (score >= 55) return { text: '✅ Good conditions',  color: '#1D9E75', ring: '#5DCAA5' };
+  if (score >= 35) return { text: '🟡 Possible flights', color: '#BA7517', ring: '#EF9F27' };
+  return              { text: '⬜ Low chance',           color: '#888780', ring: '#B4B2A9' };
 }
 
-// ── GPS ───────────────────────────────────────────────────────────────────────
-function requestLocation() {
-  setLocDot('searching');
-  setLocName('Locating you...');
+// ── Haversine distance (km) ──────────────────────────────
+function distKm(lat1, lng1, lat2, lng2) {
+  const R = 6371, d2r = Math.PI/180;
+  const dLat = (lat2-lat1)*d2r, dLng = (lng2-lng1)*d2r;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
 
-  if (!navigator.geolocation) {
-    useDefault(); return;
+function fmtDist(km) {
+  return km < 1 ? Math.round(km*1000)+'m' : km.toFixed(1)+'km';
+}
+function walkMin(km) {
+  const m = Math.round(km / 0.08); // ~5km/h walking
+  return m < 2 ? '< 2 min walk' : m+'min walk';
+}
+
+// ── Spot tips by type ────────────────────────────────────
+const TIPS = {
+  park:        'Check lit signboards and walls near grass after rain',
+  nature:      'Forest edge paths — bring a headlamp, check post-rain',
+  garden:      'Ornamental plants attract alates — check wall lights',
+  pitch:       'Grassy field edges near any flood-lit areas',
+  playground:  'Check lit walls and sandy edges nearby',
+  recreation:  'Lit car park edges and grassy borders',
+  default:     'Scan lit walls and grassy areas after dark'
+};
+
+const ICONS = {
+  park: '🌳', nature: '🌿', garden: '🌸', pitch: '⚽',
+  playground: '🛝', recreation: '🏞', default: '📍'
+};
+
+function spotTip(tags) {
+  if (!tags) return TIPS.default;
+  const t = JSON.stringify(tags).toLowerCase();
+  if (t.includes('nature') || t.includes('reserve')) return TIPS.nature;
+  if (t.includes('garden'))     return TIPS.garden;
+  if (t.includes('pitch'))      return TIPS.pitch;
+  if (t.includes('playground')) return TIPS.playground;
+  if (t.includes('recreation')) return TIPS.recreation;
+  return TIPS.park;
+}
+
+function spotIcon(tags) {
+  if (!tags) return ICONS.default;
+  const t = JSON.stringify(tags).toLowerCase();
+  if (t.includes('nature') || t.includes('reserve')) return ICONS.nature;
+  if (t.includes('garden'))     return ICONS.garden;
+  if (t.includes('pitch'))      return ICONS.pitch;
+  if (t.includes('playground')) return ICONS.playground;
+  if (t.includes('recreation')) return ICONS.recreation;
+  return ICONS.park;
+}
+
+function spotType(tags) {
+  if (!tags) return 'Green area';
+  const t = JSON.stringify(tags).toLowerCase();
+  if (t.includes('nature_reserve')) return 'Nature reserve';
+  if (t.includes('nature'))         return 'Nature area';
+  if (t.includes('garden'))         return 'Garden';
+  if (t.includes('pitch'))          return 'Sports field';
+  if (t.includes('playground'))     return 'Playground';
+  if (t.includes('recreation'))     return 'Recreation area';
+  return 'Park';
+}
+
+// ── Fetch nearby parks from Overpass API ─────────────────
+async function fetchNearbySpots(lat, lng, score) {
+  const section = document.getElementById('spots-section');
+  const listEl  = document.getElementById('spot-list');
+  const subEl   = document.getElementById('spots-sub');
+
+  if (score < 35) { section.style.display = 'none'; return; }
+
+  section.style.display = 'block';
+  listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Finding spots near you...</div>';
+
+  const radius = 2500; // 2.5km radius
+  const query = `
+    [out:json][timeout:10];
+    (
+      node["leisure"="park"](around:${radius},${lat},${lng});
+      way["leisure"="park"](around:${radius},${lat},${lng});
+      way["leisure"="nature_reserve"](around:${radius},${lat},${lng});
+      way["leisure"="garden"](around:${radius},${lat},${lng});
+      way["leisure"="pitch"](around:${radius},${lat},${lng});
+      way["leisure"="recreation_ground"](around:${radius},${lat},${lng});
+    );
+    out center 20;
+  `;
+
+  try {
+    const res  = await fetch('https://overpass-api.de/api/interpreter', {
+      method: 'POST', body: 'data=' + encodeURIComponent(query)
+    });
+    const data = await res.json();
+
+    // Compute centre coords for each element
+    const spots = data.elements
+      .map(el => {
+        const slat = el.lat ?? el.center?.lat;
+        const slng = el.lon ?? el.center?.lon;
+        if (!slat || !slng) return null;
+        const km   = distKm(lat, lng, slat, slng);
+        const name = el.tags?.name || el.tags?.['name:en'] || 'Unnamed green area';
+        return { name, tags: el.tags, lat: slat, lng: slng, km };
+      })
+      .filter(s => s && s.km <= 2.5)
+      .sort((a, b) => a.km - b.km)
+      .slice(0, 5);
+
+    if (!spots.length) {
+      listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">No parks found within 2.5km — try a larger area.</div>';
+      subEl.textContent = 'No nearby spots found';
+      return;
+    }
+
+    const rankClass = ['gold','silver','bronze','',''];
+    subEl.textContent = `${spots.length} spots within 2.5km of you`;
+
+    listEl.innerHTML = spots.map((s, i) => {
+      const icon = spotIcon(s.tags);
+      const type = spotType(s.tags);
+      const tip  = spotTip(s.tags);
+      const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=walking`;
+      return `
+        <div class="spot-card" onclick="navigate('${mapsUrl}')">
+          <div class="spot-rank ${rankClass[i]}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+          <div class="spot-info">
+            <div class="spot-name">${icon} ${s.name}</div>
+            <div class="spot-type">${type}</div>
+            <div class="spot-meta">
+              <span class="spot-dist">${fmtDist(s.km)}</span>
+              <span class="spot-walk">· ${walkMin(s.km)}</span>
+            </div>
+            <div class="spot-tip">${tip}</div>
+          </div>
+          <button class="spot-nav" onclick="event.stopPropagation();navigate('${mapsUrl}')">
+            🧭 Go
+          </button>
+        </div>`;
+    }).join('');
+
+    // Show minimap centred on user
+    showMinimap(lat, lng, spots[0]);
+
+  } catch(e) {
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Couldn\'t load nearby spots — check connection.</div>';
   }
+}
 
+function navigate(url) {
+  window.open(url, '_blank');
+}
+
+function showMinimap(lat, lng, nearest) {
+  const wrap  = document.getElementById('minimap-wrap');
+  const frame = document.getElementById('minimap');
+  const label = document.getElementById('minimap-label');
+  // OpenStreetMap embed centred on user, zoom 14
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
+  frame.src = src;
+  wrap.style.display = 'block';
+  label.textContent  = nearest ? `Nearest: ${nearest.name} (${fmtDist(nearest.km)})` : 'Your area';
+}
+
+// ── GPS ──────────────────────────────────────────────────
+function requestLocation() {
+  setDot('searching'); setName('Locating you...');
+  if (!navigator.geolocation) { useDefault(); return; }
   navigator.geolocation.getCurrentPosition(
-    pos => onGotPosition(pos),
-    err => {
-      console.warn('GPS error:', err.code, err.message);
-      if (err.code === 1) { // PERMISSION_DENIED
-        document.getElementById('location-screen').style.display = 'block';
-        setLocDot('error'); setLocName('Location denied');
-      } else {
-        useDefault();
-      }
-    },
+    pos => onPos(pos),
+    err => { err.code === 1 ? (document.getElementById('location-screen').style.display='block', setDot('error'), setName('Location denied')) : useDefault(); },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
   );
 }
 
-function onGotPosition(pos) {
+async function onPos(pos) {
   state.lat = pos.coords.latitude;
   state.lng = pos.coords.longitude;
-  state.accuracy = Math.round(pos.coords.accuracy);
-  state.gpsGranted = true;
-
   document.getElementById('location-screen').style.display = 'none';
-  document.getElementById('main-content').style.display = 'block';
-
-  const accPill = document.getElementById('acc-pill');
-  accPill.style.display = 'inline-flex';
-  document.getElementById('acc-text').textContent = `±${state.accuracy}m accuracy`;
-
-  setLocDot('ok'); setLocName('Resolving...');
+  document.getElementById('main-content').style.display    = 'block';
+  setDot('ok'); setName('Resolving...');
   reverseGeocode(state.lat, state.lng);
   fetchWeather();
 }
 
 function useDefault() {
-  state.lat = FALLBACK.lat; state.lng = FALLBACK.lng;
-  state.locationName = FALLBACK.name;
+  Object.assign(state, { lat: FALLBACK.lat, lng: FALLBACK.lng, locationName: FALLBACK.name });
   document.getElementById('location-screen').style.display = 'none';
-  document.getElementById('main-content').style.display = 'block';
-  setLocDot('ok'); setLocName(FALLBACK.name);
+  document.getElementById('main-content').style.display    = 'block';
+  setDot('ok'); setName(FALLBACK.name);
   fetchWeather();
 }
 
 async function reverseGeocode(lat, lng) {
   try {
-    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=14`;
-    const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+    const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=14`, { headers: { 'Accept-Language': 'en' } });
     const data = await res.json();
-    const addr = data.address;
-    const name = addr.suburb || addr.neighbourhood || addr.district || addr.city_district || addr.town || addr.city || 'Your location';
-    const city = addr.city || addr.state || '';
-    state.locationName = city ? `${name}, ${city}` : name;
-    setLocName(state.locationName);
+    const a    = data.address;
+    const name = a.suburb || a.neighbourhood || a.district || a.town || a.city || 'Your location';
+    state.locationName = a.city ? `${name}, ${a.city}` : name;
+    setName(state.locationName);
     saveCoords();
   } catch(e) {
-    setLocName(`${lat.toFixed(4)}°N, ${lng.toFixed(4)}°E`);
     state.locationName = 'Your location';
+    setName(`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`);
     saveCoords();
   }
 }
 
 function saveCoords() {
-  // Save to localStorage so the app remembers between sessions
-  try {
-    localStorage.setItem('ant-last-coords', JSON.stringify({
-      lat: state.lat, lng: state.lng, name: state.locationName, ts: Date.now()
-    }));
-  } catch(e) {}
-
-  // Also tell service worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(reg => {
-      if (reg.active) reg.active.postMessage({
-        type: 'SAVE_COORDS', lat: state.lat, lng: state.lng, locationName: state.locationName
-      });
-    });
-  }
+  try { localStorage.setItem('ant-coords', JSON.stringify({ lat: state.lat, lng: state.lng, name: state.locationName, ts: Date.now() })); } catch(e) {}
+  if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(r => r.active?.postMessage({ type: 'SAVE_COORDS', lat: state.lat, lng: state.lng, locationName: state.locationName }));
 }
 
-// ── Weather ───────────────────────────────────────────────────────────────────
+// ── Weather ──────────────────────────────────────────────
 async function fetchWeather() {
   if (!state.lat) return;
   const btn = document.getElementById('refresh-btn');
   btn.innerHTML = '<span class="spinning">↻</span>';
-
   try {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lng}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&forecast_days=2&timezone=auto`;
-    const res  = await fetch(url);
-    const data = await res.json();
+    const url  = `https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lng}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&forecast_days=2&timezone=auto`;
+    const data = await (await fetch(url)).json();
     const c    = data.current;
     const h    = new Date().getHours();
     const eve  = h >= 18 && h <= 23;
-
     const { score, factors } = calcScore(c.temperature_2m, c.relative_humidity_2m, c.wind_speed_10m, c.precipitation, eve);
     const v = verdict(score);
 
-    // Stats
-    document.getElementById('w-temp').textContent  = c.temperature_2m.toFixed(1) + '°C';
-    document.getElementById('w-humid').textContent = Math.round(c.relative_humidity_2m) + '%';
-    document.getElementById('w-wind').textContent  = c.wind_speed_10m.toFixed(0) + 'km/h';
-    document.getElementById('w-rain').textContent  = c.precipitation.toFixed(1) + 'mm';
+    document.getElementById('w-temp').textContent  = c.temperature_2m.toFixed(1)+'°C';
+    document.getElementById('w-humid').textContent = Math.round(c.relative_humidity_2m)+'%';
+    document.getElementById('w-wind').textContent  = c.wind_speed_10m.toFixed(0)+'km/h';
+    document.getElementById('w-rain').textContent  = c.precipitation.toFixed(1)+'mm';
 
-    // Ring
     const ring = document.getElementById('score-ring');
     ring.style.strokeDasharray  = CIRC.toFixed(1);
-    ring.style.strokeDashoffset = (CIRC * (1 - score / 100)).toFixed(1);
+    ring.style.strokeDashoffset = (CIRC*(1-score/100)).toFixed(1);
     ring.setAttribute('stroke', v.ring);
 
-    // Score number
     const num = document.getElementById('score-num');
     num.textContent = Math.round(score);
     num.style.color = v.ring;
 
     document.getElementById('verdict-text').textContent = v.text;
     document.getElementById('verdict-text').style.color = v.color;
-    document.getElementById('time-window').textContent  = eve
-      ? '🌙 Evening window active (6–11pm)'
-      : h < 18 ? `Next window: today at 6:00 PM` : `Next window: tomorrow at 6:00 PM`;
+    document.getElementById('time-window').textContent  = eve ? '🌙 Evening window active' : h < 18 ? 'Next window: today 6pm' : 'Next window: tomorrow 6pm';
 
-    // Alert banner
     const banner = document.getElementById('alert-banner');
     if (score >= 60) {
-      banner.className = 'alert-banner alert-go';
+      banner.className     = 'alert-banner alert-go';
       banner.style.display = 'block';
-      banner.textContent = `🐜 High flight chance near ${state.locationName}! Check walls, lit signboards, and grassy areas. Bring small containers.`;
+      banner.textContent   = `🐜 High flight chance near ${state.locationName}! Check the nearest spots below — head there after dark with your containers.`;
     } else if (score >= 35) {
-      banner.className = 'alert-banner alert-mid';
+      banner.className     = 'alert-banner alert-mid';
       banner.style.display = 'block';
-      banner.textContent = `Moderate conditions near you — worth a look at lit spots near grass tonight.`;
+      banner.textContent   = `Moderate conditions — worth checking the nearest parks tonight.`;
     } else {
       banner.style.display = 'none';
     }
 
     renderFactors(factors);
+    renderHourly(data.hourly);
+    setName(state.locationName + ' · ' + new Date().toLocaleTimeString('en-SG', { hour:'2-digit', minute:'2-digit' }));
 
-    // Hourly
-    const hourlyData = data.hourly.time.map((t, i) => ({
-      time: t,
-      temp: data.hourly.temperature_2m[i],
-      humidity: data.hourly.relative_humidity_2m[i],
-      wind: data.hourly.wind_speed_10m[i],
-      rain: data.hourly.precipitation[i]
-    }));
-    renderHourly(hourlyData);
+    // Fetch hunting spots whenever score is meaningful
+    fetchNearbySpots(state.lat, state.lng, score);
 
-    setLocName(state.locationName + ' · ' + new Date().toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit' }));
-
-    // Notify service worker for background check
-    if (state.notifEnabled && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then(reg => {
-        if (reg.active) reg.active.postMessage({
-          type: 'CHECK_WITH_COORDS', lat: state.lat, lng: state.lng, locationName: state.locationName
-        });
-      });
-    }
-
-  } catch(e) {
-    setLocName('Error — tap ↻ to retry');
-  }
-
+  } catch(e) { setName('Error — tap ↻ to retry'); }
   btn.innerHTML = '↻';
 }
 
 function renderFactors(factors) {
   document.getElementById('factor-list').innerHTML = factors.map(f => {
-    const pct      = f.max > 0 ? Math.round((f.pts / f.max) * 100) : 0;
-    const barColor = f.pts >= f.max * 0.66 ? '#1D9E75' : f.pts >= f.max * 0.33 ? '#EF9F27' : '#E24B4A';
+    const pct = f.max > 0 ? Math.round((f.pts/f.max)*100) : 0;
+    const col = f.pts >= f.max*0.66 ? '#1D9E75' : f.pts >= f.max*0.33 ? '#EF9F27' : '#E24B4A';
     return `<div class="factor-row">
       <span class="factor-name">${f.name}</span>
-      <div class="factor-bar-bg">
-        <div class="factor-bar" style="width:${f.pts > 0 ? Math.max(6, pct) : 0}%; background:${f.pts > 0 ? barColor : 'transparent'}"></div>
-      </div>
+      <div class="factor-bar-bg"><div class="factor-bar" style="width:${f.pts>0?Math.max(6,pct):0}%;background:${f.pts>0?col:'transparent'}"></div></div>
       <span class="factor-val">${f.val}</span>
-      <span class="factor-pts" style="color:${f.pts > 0 ? 'var(--text)' : 'var(--text-3)'}">${f.pts}</span>
+      <span class="factor-pts" style="color:${f.pts>0?'var(--text)':'var(--text-3)'}">${f.pts}</span>
     </div>`;
   }).join('');
 }
 
-function renderHourly(hourlyData) {
-  const now = Date.now();
-  const upcoming = hourlyData.filter(h => new Date(h.time).getTime() >= now - 1800000).slice(0, 12);
-  document.getElementById('hourly-row').innerHTML = upcoming.map(h => {
+function renderHourly(hourly) {
+  const now  = Date.now();
+  const rows = hourly.time
+    .map((t,i) => ({ time:t, temp:hourly.temperature_2m[i], humidity:hourly.relative_humidity_2m[i], wind:hourly.wind_speed_10m[i], rain:hourly.precipitation[i] }))
+    .filter(h => new Date(h.time).getTime() >= now - 1800000)
+    .slice(0,12);
+
+  document.getElementById('hourly-row').innerHTML = rows.map(h => {
     const hr  = new Date(h.time).getHours();
-    const eve = hr >= 18 && hr <= 23;
-    const { score } = calcScore(h.temp, h.humidity, h.wind, h.rain, eve);
+    const { score } = calcScore(h.temp, h.humidity, h.wind, h.rain, hr>=18&&hr<=23);
     const v   = verdict(score);
-    const t   = hr.toString().padStart(2, '0') + ':00';
     const cls = score >= 60 ? 'high' : score >= 35 ? 'mid' : '';
     return `<div class="hour-pill ${cls}">
-      <div class="hour-time">${t}</div>
+      <div class="hour-time">${hr.toString().padStart(2,'0')}:00</div>
       <div class="hour-score" style="color:${v.color}">${Math.round(score)}</div>
-      <div class="hour-rain">${h.rain > 0.05 ? h.rain.toFixed(1) + 'mm' : 'dry'}</div>
+      <div class="hour-rain">${h.rain>0.05?h.rain.toFixed(1)+'mm':'dry'}</div>
     </div>`;
   }).join('');
 }
 
-// ── Notifications ─────────────────────────────────────────────────────────────
+// ── Notifications ────────────────────────────────────────
 async function toggleNotifications() {
-  if (state.notifEnabled) {
-    state.notifEnabled = false;
-    updateNotifUI(false);
-    clearInterval(refreshTimer);
-    refreshTimer = setInterval(fullRefresh, 15 * 60 * 1000);
-    return;
-  }
-  if (!('Notification' in window)) {
-    alert('Install the app to your home screen first, then enable notifications.');
-    return;
-  }
+  if (state.notifEnabled) { state.notifEnabled=false; updateNotifUI(false); return; }
+  if (!('Notification' in window)) { alert('Install to home screen first, then enable notifications.'); return; }
   const perm = await Notification.requestPermission();
   if (perm === 'granted') {
-    state.notifEnabled = true;
-    updateNotifUI(true);
-    new Notification('Ant Alert active 🐜', {
-      body: `Watching ${state.locationName || 'your location'} — you'll be notified when flight chance hits 60+.`,
-      icon: '/icon-192.png'
-    });
+    state.notifEnabled = true; updateNotifUI(true);
+    new Notification('Ant Alert active 🐜', { body:`Watching ${state.locationName} — alerts fire at 60+.`, icon:'/icon-192.png' });
     if ('serviceWorker' in navigator) {
       const reg = await navigator.serviceWorker.ready;
-      if ('periodicSync' in reg) {
-        try { await reg.periodicSync.register('ant-weather-check', { minInterval: 15 * 60 * 1000 }); } catch(e) {}
-      }
+      if ('periodicSync' in reg) { try { await reg.periodicSync.register('ant-weather-check',{minInterval:15*60*1000}); } catch(e){} }
     }
-  } else {
-    alert('Notifications blocked. Go to browser settings → Site settings → Notifications to allow this site.');
-  }
+  } else { alert('Notifications blocked. Enable in browser settings.'); }
 }
 
 function updateNotifUI(on) {
-  document.getElementById('notif-toggle').className = 'toggle' + (on ? ' on' : '');
+  document.getElementById('notif-toggle').className = 'toggle'+(on?' on':'');
   document.getElementById('notif-title').textContent = on ? 'Alerts enabled' : 'Enable alerts';
   document.getElementById('notif-icon').textContent  = on ? '🔔' : '🔕';
-  document.getElementById('notif-sub').textContent   = on
-    ? `Watching ${state.locationName} · 60+ triggers alert`
-    : 'Notify when flight chance ≥ 60/100';
+  document.getElementById('notif-sub').textContent   = on ? `Watching ${state.locationName} · 60+ triggers alert` : 'Notify when flight chance ≥ 60/100';
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function setLocDot(status) {
-  const d = document.getElementById('loc-dot');
-  d.className = 'location-dot' + (status === 'searching' ? ' searching' : status === 'error' ? ' error' : '');
-}
-function setLocName(name) {
-  document.getElementById('loc-name').textContent = name;
-}
-function fullRefresh() {
-  requestLocation();
-}
+// ── Helpers ──────────────────────────────────────────────
+function setDot(s)  { document.getElementById('loc-dot').className  = 'location-dot'+(s==='searching'?' searching':s==='error'?' error':''); }
+function setName(n) { document.getElementById('loc-name').textContent = n; }
+function fullRefresh() { requestLocation(); }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+// ── Init ─────────────────────────────────────────────────
 async function init() {
-  // Register service worker
-  if ('serviceWorker' in navigator) {
-    try { await navigator.serviceWorker.register('/sw.js'); } catch(e) {}
-  }
+  if ('serviceWorker' in navigator) { try { await navigator.serviceWorker.register('/sw.js'); } catch(e){} }
 
-  // Show install hint if not already installed
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if (!isStandalone) {
-    document.getElementById('install-hint').style.display = 'block';
-  }
+  if (!isStandalone) document.getElementById('install-hint').style.display = 'block';
 
-  // Try to restore last known coords for instant load
+  // Restore cached coords for instant load
   try {
-    const saved = JSON.parse(localStorage.getItem('ant-last-coords') || 'null');
-    if (saved && (Date.now() - saved.ts < 3600000)) {
-      state.lat = saved.lat; state.lng = saved.lng; state.locationName = saved.name;
+    const saved = JSON.parse(localStorage.getItem('ant-coords')||'null');
+    if (saved && Date.now()-saved.ts < 3600000) {
+      Object.assign(state, { lat:saved.lat, lng:saved.lng, locationName:saved.name });
       document.getElementById('main-content').style.display = 'block';
-      setLocName(saved.name + ' (updating...)');
+      setName(saved.name+' (updating...)');
       fetchWeather();
     }
   } catch(e) {}
 
-  // Check permission state
-  if (navigator.permissions) {
-    const perm = await navigator.permissions.query({ name: 'geolocation' }).catch(() => null);
-    if (perm?.state === 'granted') {
-      requestLocation();
-    } else if (perm?.state === 'denied') {
-      setLocDot('error');
-      document.getElementById('location-screen').style.display = state.lat ? 'none' : 'block';
-      document.getElementById('main-content').style.display   = state.lat ? 'block' : 'none';
-    } else {
-      // 'prompt' or unknown — show location screen if no cached coords
-      if (!state.lat) {
-        document.getElementById('location-screen').style.display = 'block';
-      } else {
-        requestLocation();
-      }
-    }
-  } else {
-    if (!state.lat) {
-      document.getElementById('location-screen').style.display = 'block';
-    } else {
-      requestLocation();
-    }
-  }
+  const perm = await navigator.permissions?.query({name:'geolocation'}).catch(()=>null);
+  if (perm?.state === 'granted')       { requestLocation(); }
+  else if (perm?.state === 'denied')   { setDot('error'); if (!state.lat) document.getElementById('location-screen').style.display='block'; }
+  else if (!state.lat)                 { document.getElementById('location-screen').style.display = 'block'; }
+  else                                 { requestLocation(); }
 
-  // Auto-refresh every 15 min
   clearInterval(refreshTimer);
-  refreshTimer = setInterval(fullRefresh, 15 * 60 * 1000);
+  refreshTimer = setInterval(fullRefresh, 15*60*1000);
 }
-
 init();
 </script>
 </body>
