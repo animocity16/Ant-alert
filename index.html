@@ -328,6 +328,13 @@ body {
 const CIRC = 2 * Math.PI * 56;
 const FALLBACK = { lat: 1.3200, lng: 103.8440, name: 'Novena, Singapore' };
 
+// ── Multiple Overpass endpoints for fallback ─────────────
+const OVERPASS_ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+];
+
 let state = { lat: null, lng: null, locationName: '', notifEnabled: false };
 let refreshTimer;
 
@@ -367,7 +374,7 @@ function fmtDist(km) {
   return km < 1 ? Math.round(km*1000)+'m' : km.toFixed(1)+'km';
 }
 function walkMin(km) {
-  const m = Math.round(km / 0.08); // ~5km/h walking
+  const m = Math.round(km / 0.08);
   return m < 2 ? '< 2 min walk' : m+'min walk';
 }
 
@@ -421,7 +428,29 @@ function spotType(tags) {
   return 'Park';
 }
 
-// ── Fetch nearby parks from Overpass API ─────────────────
+// ── Overpass query with multi-endpoint fallback ──────────
+async function queryOverpass(query) {
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        body: 'data=' + encodeURIComponent(query),
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return await res.json();
+    } catch (err) {
+      console.warn('Overpass failed:', endpoint, err.message);
+      // try next endpoint
+    }
+  }
+  throw new Error('All Overpass endpoints failed');
+}
+
+// ── Fetch nearby parks ───────────────────────────────────
 async function fetchNearbySpots(lat, lng, score) {
   const section = document.getElementById('spots-section');
   const listEl  = document.getElementById('spot-list');
@@ -432,9 +461,9 @@ async function fetchNearbySpots(lat, lng, score) {
   section.style.display = 'block';
   listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Finding spots near you...</div>';
 
-  const radius = 2500; // 2.5km radius
+  const radius = 2500;
   const query = `
-    [out:json][timeout:10];
+    [out:json][timeout:25];
     (
       node["leisure"="park"](around:${radius},${lat},${lng});
       way["leisure"="park"](around:${radius},${lat},${lng});
@@ -447,12 +476,8 @@ async function fetchNearbySpots(lat, lng, score) {
   `;
 
   try {
-    const res  = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST', body: 'data=' + encodeURIComponent(query)
-    });
-    const data = await res.json();
+    const data = await queryOverpass(query);
 
-    // Compute centre coords for each element
     const spots = data.elements
       .map(el => {
         const slat = el.lat ?? el.center?.lat;
@@ -498,11 +523,17 @@ async function fetchNearbySpots(lat, lng, score) {
         </div>`;
     }).join('');
 
-    // Show minimap centred on user
     showMinimap(lat, lng, spots[0]);
 
   } catch(e) {
-    listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Couldn\'t load nearby spots — check connection.</div>';
+    listEl.innerHTML = `<div style="font-size:13px;color:var(--text-3);padding:8px 0;">
+      Couldn't load nearby spots —
+      <span onclick="fetchNearbySpots(${lat},${lng},${score})"
+            style="color:var(--green);cursor:pointer;text-decoration:underline;font-weight:600">
+        tap to retry
+      </span>
+    </div>`;
+    subEl.textContent = 'Connection issue';
   }
 }
 
@@ -514,7 +545,6 @@ function showMinimap(lat, lng, nearest) {
   const wrap  = document.getElementById('minimap-wrap');
   const frame = document.getElementById('minimap');
   const label = document.getElementById('minimap-label');
-  // OpenStreetMap embed centred on user, zoom 14
   const src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
   frame.src = src;
   wrap.style.display = 'block';
@@ -620,7 +650,6 @@ async function fetchWeather() {
     renderHourly(data.hourly);
     setName(state.locationName + ' · ' + new Date().toLocaleTimeString('en-SG', { hour:'2-digit', minute:'2-digit' }));
 
-    // Fetch hunting spots whenever score is meaningful
     fetchNearbySpots(state.lat, state.lng, score);
 
   } catch(e) { setName('Error — tap ↻ to retry'); }
@@ -694,7 +723,6 @@ async function init() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
   if (!isStandalone) document.getElementById('install-hint').style.display = 'block';
 
-  // Restore cached coords for instant load
   try {
     const saved = JSON.parse(localStorage.getItem('ant-coords')||'null');
     if (saved && Date.now()-saved.ts < 3600000) {
