@@ -16,7 +16,7 @@
   --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #085041;
   --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #633806;
   --red: #A32D2D; --red-light: #FCEBEB;
-  --gray: #888780; --gray-light: #F1EFE8;
+  --gray: #888780;
   --bg: #f5f5f3; --surface: #ffffff;
   --text: #1a1a18; --text-2: #5f5e5a; --text-3: #888780;
   --border: rgba(0,0,0,0.09);
@@ -29,13 +29,12 @@
     --bg: #0f0f0e; --surface: #1c1c1a;
     --text: #f0efe8; --text-2: #888780; --text-3: #5f5e5a;
     --border: rgba(255,255,255,0.09);
-    --green-light: #04342C; --amber-light: #412402; --red-light: #501313; --gray-light: #2C2C2A;
+    --green-light: #04342C; --amber-light: #412402; --red-light: #501313;
   }
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
-  background: var(--bg); color: var(--text);
-  min-height: 100dvh;
+  background: var(--bg); color: var(--text); min-height: 100dvh;
   padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 32px);
   max-width: 440px; margin: 0 auto;
 }
@@ -56,18 +55,15 @@ body {
 .icon-btn:active { opacity: 0.5; }
 .location-screen {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 32px 24px;
-  text-align: center; margin-bottom: 16px;
+  border-radius: var(--radius); padding: 32px 24px; text-align: center; margin-bottom: 16px;
 }
 .location-screen .big-icon { font-size: 52px; margin-bottom: 16px; }
 .location-screen h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
 .location-screen p { font-size: 14px; color: var(--text-2); line-height: 1.5; margin-bottom: 20px; }
 .btn-primary {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--green); color: white; border: none;
-  font-size: 15px; font-weight: 600; padding: 13px 24px;
-  border-radius: 99px; cursor: pointer; width: 100%;
-  justify-content: center; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
+  display: inline-flex; align-items: center; gap: 6px; background: var(--green); color: white; border: none;
+  font-size: 15px; font-weight: 600; padding: 13px 24px; border-radius: 99px; cursor: pointer;
+  width: 100%; justify-content: center; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
 }
 .btn-primary:active { opacity: 0.8; }
 .btn-secondary {
@@ -78,8 +74,7 @@ body {
 }
 .score-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px 16px 16px;
-  margin-bottom: 12px; text-align: center;
+  border-radius: var(--radius); padding: 20px 16px 16px; margin-bottom: 12px; text-align: center;
 }
 .score-ring-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 12px; }
 #score-ring { transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1), stroke 0.5s; }
@@ -89,8 +84,8 @@ body {
 .verdict { font-size: 19px; font-weight: 600; }
 .time-window { font-size: 12px; color: var(--text-2); margin-top: 4px; }
 .alert-banner {
-  border-radius: var(--radius-sm); padding: 13px 15px;
-  margin-bottom: 12px; font-size: 14px; font-weight: 500; line-height: 1.45; display: none;
+  border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 12px;
+  font-size: 14px; font-weight: 500; line-height: 1.45; display: none;
 }
 .alert-go  { background: var(--green-light); color: var(--green-dark); border-left: 3px solid var(--green); }
 .alert-mid { background: var(--amber-light); color: var(--amber-dark); border-left: 3px solid var(--amber); }
@@ -101,54 +96,53 @@ body {
 .spots-section { display: none; margin-bottom: 12px; }
 .spots-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .spots-title { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
-.spots-sub { font-size: 11px; color: var(--text-3); }
+.spots-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; }
 .spot-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 12px 14px;
-  display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px;
   cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s;
 }
 .spot-card:active { border-color: var(--green); }
 .spot-rank {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--green-light); color: var(--green-dark);
-  font-size: 13px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 50%; font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
 }
-.spot-rank.gold   { background: #FEF3C7; color: #92400E; }
-.spot-rank.silver { background: #F1F5F9; color: #475569; }
-.spot-rank.bronze { background: #FEF2F2; color: #991B1B; }
 .spot-info { flex: 1; min-width: 0; }
 .spot-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .spot-type { font-size: 11px; color: var(--text-3); margin-top: 1px; }
-.spot-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.spot-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
 .spot-dist { font-size: 12px; font-weight: 600; color: var(--green); }
 .spot-walk { font-size: 11px; color: var(--text-3); }
+.hunt-score-bar {
+  display: flex; align-items: center; gap: 6px; margin-top: 5px;
+}
+.hunt-score-label { font-size: 10px; color: var(--text-3); white-space: nowrap; }
+.hunt-bar-bg { flex: 1; height: 5px; background: var(--bg); border-radius: 99px; }
+.hunt-bar-fill { height: 5px; border-radius: 99px; transition: width 0.6s ease; }
+.hunt-score-num { font-size: 11px; font-weight: 700; min-width: 24px; text-align: right; }
+.spot-tip { font-size: 11px; color: var(--text-2); margin-top: 4px; font-style: italic; }
+.spot-why { font-size: 10px; color: var(--green); margin-top: 3px; font-weight: 600; }
 .spot-nav {
-  flex-shrink: 0; background: var(--green); color: white;
-  border: none; border-radius: var(--radius-xs);
-  padding: 8px 12px; font-size: 12px; font-weight: 600;
-  cursor: pointer; -webkit-tap-highlight-color: transparent; white-space: nowrap;
+  flex-shrink: 0; background: var(--green); color: white; border: none;
+  border-radius: var(--radius-xs); padding: 8px 12px; font-size: 12px; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; white-space: nowrap; margin-top: 2px;
 }
 .spot-nav:active { opacity: 0.8; }
-.spot-tip { font-size: 11px; color: var(--text-2); margin-top: 3px; font-style: italic; }
 .minimap-wrap {
-  border-radius: var(--radius-sm); overflow: hidden;
-  border: 1px solid var(--border); margin-bottom: 12px;
-  height: 160px; position: relative; display: none;
+  border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border);
+  margin-bottom: 12px; height: 160px; position: relative; display: none;
 }
 #minimap { width: 100%; height: 100%; border: none; }
 .minimap-overlay {
-  position: absolute; top: 8px; left: 8px; background: white;
-  border-radius: var(--radius-xs); padding: 4px 8px;
-  font-size: 11px; font-weight: 600; color: var(--green-dark);
+  position: absolute; top: 8px; left: 8px; background: white; border-radius: var(--radius-xs);
+  padding: 4px 8px; font-size: 11px; font-weight: 600; color: var(--green-dark);
   box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 .notif-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 14px 16px;
   display: flex; align-items: center; gap: 12px; margin-bottom: 12px; cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 .notif-icon { font-size: 24px; flex-shrink: 0; }
 .notif-title { font-size: 14px; font-weight: 600; }
@@ -184,9 +178,8 @@ body {
 .hour-score { font-size: 15px; font-weight: 700; margin: 2px 0 1px; }
 .hour-rain  { font-size: 10px; color: var(--text-3); }
 .install-hint {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-xs); padding: 11px 14px;
-  font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.5; display: none;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs);
+  padding: 11px 14px; font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.5; display: none;
 }
 .footer { text-align: center; font-size: 11px; color: var(--text-3); margin-top: 12px; line-height: 1.6; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -210,7 +203,7 @@ body {
 <div id="location-screen" class="location-screen" style="display:none">
   <div class="big-icon">📍</div>
   <h2>Allow location access</h2>
-  <p>Ant Alert uses your GPS to check conditions exactly where you are and find the best nearby hunting spots.</p>
+  <p>Ant Alert uses your GPS to check conditions and find the best nearby hunting spots for right now.</p>
   <button class="btn-primary" onclick="startLocation()">📍 Use my location</button>
   <button class="btn-secondary" onclick="useDefault()">Use Novena (default)</button>
 </div>
@@ -223,8 +216,7 @@ body {
       <svg width="140" height="140" viewBox="0 0 140 140" style="position:absolute;inset:0;">
         <circle cx="70" cy="70" r="56" fill="none" stroke="var(--bg)" stroke-width="11"/>
         <circle cx="70" cy="70" r="56" fill="none" id="score-ring"
-          stroke="#1D9E75" stroke-width="11"
-          stroke-dasharray="352" stroke-dashoffset="352"
+          stroke="#1D9E75" stroke-width="11" stroke-dasharray="352" stroke-dashoffset="352"
           stroke-linecap="round" transform="rotate(-90 70 70)"/>
       </svg>
       <div class="score-center">
@@ -246,7 +238,7 @@ body {
   <div class="spots-section" id="spots-section">
     <div class="spots-header">
       <div>
-        <div class="spots-title">🗺 Nearest hunting spots</div>
+        <div class="spots-title">🗺 Best spots right now</div>
         <div class="spots-sub" id="spots-sub"></div>
       </div>
     </div>
@@ -268,85 +260,139 @@ body {
 
   <div class="section-label">Score breakdown</div>
   <div class="factor-list" id="factor-list"></div>
-
   <div class="section-label">Next 12 hours</div>
   <div class="hourly-scroll" id="hourly-row"></div>
-
-  <div id="install-hint" class="install-hint">
-    📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"
-  </div>
-  <div class="footer">Auto-refreshes every 15 min · Weather: Open-Meteo · Parks: built-in SG database</div>
+  <div id="install-hint" class="install-hint">📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"</div>
+  <div class="footer">Auto-refreshes every 15 min · Weather: Open-Meteo</div>
 </div>
 
 <script>
 const CIRC = 2 * Math.PI * 56;
 const FALLBACK = { lat: 1.3200, lng: 103.8440, name: 'Novena, Singapore' };
 let state = { lat: null, lng: null, locationName: '', notifEnabled: false };
+let currentWeather = null;
 let refreshTimer, locAttempts = 0;
 
-// ── Singapore Parks Database (no API needed, always works) ──────────────────
+// ── Singapore Parks Database ─────────────────────────────
+// habitatScore: 1–5 (5 = primary forest, 4 = nature reserve, 3 = large park with forest edge,
+//               2 = neighbourhood park, 1 = manicured/sports ground)
+// litAtNight: true = good lit surfaces for spotting alates at night
 const SG_PARKS = [
-  // Central
-  { name: 'Bishan-Ang Mo Kio Park',       lat: 1.3620, lng: 103.8487, type: 'park',    tip: 'Large park with river — check grassy banks and light poles after rain' },
-  { name: 'Fort Canning Park',             lat: 1.2934, lng: 103.8455, type: 'nature',  tip: 'Forested hill — forest edge paths excellent after evening rain' },
-  { name: 'Singapore Botanic Gardens',     lat: 1.3138, lng: 103.8159, type: 'garden',  tip: 'Rich soil and ornamental plants — check lit entrances at night' },
-  { name: 'MacRitchie Reservoir Park',     lat: 1.3419, lng: 103.8198, type: 'nature',  tip: 'Dense forest edge — brilliant post-rain hunting, bring headlamp' },
-  { name: 'Bukit Timah Nature Reserve',    lat: 1.3520, lng: 103.7767, type: 'nature',  tip: 'Primary forest — best in Singapore after heavy rain, check trail lights' },
-  { name: 'Lower Pierce Reservoir Park',   lat: 1.3699, lng: 103.8148, type: 'nature',  tip: 'Forested reservoir edge — check road lights after rain' },
-  { name: 'Upper Seletar Reservoir Park',  lat: 1.4003, lng: 103.8148, type: 'park',    tip: 'Quiet park with good grass coverage — check lit paths' },
-  { name: 'Thomson Nature Park',           lat: 1.3707, lng: 103.8243, type: 'nature',  tip: 'Secondary forest — great humid conditions near stream edges' },
-  { name: 'Springleaf Nature Park',        lat: 1.3946, lng: 103.8139, type: 'nature',  tip: 'Forest and stream — ideal post-rain nuptial flight conditions' },
-  // North
-  { name: 'Sembawang Park',               lat: 1.4592, lng: 103.8208, type: 'park',    tip: 'Coastal grass and trees — check lit paths near the beach edge' },
-  { name: 'Admiralty Park',               lat: 1.4441, lng: 103.7997, type: 'park',    tip: 'Large park near mangroves — check grass edges after rain' },
-  { name: 'Yishun Park',                  lat: 1.4192, lng: 103.8339, type: 'park',    tip: 'Grassy field edges and lit walkways — good post-rain spot' },
-  { name: 'Mandai Nature Trail',          lat: 1.4036, lng: 103.7934, type: 'nature',  tip: 'Forest trail adjacent — check lit carpark edges after rain' },
-  { name: 'Sungei Buloh Wetland Reserve', lat: 1.4473, lng: 103.7290, type: 'nature',  tip: 'Mangrove and marsh edge — humid conditions perfect for flights' },
-  // East
-  { name: 'East Coast Park',              lat: 1.3005, lng: 103.9121, type: 'park',    tip: 'Long coastal stretch — check lit BBQ pits and lamp posts after rain' },
-  { name: 'Pasir Ris Park',              lat: 1.3721, lng: 103.9488, type: 'park',    tip: 'Forest fringe and mangrove edge — excellent post-rain hunting' },
-  { name: 'Bedok Reservoir Park',         lat: 1.3393, lng: 103.9317, type: 'park',    tip: 'Reservoir loop path — check grass edges and lit benches' },
-  { name: 'Tampines Eco Green',           lat: 1.3559, lng: 103.9449, type: 'nature',  tip: 'Secondary forest plots — rich hunting after afternoon rain' },
-  { name: 'Tampines Central Park',        lat: 1.3531, lng: 103.9430, type: 'park',    tip: 'Open grass with lit paths — check ground near lamp posts' },
-  { name: 'Changi Beach Park',            lat: 1.3876, lng: 103.9862, type: 'park',    tip: 'Grassy coastal park — check lit areas and wooden shelter posts' },
-  { name: 'Ketam Mountain Bike Trail',    lat: 1.3634, lng: 103.9770, type: 'nature',  tip: 'Pulau Ubin forest edge — ferry required, worth it after big rain' },
-  // West
-  { name: 'Jurong Lake Gardens',          lat: 1.3344, lng: 103.7262, type: 'park',    tip: 'Large lakeside park — check grass near water\'s edge after rain' },
-  { name: 'Jurong Central Park',          lat: 1.3337, lng: 103.7381, type: 'park',    tip: 'Shaded grass areas — check lit paths near trees' },
-  { name: 'Clementi Forest',              lat: 1.3230, lng: 103.7644, type: 'nature',  tip: 'Unofficial forest — excellent secondary growth, post-rain goldmine' },
-  { name: 'Buona Vista Park',             lat: 1.3060, lng: 103.7903, type: 'park',    tip: 'Grassy slopes — check lit carpark and path edges' },
-  { name: 'Hortpark',                     lat: 1.2870, lng: 103.8008, type: 'garden',  tip: 'Garden with rich planting — check wall lights and garden beds' },
-  { name: 'Telok Blangah Hill Park',      lat: 1.2794, lng: 103.8081, type: 'nature',  tip: 'Forested hill — check trail entrances and lamp posts at base' },
-  { name: 'Kent Ridge Park',              lat: 1.2924, lng: 103.7817, type: 'nature',  tip: 'Forest ridge — lit carpark at base great post-rain checking spot' },
-  { name: 'Labrador Nature Reserve',      lat: 1.2664, lng: 103.8025, type: 'nature',  tip: 'Coastal forest — check lit paths near rocky shore' },
-  { name: 'West Coast Park',              lat: 1.2948, lng: 103.7610, type: 'park',    tip: 'Coastal grass and trees — check any lit structures after rain' },
-  { name: 'Pandan Reservoir Park',        lat: 1.3150, lng: 103.7374, type: 'park',    tip: 'Reservoir edge grass — check road lights near water' },
-  // South / City
-  { name: 'Labrador Park MRT area',       lat: 1.2717, lng: 103.8024, type: 'park',    tip: 'Park connector with grass patches — check MRT station lights' },
-  { name: 'Tanjong Pagar Railway Corridor',lat:1.2812, lng: 103.8261, type: 'nature',  tip: 'Linear forest — check overgrown patches and lamp posts' },
-  { name: 'Southern Ridges (HortPark end)',lat:1.2845, lng: 103.8014, type: 'nature',  tip: 'Ridge forest — post-rain flying ants common near lit shelters' },
-  { name: 'Gillman Barracks Green',        lat:1.2841, lng: 103.8065, type: 'park',    tip: 'Grassy compound — check lit walkways near buildings' },
-  // Punggol / NE
-  { name: 'Punggol Waterway Park',        lat: 1.4003, lng: 103.9050, type: 'park',    tip: 'Waterway corridor — grassy banks excellent for post-rain checks' },
-  { name: 'Punggol Point Park',           lat: 1.4148, lng: 103.9106, type: 'park',    tip: 'Coastal grass and mangrove fringe — check lit fishing platforms' },
-  { name: 'Coney Island Park',            lat: 1.4027, lng: 103.9254, type: 'nature',  tip: 'Island nature park — forest edge with low light, great for hunting' },
-  { name: 'Sengkang Riverside Park',      lat: 1.3903, lng: 103.8974, type: 'park',    tip: 'River corridor — check grass banks and lit pavilions' },
-  { name: 'Hougang Park',                 lat: 1.3700, lng: 103.8869, type: 'park',    tip: 'Neighbourhood park — check lamp post bases after rain' },
-  // Bukit areas
-  { name: 'Bukit Batok Nature Park',      lat: 1.3590, lng: 103.7613, type: 'nature',  tip: 'Quarry lake forest — check water\'s edge and lit paths at dusk' },
-  { name: 'Bukit Timah Hill summit area', lat: 1.3549, lng: 103.7761, type: 'nature',  tip: 'Hill summit — check all lit shelter poles post rain' },
-  { name: 'Dairy Farm Nature Park',       lat: 1.3536, lng: 103.7728, type: 'nature',  tip: 'Secondary forest and grassland — excellent ground hunting spot' },
-  { name: 'Zhenghua Nature Park',         lat: 1.3712, lng: 103.7683, type: 'nature',  tip: 'Young secondary forest — active flight zone after afternoon rain' },
-  { name: 'Hindhede Nature Park',         lat: 1.3538, lng: 103.7772, type: 'nature',  tip: 'Quarry and forest — check path lights at quarry rim' },
-  // Additional
-  { name: 'Katong Park',                  lat: 1.2999, lng: 103.9002, type: 'park',    tip: 'Small coastal park — check lamp posts and sea wall edges' },
-  { name: 'Geylang Park Connector',       lat: 1.3150, lng: 103.8850, type: 'park',    tip: 'Linear park along river — check lit bridges and grass banks' },
-  { name: 'Toa Payoh Town Park',          lat: 1.3330, lng: 103.8472, type: 'park',    tip: 'Central town park — check any lamp posts near grassy areas' },
-  { name: 'Ang Mo Kio Town Garden West',  lat: 1.3709, lng: 103.8461, type: 'garden',  tip: 'Dense planting areas — check lit shelters after rain' },
-  { name: 'Serangoon Garden Park',        lat: 1.3628, lng: 103.8673, type: 'park',    tip: 'Neighbourhood park — well-lit paths great for night checking' },
+  // Primary / Nature Reserves (habitatScore 5)
+  { name: 'Bukit Timah Nature Reserve',    lat: 1.3520, lng: 103.7767, habitat: 5, lit: false, tip: 'Primary forest — the #1 spot in SG after heavy rain. Check trail entrance lights and car park lamp posts.' },
+  { name: 'Central Catchment Nature Reserve', lat: 1.3568, lng: 103.8198, habitat: 5, lit: false, tip: 'Largest forest in SG — MacRitchie/Pierce/Seletar edges all excellent. Bring headlamp.' },
+  { name: 'Sungei Buloh Wetland Reserve',  lat: 1.4473, lng: 103.7290, habitat: 5, lit: false, tip: 'Mangrove and marsh edges — humid microclimates ideal for nuptial flights after rain.' },
+  { name: 'Labrador Nature Reserve',       lat: 1.2664, lng: 103.8025, habitat: 5, lit: true,  tip: 'Coastal forest — check lit path lamps and the cliff base area after evening rain.' },
+  // Secondary Forest / Nature Parks (habitatScore 4)
+  { name: 'Thomson Nature Park',           lat: 1.3707, lng: 103.8243, habitat: 4, lit: false, tip: 'Tembusu forest and stream — great conditions post-rain. Check ground near water.' },
+  { name: 'Springleaf Nature Park',        lat: 1.3946, lng: 103.8139, habitat: 4, lit: false, tip: 'Forest stream corridor — excellent humid micro-habitat for post-rain flights.' },
+  { name: 'Dairy Farm Nature Park',        lat: 1.3536, lng: 103.7728, habitat: 4, lit: true,  tip: 'Secondary forest and grassland — mix of forest edge and lit car park gives day+night options.' },
+  { name: 'Zhenghua Nature Park',          lat: 1.3712, lng: 103.7683, habitat: 4, lit: false, tip: 'Young secondary forest — fast coloniser ants very active here after afternoon storms.' },
+  { name: 'Hindhede Nature Park',          lat: 1.3538, lng: 103.7772, habitat: 4, lit: true,  tip: 'Quarry rim path with forest — check lit shelter poles at quarry viewpoint.' },
+  { name: 'Clementi Forest',               lat: 1.3230, lng: 103.7644, habitat: 4, lit: false, tip: 'Unofficial secondary growth — dense and productive. Check disturbed ground edges.' },
+  { name: 'Mandai Nature Trail',           lat: 1.4036, lng: 103.7934, habitat: 4, lit: true,  tip: 'Forest trail near zoo — check lit carpark edges and forest border after rain.' },
+  { name: 'Tampines Eco Green',            lat: 1.3559, lng: 103.9449, habitat: 4, lit: true,  tip: 'Secondary forest plots in East SG — excellent nuptial conditions after afternoon rain.' },
+  { name: 'Coney Island Park',             lat: 1.4027, lng: 103.9254, habitat: 4, lit: false, tip: 'Island forest — very low light pollution, queen ants highly active after heavy rain.' },
+  { name: 'Ketam Mountain Bike Trail',     lat: 1.3634, lng: 103.9770, habitat: 4, lit: false, tip: 'Pulau Ubin forest — ferry required but undisturbed habitat, exceptional post-rain spot.' },
+  { name: 'Kent Ridge Park',               lat: 1.2924, lng: 103.7817, habitat: 4, lit: true,  tip: 'Ridge forest — check lit carpark at base and forest path entrance at dusk.' },
+  { name: 'Telok Blangah Hill Park',       lat: 1.2794, lng: 103.8081, habitat: 4, lit: true,  tip: 'Forested hill in city — check trail entrances and lamp posts at base after rain.' },
+  // Large Parks with Forest Edge (habitatScore 3)
+  { name: 'Bishan-Ang Mo Kio Park',        lat: 1.3620, lng: 103.8487, habitat: 3, lit: true,  tip: 'River and grass park — check grassy banks, lamp posts and any lamp-lit walls at night.' },
+  { name: 'Pasir Ris Park',               lat: 1.3721, lng: 103.9488, habitat: 3, lit: true,  tip: 'Forest fringe meets beach — mangrove edge excellent, plus lit BBQ shelters at night.' },
+  { name: 'East Coast Park',              lat: 1.3005, lng: 103.9121, habitat: 3, lit: true,  tip: 'Long coastal strip — check lit BBQ pits, lamp posts and any concrete walls at night.' },
+  { name: 'Bedok Reservoir Park',          lat: 1.3393, lng: 103.9317, habitat: 3, lit: true,  tip: 'Reservoir loop with grass — check lamp post bases and grassy embankment edges.' },
+  { name: 'MacRitchie Reservoir Park',     lat: 1.3419, lng: 103.8198, habitat: 3, lit: true,  tip: 'Reservoir forest loop — treetop walk boardwalk area excellent. Check lit car park too.' },
+  { name: 'Jurong Lake Gardens',           lat: 1.3344, lng: 103.7262, habitat: 3, lit: true,  tip: 'Lakeside with restored grassland — check grass near water\'s edge and any lit shelters.' },
+  { name: 'Fort Canning Park',             lat: 1.2934, lng: 103.8455, habitat: 3, lit: true,  tip: 'Forested urban hill — lit walkways and old walls great for night checking after rain.' },
+  { name: 'Punggol Waterway Park',         lat: 1.4003, lng: 103.9050, habitat: 3, lit: true,  tip: 'Waterway corridor — check all lamp posts along grassy banks, especially after storms.' },
+  { name: 'Singapore Botanic Gardens',     lat: 1.3138, lng: 103.8159, habitat: 3, lit: true,  tip: 'Rich soil and tall trees — check lamp posts near Swan Lake and any lit entrances at night.' },
+  { name: 'West Coast Park',               lat: 1.2948, lng: 103.7610, habitat: 3, lit: true,  tip: 'Coastal park with wooded areas — check any lit structures and concrete surfaces.' },
+  { name: 'Bukit Batok Nature Park',       lat: 1.3590, lng: 103.7613, habitat: 3, lit: true,  tip: 'Quarry lake with secondary forest — check water\'s edge grass and lit path at dusk.' },
+  { name: 'Lower Pierce Reservoir Park',   lat: 1.3699, lng: 103.8148, habitat: 3, lit: false, tip: 'Forested reservoir edge — check road lights and grassy berm after rain.' },
+  { name: 'Upper Seletar Reservoir Park',  lat: 1.4003, lng: 103.8148, habitat: 3, lit: true,  tip: 'Quiet park with grass and trees — check lit car park edges and path lamps.' },
+  { name: 'Sembawang Park',               lat: 1.4592, lng: 103.8208, habitat: 3, lit: true,  tip: 'Coastal park near secondary forest — check lit path edges near the beach after rain.' },
+  { name: 'Hortpark',                      lat: 1.2870, lng: 103.8008, habitat: 3, lit: true,  tip: 'Dense mixed planting — check wall lights and ornamental beds at night.' },
+  { name: 'Changi Beach Park',             lat: 1.3876, lng: 103.9862, habitat: 3, lit: true,  tip: 'Coastal grass and casuarina trees — check lit wooden shelter posts at night.' },
+  { name: 'Southern Ridges',              lat: 1.2845, lng: 103.8014, habitat: 3, lit: true,  tip: 'Ridge forest and bridges — check under lit Henderson Waves bridge after evening rain.' },
+  // Neighbourhood Parks (habitatScore 2)
+  { name: 'Admiralty Park',               lat: 1.4441, lng: 103.7997, habitat: 2, lit: true,  tip: 'Large park near mangroves — check grass edges and any lit paths after rain.' },
+  { name: 'Yishun Park',                  lat: 1.4192, lng: 103.8339, habitat: 2, lit: true,  tip: 'Grassy park — check lamp post bases and grass edges post-rain.' },
+  { name: 'Punggol Point Park',            lat: 1.4148, lng: 103.9106, habitat: 2, lit: true,  tip: 'Coastal grass with mangrove nearby — check lit fishing platform lamp posts at night.' },
+  { name: 'Sengkang Riverside Park',       lat: 1.3903, lng: 103.8974, habitat: 2, lit: true,  tip: 'River corridor — check lamp post bases on grass banks after rain.' },
+  { name: 'Toa Payoh Town Park',           lat: 1.3330, lng: 103.8472, habitat: 2, lit: true,  tip: 'Town park — any lamp posts near grass are worth checking post-rain.' },
+  { name: 'Tampines Central Park',         lat: 1.3531, lng: 103.9430, habitat: 2, lit: true,  tip: 'Open grass with lit paths — check ground near lamp posts at night.' },
+  { name: 'Ang Mo Kio Town Garden West',   lat: 1.3709, lng: 103.8461, habitat: 2, lit: true,  tip: 'Dense planting with lit shelters — check ground near any garden lights.' },
+  { name: 'Serangoon Garden Park',         lat: 1.3628, lng: 103.8673, habitat: 2, lit: true,  tip: 'Neighbourhood park — well-lit paths decent for quick night checks.' },
+  { name: 'Pandan Reservoir Park',         lat: 1.3150, lng: 103.7374, habitat: 2, lit: true,  tip: 'Reservoir edge grass — check road lights near water\'s edge.' },
+  { name: 'Geylang Park Connector',        lat: 1.3150, lng: 103.8850, habitat: 2, lit: true,  tip: 'River corridor — check lit bridges and grass banks along route.' },
+  { name: 'Katong Park',                   lat: 1.2999, lng: 103.9002, habitat: 2, lit: true,  tip: 'Small coastal park — check lamp posts and any concrete sea wall edges.' },
+  { name: 'Buona Vista Park',              lat: 1.3060, lng: 103.7903, habitat: 2, lit: true,  tip: 'Grassy slopes — check lit carpark edge and path lamps.' },
 ];
 
-// ── Score ────────────────────────────────────────────────
+// ── Hunt Score calculation ───────────────────────────────
+// Combines habitat quality + distance + current conditions + time of day
+// Returns 0–100 score per park
+function calcHuntScore(park, distKm, weather, isEvening, precip) {
+  // 1. Habitat base (0–40 pts)
+  const habitatPts = { 5: 40, 4: 32, 3: 22, 2: 12, 1: 5 }[park.habitat] || 10;
+
+  // 2. Distance penalty (0–30 pts — closer = more pts, but not a dealbreaker)
+  // Parks within 1km = full 30. 5km+ = 0.
+  const distPts = Math.max(0, 30 - (distKm * 6));
+
+  // 3. Weather synergy (0–20 pts)
+  // Forest parks benefit most from rain (hold moisture longer, more flight activity)
+  // Open/lit parks benefit more from dry conditions at night
+  let weatherPts = 0;
+  if (precip >= 1) {
+    // After rain: forest/nature parks get full bonus, open parks less
+    weatherPts = park.habitat >= 4 ? 20 : park.habitat === 3 ? 14 : 8;
+  } else if (precip >= 0.1) {
+    weatherPts = park.habitat >= 4 ? 14 : park.habitat === 3 ? 10 : 6;
+  } else {
+    // Dry: lit parks better for spotting (alates still fly but you need lights)
+    weatherPts = park.lit ? 10 : 5;
+  }
+
+  // 4. Time of day synergy (0–10 pts)
+  let timePts = 0;
+  if (isEvening) {
+    // Evening: lit parks get a big boost — you need to see them
+    timePts = park.lit ? 10 : 3;
+  } else {
+    // Daytime: habitat quality matters more than lighting
+    timePts = park.habitat >= 4 ? 8 : 4;
+  }
+
+  return Math.min(100, Math.round(habitatPts + distPts + weatherPts + timePts));
+}
+
+function huntScoreColor(score) {
+  if (score >= 75) return '#1D9E75';
+  if (score >= 55) return '#5DCAA5';
+  if (score >= 40) return '#EF9F27';
+  return '#B4B2A9';
+}
+
+function huntScoreLabel(score) {
+  if (score >= 75) return '🔥 Prime';
+  if (score >= 55) return '✅ Good';
+  if (score >= 40) return '🟡 Fair';
+  return '⬜ Low';
+}
+
+function whyTopSpot(park, distKm, isEvening, precip) {
+  const reasons = [];
+  if (park.habitat >= 5) reasons.push('primary forest');
+  else if (park.habitat >= 4) reasons.push('secondary forest');
+  else if (park.habitat >= 3) reasons.push('forest edge');
+  if (precip >= 1 && park.habitat >= 4) reasons.push('rain boost');
+  if (isEvening && park.lit) reasons.push('lit surfaces');
+  if (distKm < 1) reasons.push('very close');
+  return reasons.length ? '↑ ' + reasons.join(' · ') : '';
+}
+
+// ── Score + verdict ──────────────────────────────────────
 function calcScore(temp, humidity, wind, precip, eve) {
   const r = precip >= 5 ? 35 : precip >= 1 ? 25 : precip >= 0.1 ? 12 : 0;
   const h = humidity >= 85 ? 25 : humidity >= 75 ? 18 : humidity >= 65 ? 8 : 0;
@@ -376,120 +422,122 @@ function distKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 function fmtDist(km) { return km < 1 ? Math.round(km*1000)+'m' : km.toFixed(1)+'km'; }
-function walkMin(km) { const m = Math.round(km/0.083); return m < 2 ? '<2 min walk' : m+'min walk'; }
+function walkMin(km) { const m = Math.round(km/0.083); return m < 2 ? '<2 min' : m+'min walk'; }
 
-// ── Parks: instant, no API call ──────────────────────────
-function showNearbySpots(lat, lng, score) {
+// ── Show best spots ──────────────────────────────────────
+function showBestSpots(lat, lng, flightScore, weather) {
   const section = document.getElementById('spots-section');
   const listEl  = document.getElementById('spot-list');
   const subEl   = document.getElementById('spots-sub');
 
-  if (score < 35) { section.style.display = 'none'; return; }
+  if (flightScore < 35) { section.style.display = 'none'; return; }
   section.style.display = 'block';
 
-  const spots = SG_PARKS
-    .map(p => ({ ...p, km: distKm(lat, lng, p.lat, p.lng) }))
-    .sort((a, b) => a.km - b.km)
+  const h       = new Date().getHours();
+  const isEve   = h >= 18 && h <= 23;
+  const precip  = weather?.precip ?? 0;
+
+  // Score every park and sort by hunt score
+  const ranked = SG_PARKS
+    .map(p => {
+      const km  = distKm(lat, lng, p.lat, p.lng);
+      const hs  = calcHuntScore(p, km, weather, isEve, precip);
+      return { ...p, km, huntScore: hs };
+    })
+    .sort((a, b) => b.huntScore - a.huntScore)
     .slice(0, 5);
 
-  subEl.textContent = `${spots.length} spots near you`;
+  const topScore = ranked[0]?.huntScore ?? 100;
+  subEl.textContent = `Ranked by habitat + conditions${isEve ? ' + lighting' : ''}`;
 
-  const rankClass = ['gold','silver','bronze','',''];
-  const typeLabel = { park: 'Park', nature: 'Nature area', garden: 'Garden' };
-  const typeIcon  = { park: '🌳', nature: '🌿', garden: '🌸' };
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const typeLabel = { 5: 'Primary forest', 4: 'Secondary forest', 3: 'Park with forest edge', 2: 'Neighbourhood park' };
 
-  listEl.innerHTML = spots.map((s, i) => {
+  listEl.innerHTML = ranked.map((s, i) => {
     const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=walking`;
+    const col     = huntScoreColor(s.huntScore);
+    const lbl     = huntScoreLabel(s.huntScore);
+    const why     = i === 0 ? whyTopSpot(s, s.km, isEve, precip) : '';
+    const barPct  = Math.round((s.huntScore / topScore) * 100);
     return `
       <div class="spot-card" onclick="navigate('${mapsUrl}')">
-        <div class="spot-rank ${rankClass[i]}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+        <div class="spot-rank" style="background:${col}22;color:${col}">${medals[i]}</div>
         <div class="spot-info">
-          <div class="spot-name">${typeIcon[s.type]||'📍'} ${s.name}</div>
-          <div class="spot-type">${typeLabel[s.type]||'Green area'}</div>
+          <div class="spot-name">${s.name}</div>
+          <div class="spot-type">${typeLabel[s.habitat] || 'Green area'}${s.lit ? ' · 💡 lit' : ''}</div>
           <div class="spot-meta">
             <span class="spot-dist">${fmtDist(s.km)}</span>
             <span class="spot-walk">· ${walkMin(s.km)}</span>
           </div>
+          <div class="hunt-score-bar">
+            <span class="hunt-score-label">Hunt score</span>
+            <div class="hunt-bar-bg"><div class="hunt-bar-fill" style="width:${barPct}%;background:${col}"></div></div>
+            <span class="hunt-score-num" style="color:${col}">${lbl}</span>
+          </div>
+          ${why ? `<div class="spot-why">${why}</div>` : ''}
           <div class="spot-tip">${s.tip}</div>
         </div>
         <button class="spot-nav" onclick="event.stopPropagation();navigate('${mapsUrl}')">🧭 Go</button>
       </div>`;
   }).join('');
 
-  showMinimap(lat, lng, spots[0]);
+  showMinimap(lat, lng, ranked[0]);
 }
 
 function navigate(url) { window.open(url, '_blank'); }
 
 function showMinimap(lat, lng, nearest) {
-  const wrap  = document.getElementById('minimap-wrap');
+  const wrap = document.getElementById('minimap-wrap');
   const frame = document.getElementById('minimap');
   const label = document.getElementById('minimap-label');
   frame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
   wrap.style.display = 'block';
-  label.textContent  = nearest ? `Nearest: ${nearest.name} (${fmtDist(nearest.km)})` : 'Your area';
+  label.textContent = nearest ? `#1: ${nearest.name} (${fmtDist(nearest.km)})` : 'Your area';
 }
 
 // ── Location: robust with retry + accuracy fallback ──────
 function startLocation() {
   locAttempts = 0;
   document.getElementById('location-screen').style.display = 'none';
-  tryGetPosition(true); // try high accuracy first
-}
-
-function retryLocation() {
-  locAttempts = 0;
   tryGetPosition(true);
 }
+function retryLocation() { locAttempts = 0; tryGetPosition(true); }
 
 function tryGetPosition(highAccuracy) {
   setDot('searching');
   setName(highAccuracy ? 'Locating you...' : 'Locating (fallback)...');
-
   if (!navigator.geolocation) { useDefault(); return; }
-
   navigator.geolocation.getCurrentPosition(
     pos => onPos(pos),
     err => {
-      console.warn('GPS error:', err.code, err.message);
       if (err.code === 1) {
-        // Permission denied — show screen
-        setDot('error');
-        setName('Location denied — tap to retry');
+        setDot('error'); setName('Location denied — tap to retry');
         document.getElementById('location-screen').style.display = 'block';
       } else if (highAccuracy && locAttempts < 2) {
-        // Timeout or unavailable — retry with low accuracy
         locAttempts++;
         setTimeout(() => tryGetPosition(false), 500);
       } else {
-        // All attempts failed — use cached or default
         loadCachedOrDefault();
       }
     },
-    {
-      enableHighAccuracy: highAccuracy,
-      timeout: highAccuracy ? 12000 : 20000,
-      maximumAge: highAccuracy ? 30000 : 120000,
-    }
+    { enableHighAccuracy: highAccuracy, timeout: highAccuracy ? 12000 : 20000, maximumAge: highAccuracy ? 30000 : 120000 }
   );
 }
 
 function loadCachedOrDefault() {
   try {
     const saved = JSON.parse(localStorage.getItem('ant-coords') || 'null');
-    if (saved && Date.now() - saved.ts < 7200000) { // 2hr cache
+    if (saved && Date.now() - saved.ts < 7200000) {
       Object.assign(state, { lat: saved.lat, lng: saved.lng, locationName: saved.name + ' (cached)' });
       document.getElementById('main-content').style.display = 'block';
-      setDot('ok'); setName(state.locationName);
-      fetchWeather(); return;
+      setDot('ok'); setName(state.locationName); fetchWeather(); return;
     }
   } catch(e) {}
   useDefault();
 }
 
 async function onPos(pos) {
-  state.lat = pos.coords.latitude;
-  state.lng = pos.coords.longitude;
+  state.lat = pos.coords.latitude; state.lng = pos.coords.longitude;
   document.getElementById('location-screen').style.display = 'none';
   document.getElementById('main-content').style.display    = 'block';
   setDot('ok'); setName('Resolving...');
@@ -501,8 +549,7 @@ function useDefault() {
   Object.assign(state, { lat: FALLBACK.lat, lng: FALLBACK.lng, locationName: FALLBACK.name });
   document.getElementById('location-screen').style.display = 'none';
   document.getElementById('main-content').style.display    = 'block';
-  setDot('ok'); setName(FALLBACK.name);
-  fetchWeather();
+  setDot('ok'); setName(FALLBACK.name); fetchWeather();
 }
 
 async function reverseGeocode(lat, lng) {
@@ -512,12 +559,10 @@ async function reverseGeocode(lat, lng) {
     const a    = data.address;
     const name = a.suburb || a.neighbourhood || a.district || a.town || a.city || 'Your location';
     state.locationName = a.city ? `${name}, ${a.city}` : name;
-    setName(state.locationName);
-    saveCoords();
+    setName(state.locationName); saveCoords();
   } catch(e) {
     state.locationName = `${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`;
-    setName(state.locationName);
-    saveCoords();
+    setName(state.locationName); saveCoords();
   }
 }
 
@@ -540,6 +585,8 @@ async function fetchWeather() {
     const { score, factors } = calcScore(c.temperature_2m, c.relative_humidity_2m, c.wind_speed_10m, c.precipitation, eve);
     const v = verdict(score);
 
+    currentWeather = { temp: c.temperature_2m, humidity: c.relative_humidity_2m, wind: c.wind_speed_10m, precip: c.precipitation };
+
     document.getElementById('w-temp').textContent  = c.temperature_2m.toFixed(1)+'°C';
     document.getElementById('w-humid').textContent = Math.round(c.relative_humidity_2m)+'%';
     document.getElementById('w-wind').textContent  = c.wind_speed_10m.toFixed(0)+'km/h';
@@ -550,9 +597,7 @@ async function fetchWeather() {
     ring.style.strokeDashoffset = (CIRC*(1-score/100)).toFixed(1);
     ring.setAttribute('stroke', v.ring);
     const num = document.getElementById('score-num');
-    num.textContent = Math.round(score);
-    num.style.color = v.ring;
-
+    num.textContent = Math.round(score); num.style.color = v.ring;
     document.getElementById('verdict-text').textContent = v.text;
     document.getElementById('verdict-text').style.color = v.color;
     document.getElementById('time-window').textContent  = eve ? '🌙 Evening window active' : h < 18 ? 'Next window: today 6pm' : 'Next window: tomorrow 6pm';
@@ -560,16 +605,16 @@ async function fetchWeather() {
     const banner = document.getElementById('alert-banner');
     if (score >= 60) {
       banner.className = 'alert-banner alert-go'; banner.style.display = 'block';
-      banner.textContent = `🐜 High flight chance near ${state.locationName}! Check the nearest spots below — head there after dark with your containers.`;
+      banner.textContent = `🐜 High flight chance near ${state.locationName}! Best spots ranked below — head out after dark.`;
     } else if (score >= 35) {
       banner.className = 'alert-banner alert-mid'; banner.style.display = 'block';
-      banner.textContent = `Moderate conditions — worth checking the nearest parks tonight.`;
+      banner.textContent = `Moderate conditions — worth checking the best ranked spots tonight.`;
     } else { banner.style.display = 'none'; }
 
     renderFactors(factors);
     renderHourly(data.hourly);
     setName(state.locationName + ' · ' + new Date().toLocaleTimeString('en-SG', { hour:'2-digit', minute:'2-digit' }));
-    showNearbySpots(state.lat, state.lng, score); // instant — no API call!
+    showBestSpots(state.lat, state.lng, score, currentWeather);
 
   } catch(e) { setName('Error — tap ↻ to retry'); }
   btn.innerHTML = '↻';
@@ -589,7 +634,7 @@ function renderFactors(factors) {
 }
 
 function renderHourly(hourly) {
-  const now  = Date.now();
+  const now = Date.now();
   const rows = hourly.time
     .map((t,i) => ({ time:t, temp:hourly.temperature_2m[i], humidity:hourly.relative_humidity_2m[i], wind:hourly.wind_speed_10m[i], rain:hourly.precipitation[i] }))
     .filter(h => new Date(h.time).getTime() >= now - 1800000).slice(0,12);
@@ -606,7 +651,6 @@ function renderHourly(hourly) {
   }).join('');
 }
 
-// ── Notifications ────────────────────────────────────────
 async function toggleNotifications() {
   if (state.notifEnabled) { state.notifEnabled=false; updateNotifUI(false); return; }
   if (!('Notification' in window)) { alert('Install to home screen first, then enable notifications.'); return; }
@@ -632,33 +676,22 @@ function setDot(s)  { document.getElementById('loc-dot').className = 'location-d
 function setName(n) { document.getElementById('loc-name').textContent = n; }
 function fullRefresh() { locAttempts = 0; tryGetPosition(true); }
 
-// ── Init ─────────────────────────────────────────────────
 async function init() {
   if ('serviceWorker' in navigator) { try { await navigator.serviceWorker.register('/sw.js'); } catch(e){} }
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
   if (!isStandalone) document.getElementById('install-hint').style.display = 'block';
-
-  // Try restoring cache for instant load while GPS fires
   try {
     const saved = JSON.parse(localStorage.getItem('ant-coords') || 'null');
     if (saved && Date.now() - saved.ts < 3600000) {
       Object.assign(state, { lat: saved.lat, lng: saved.lng, locationName: saved.name });
       document.getElementById('main-content').style.display = 'block';
-      setName(saved.name + ' (updating...)');
-      fetchWeather();
+      setName(saved.name + ' (updating...)'); fetchWeather();
     }
   } catch(e) {}
-
   const perm = await navigator.permissions?.query({name:'geolocation'}).catch(()=>null);
-  if (perm?.state === 'denied') {
-    setDot('error');
-    if (!state.lat) document.getElementById('location-screen').style.display = 'block';
-  } else if (!state.lat) {
-    document.getElementById('location-screen').style.display = 'block';
-  } else {
-    tryGetPosition(true); // refresh GPS in background
-  }
-
+  if (perm?.state === 'denied') { setDot('error'); if (!state.lat) document.getElementById('location-screen').style.display = 'block'; }
+  else if (!state.lat) { document.getElementById('location-screen').style.display = 'block'; }
+  else { tryGetPosition(true); }
   clearInterval(refreshTimer);
   refreshTimer = setInterval(fullRefresh, 15*60*1000);
 }
