@@ -39,7 +39,6 @@ body {
   padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 32px);
   max-width: 440px; margin: 0 auto;
 }
-
 .header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
 .app-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
 .location-row { display: flex; align-items: center; gap: 5px; margin-top: 3px; cursor: pointer; }
@@ -55,7 +54,6 @@ body {
   -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
 }
 .icon-btn:active { opacity: 0.5; }
-
 .location-screen {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 32px 24px;
@@ -69,18 +67,15 @@ body {
   background: var(--green); color: white; border: none;
   font-size: 15px; font-weight: 600; padding: 13px 24px;
   border-radius: 99px; cursor: pointer; width: 100%;
-  justify-content: center; -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.15s;
+  justify-content: center; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
 }
 .btn-primary:active { opacity: 0.8; }
 .btn-secondary {
   display: inline-flex; align-items: center; justify-content: center;
   background: transparent; color: var(--text-2); border: 1px solid var(--border);
   font-size: 13px; padding: 10px 20px; border-radius: 99px;
-  cursor: pointer; margin-top: 10px; width: 100%;
-  -webkit-tap-highlight-color: transparent;
+  cursor: pointer; margin-top: 10px; width: 100%; -webkit-tap-highlight-color: transparent;
 }
-
 .score-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 20px 16px 16px;
@@ -88,51 +83,37 @@ body {
 }
 .score-ring-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 12px; }
 #score-ring { transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1), stroke 0.5s; }
-.score-center {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
+.score-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .score-big { font-size: 44px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
 .score-sub { font-size: 12px; color: var(--text-3); margin-top: 1px; }
 .verdict { font-size: 19px; font-weight: 600; }
 .time-window { font-size: 12px; color: var(--text-2); margin-top: 4px; }
-
 .alert-banner {
   border-radius: var(--radius-sm); padding: 13px 15px;
-  margin-bottom: 12px; font-size: 14px; font-weight: 500;
-  line-height: 1.45; display: none;
+  margin-bottom: 12px; font-size: 14px; font-weight: 500; line-height: 1.45; display: none;
 }
 .alert-go  { background: var(--green-light); color: var(--green-dark); border-left: 3px solid var(--green); }
 .alert-mid { background: var(--amber-light); color: var(--amber-dark); border-left: 3px solid var(--amber); }
-
 .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 10px 8px; }
 .stat-label { font-size: 10px; color: var(--text-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
 .stat-val { font-size: 14px; font-weight: 600; margin-top: 2px; }
-
-/* ── HUNTING SPOTS ─────────────────────────────────────── */
 .spots-section { display: none; margin-bottom: 12px; }
-.spots-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
-}
+.spots-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .spots-title { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
 .spots-sub { font-size: 11px; color: var(--text-3); }
-
 .spot-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 12px 14px;
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 8px; text-decoration: none; color: inherit;
-  -webkit-tap-highlight-color: transparent; cursor: pointer;
-  transition: border-color 0.15s;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s;
 }
 .spot-card:active { border-color: var(--green); }
 .spot-rank {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--green-light); color: var(--green-dark);
   font-size: 13px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .spot-rank.gold   { background: #FEF3C7; color: #92400E; }
 .spot-rank.silver { background: #F1F5F9; color: #475569; }
@@ -147,16 +128,10 @@ body {
   flex-shrink: 0; background: var(--green); color: white;
   border: none; border-radius: var(--radius-xs);
   padding: 8px 12px; font-size: 12px; font-weight: 600;
-  cursor: pointer; -webkit-tap-highlight-color: transparent;
-  white-space: nowrap;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; white-space: nowrap;
 }
 .spot-nav:active { opacity: 0.8; }
-.spot-tip {
-  font-size: 11px; color: var(--text-2); margin-top: 3px;
-  font-style: italic;
-}
-
-/* Minimap */
+.spot-tip { font-size: 11px; color: var(--text-2); margin-top: 3px; font-style: italic; }
 .minimap-wrap {
   border-radius: var(--radius-sm); overflow: hidden;
   border: 1px solid var(--border); margin-bottom: 12px;
@@ -164,50 +139,39 @@ body {
 }
 #minimap { width: 100%; height: 100%; border: none; }
 .minimap-overlay {
-  position: absolute; top: 8px; left: 8px;
-  background: white; border-radius: var(--radius-xs);
-  padding: 4px 8px; font-size: 11px; font-weight: 600; color: var(--green-dark);
+  position: absolute; top: 8px; left: 8px; background: white;
+  border-radius: var(--radius-xs); padding: 4px 8px;
+  font-size: 11px; font-weight: 600; color: var(--green-dark);
   box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
-
-/* ── Notifications ─────────────────────────────────────── */
 .notif-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 12px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 .notif-icon { font-size: 24px; flex-shrink: 0; }
 .notif-title { font-size: 14px; font-weight: 600; }
 .notif-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
 .toggle {
-  margin-left: auto; flex-shrink: 0;
-  width: 46px; height: 27px; border-radius: 99px;
-  border: none; cursor: pointer; position: relative;
-  transition: background 0.2s; background: var(--gray);
+  margin-left: auto; flex-shrink: 0; width: 46px; height: 27px; border-radius: 99px;
+  border: none; cursor: pointer; position: relative; transition: background 0.2s; background: var(--gray);
 }
 .toggle.on { background: var(--green); }
 .toggle::after {
   content: ''; position: absolute; top: 3px; left: 3px;
-  width: 21px; height: 21px; border-radius: 50%;
-  background: white; transition: transform 0.2s;
+  width: 21px; height: 21px; border-radius: 50%; background: white; transition: transform 0.2s;
 }
 .toggle.on::after { transform: translateX(19px); }
-
 .section-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 7px; }
 .factor-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
-.factor-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px; border-bottom: 1px solid var(--border);
-}
+.factor-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
 .factor-row:last-child { border-bottom: none; }
 .factor-name { flex: 1; color: var(--text-2); font-size: 12px; }
 .factor-bar-bg { width: 70px; height: 4px; background: var(--bg); border-radius: 99px; }
 .factor-bar { height: 4px; border-radius: 99px; transition: width 0.7s ease; }
 .factor-val { font-size: 11px; color: var(--text-3); width: 42px; text-align: right; }
 .factor-pts { font-size: 13px; font-weight: 600; width: 24px; text-align: right; }
-
 .hourly-scroll { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .hourly-scroll::-webkit-scrollbar { display: none; }
 .hour-pill {
@@ -219,15 +183,12 @@ body {
 .hour-time  { font-size: 10px; color: var(--text-3); }
 .hour-score { font-size: 15px; font-weight: 700; margin: 2px 0 1px; }
 .hour-rain  { font-size: 10px; color: var(--text-3); }
-
 .install-hint {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-xs); padding: 11px 14px;
-  font-size: 12px; color: var(--text-2); margin-bottom: 12px;
-  line-height: 1.5; display: none;
+  font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.5; display: none;
 }
 .footer { text-align: center; font-size: 11px; color: var(--text-3); margin-top: 12px; line-height: 1.6; }
-
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 @keyframes spin   { to { transform: rotate(360deg); } }
 .spinning { animation: spin 1s linear infinite; display: inline-block; }
@@ -238,7 +199,7 @@ body {
 <div class="header">
   <div>
     <div class="app-name">🐜 Ant Alert</div>
-    <div class="location-row" onclick="requestLocation()">
+    <div class="location-row" onclick="retryLocation()">
       <div class="location-dot searching" id="loc-dot"></div>
       <span class="location-name" id="loc-name">Locating you...</span>
     </div>
@@ -246,19 +207,17 @@ body {
   <div class="icon-btn" id="refresh-btn" onclick="fullRefresh()">↻</div>
 </div>
 
-<!-- GPS permission screen -->
 <div id="location-screen" class="location-screen" style="display:none">
   <div class="big-icon">📍</div>
   <h2>Allow location access</h2>
-  <p>Ant Alert uses your GPS to check conditions exactly where you are and guide you to the best nearby hunting spots.</p>
-  <button class="btn-primary" onclick="requestLocation()">📍 Use my location</button>
+  <p>Ant Alert uses your GPS to check conditions exactly where you are and find the best nearby hunting spots.</p>
+  <button class="btn-primary" onclick="startLocation()">📍 Use my location</button>
   <button class="btn-secondary" onclick="useDefault()">Use Novena (default)</button>
 </div>
 
 <div id="alert-banner" class="alert-banner"></div>
 
 <div id="main-content" style="display:none">
-
   <div class="score-card">
     <div class="score-ring-wrap">
       <svg width="140" height="140" viewBox="0 0 140 140" style="position:absolute;inset:0;">
@@ -284,12 +243,11 @@ body {
     <div class="stat-card"><div class="stat-label">🌧 Rain</div><div class="stat-val" id="w-rain">–</div></div>
   </div>
 
-  <!-- HUNTING SPOTS — shown when score >= 35 -->
   <div class="spots-section" id="spots-section">
     <div class="spots-header">
       <div>
         <div class="spots-title">🗺 Nearest hunting spots</div>
-        <div class="spots-sub" id="spots-sub">Finding parks near you...</div>
+        <div class="spots-sub" id="spots-sub"></div>
       </div>
     </div>
     <div id="minimap-wrap" class="minimap-wrap">
@@ -317,26 +275,76 @@ body {
   <div id="install-hint" class="install-hint">
     📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"
   </div>
-
-  <div class="footer">
-    Auto-refreshes every 15 min · Weather: Open-Meteo · Spots: OpenStreetMap
-  </div>
-
+  <div class="footer">Auto-refreshes every 15 min · Weather: Open-Meteo · Parks: built-in SG database</div>
 </div>
 
 <script>
 const CIRC = 2 * Math.PI * 56;
 const FALLBACK = { lat: 1.3200, lng: 103.8440, name: 'Novena, Singapore' };
-
-// ── Multiple Overpass endpoints for fallback ─────────────
-const OVERPASS_ENDPOINTS = [
-  'https://overpass-api.de/api/interpreter',
-  'https://overpass.kumi.systems/api/interpreter',
-  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
-];
-
 let state = { lat: null, lng: null, locationName: '', notifEnabled: false };
-let refreshTimer;
+let refreshTimer, locAttempts = 0;
+
+// ── Singapore Parks Database (no API needed, always works) ──────────────────
+const SG_PARKS = [
+  // Central
+  { name: 'Bishan-Ang Mo Kio Park',       lat: 1.3620, lng: 103.8487, type: 'park',    tip: 'Large park with river — check grassy banks and light poles after rain' },
+  { name: 'Fort Canning Park',             lat: 1.2934, lng: 103.8455, type: 'nature',  tip: 'Forested hill — forest edge paths excellent after evening rain' },
+  { name: 'Singapore Botanic Gardens',     lat: 1.3138, lng: 103.8159, type: 'garden',  tip: 'Rich soil and ornamental plants — check lit entrances at night' },
+  { name: 'MacRitchie Reservoir Park',     lat: 1.3419, lng: 103.8198, type: 'nature',  tip: 'Dense forest edge — brilliant post-rain hunting, bring headlamp' },
+  { name: 'Bukit Timah Nature Reserve',    lat: 1.3520, lng: 103.7767, type: 'nature',  tip: 'Primary forest — best in Singapore after heavy rain, check trail lights' },
+  { name: 'Lower Pierce Reservoir Park',   lat: 1.3699, lng: 103.8148, type: 'nature',  tip: 'Forested reservoir edge — check road lights after rain' },
+  { name: 'Upper Seletar Reservoir Park',  lat: 1.4003, lng: 103.8148, type: 'park',    tip: 'Quiet park with good grass coverage — check lit paths' },
+  { name: 'Thomson Nature Park',           lat: 1.3707, lng: 103.8243, type: 'nature',  tip: 'Secondary forest — great humid conditions near stream edges' },
+  { name: 'Springleaf Nature Park',        lat: 1.3946, lng: 103.8139, type: 'nature',  tip: 'Forest and stream — ideal post-rain nuptial flight conditions' },
+  // North
+  { name: 'Sembawang Park',               lat: 1.4592, lng: 103.8208, type: 'park',    tip: 'Coastal grass and trees — check lit paths near the beach edge' },
+  { name: 'Admiralty Park',               lat: 1.4441, lng: 103.7997, type: 'park',    tip: 'Large park near mangroves — check grass edges after rain' },
+  { name: 'Yishun Park',                  lat: 1.4192, lng: 103.8339, type: 'park',    tip: 'Grassy field edges and lit walkways — good post-rain spot' },
+  { name: 'Mandai Nature Trail',          lat: 1.4036, lng: 103.7934, type: 'nature',  tip: 'Forest trail adjacent — check lit carpark edges after rain' },
+  { name: 'Sungei Buloh Wetland Reserve', lat: 1.4473, lng: 103.7290, type: 'nature',  tip: 'Mangrove and marsh edge — humid conditions perfect for flights' },
+  // East
+  { name: 'East Coast Park',              lat: 1.3005, lng: 103.9121, type: 'park',    tip: 'Long coastal stretch — check lit BBQ pits and lamp posts after rain' },
+  { name: 'Pasir Ris Park',              lat: 1.3721, lng: 103.9488, type: 'park',    tip: 'Forest fringe and mangrove edge — excellent post-rain hunting' },
+  { name: 'Bedok Reservoir Park',         lat: 1.3393, lng: 103.9317, type: 'park',    tip: 'Reservoir loop path — check grass edges and lit benches' },
+  { name: 'Tampines Eco Green',           lat: 1.3559, lng: 103.9449, type: 'nature',  tip: 'Secondary forest plots — rich hunting after afternoon rain' },
+  { name: 'Tampines Central Park',        lat: 1.3531, lng: 103.9430, type: 'park',    tip: 'Open grass with lit paths — check ground near lamp posts' },
+  { name: 'Changi Beach Park',            lat: 1.3876, lng: 103.9862, type: 'park',    tip: 'Grassy coastal park — check lit areas and wooden shelter posts' },
+  { name: 'Ketam Mountain Bike Trail',    lat: 1.3634, lng: 103.9770, type: 'nature',  tip: 'Pulau Ubin forest edge — ferry required, worth it after big rain' },
+  // West
+  { name: 'Jurong Lake Gardens',          lat: 1.3344, lng: 103.7262, type: 'park',    tip: 'Large lakeside park — check grass near water\'s edge after rain' },
+  { name: 'Jurong Central Park',          lat: 1.3337, lng: 103.7381, type: 'park',    tip: 'Shaded grass areas — check lit paths near trees' },
+  { name: 'Clementi Forest',              lat: 1.3230, lng: 103.7644, type: 'nature',  tip: 'Unofficial forest — excellent secondary growth, post-rain goldmine' },
+  { name: 'Buona Vista Park',             lat: 1.3060, lng: 103.7903, type: 'park',    tip: 'Grassy slopes — check lit carpark and path edges' },
+  { name: 'Hortpark',                     lat: 1.2870, lng: 103.8008, type: 'garden',  tip: 'Garden with rich planting — check wall lights and garden beds' },
+  { name: 'Telok Blangah Hill Park',      lat: 1.2794, lng: 103.8081, type: 'nature',  tip: 'Forested hill — check trail entrances and lamp posts at base' },
+  { name: 'Kent Ridge Park',              lat: 1.2924, lng: 103.7817, type: 'nature',  tip: 'Forest ridge — lit carpark at base great post-rain checking spot' },
+  { name: 'Labrador Nature Reserve',      lat: 1.2664, lng: 103.8025, type: 'nature',  tip: 'Coastal forest — check lit paths near rocky shore' },
+  { name: 'West Coast Park',              lat: 1.2948, lng: 103.7610, type: 'park',    tip: 'Coastal grass and trees — check any lit structures after rain' },
+  { name: 'Pandan Reservoir Park',        lat: 1.3150, lng: 103.7374, type: 'park',    tip: 'Reservoir edge grass — check road lights near water' },
+  // South / City
+  { name: 'Labrador Park MRT area',       lat: 1.2717, lng: 103.8024, type: 'park',    tip: 'Park connector with grass patches — check MRT station lights' },
+  { name: 'Tanjong Pagar Railway Corridor',lat:1.2812, lng: 103.8261, type: 'nature',  tip: 'Linear forest — check overgrown patches and lamp posts' },
+  { name: 'Southern Ridges (HortPark end)',lat:1.2845, lng: 103.8014, type: 'nature',  tip: 'Ridge forest — post-rain flying ants common near lit shelters' },
+  { name: 'Gillman Barracks Green',        lat:1.2841, lng: 103.8065, type: 'park',    tip: 'Grassy compound — check lit walkways near buildings' },
+  // Punggol / NE
+  { name: 'Punggol Waterway Park',        lat: 1.4003, lng: 103.9050, type: 'park',    tip: 'Waterway corridor — grassy banks excellent for post-rain checks' },
+  { name: 'Punggol Point Park',           lat: 1.4148, lng: 103.9106, type: 'park',    tip: 'Coastal grass and mangrove fringe — check lit fishing platforms' },
+  { name: 'Coney Island Park',            lat: 1.4027, lng: 103.9254, type: 'nature',  tip: 'Island nature park — forest edge with low light, great for hunting' },
+  { name: 'Sengkang Riverside Park',      lat: 1.3903, lng: 103.8974, type: 'park',    tip: 'River corridor — check grass banks and lit pavilions' },
+  { name: 'Hougang Park',                 lat: 1.3700, lng: 103.8869, type: 'park',    tip: 'Neighbourhood park — check lamp post bases after rain' },
+  // Bukit areas
+  { name: 'Bukit Batok Nature Park',      lat: 1.3590, lng: 103.7613, type: 'nature',  tip: 'Quarry lake forest — check water\'s edge and lit paths at dusk' },
+  { name: 'Bukit Timah Hill summit area', lat: 1.3549, lng: 103.7761, type: 'nature',  tip: 'Hill summit — check all lit shelter poles post rain' },
+  { name: 'Dairy Farm Nature Park',       lat: 1.3536, lng: 103.7728, type: 'nature',  tip: 'Secondary forest and grassland — excellent ground hunting spot' },
+  { name: 'Zhenghua Nature Park',         lat: 1.3712, lng: 103.7683, type: 'nature',  tip: 'Young secondary forest — active flight zone after afternoon rain' },
+  { name: 'Hindhede Nature Park',         lat: 1.3538, lng: 103.7772, type: 'nature',  tip: 'Quarry and forest — check path lights at quarry rim' },
+  // Additional
+  { name: 'Katong Park',                  lat: 1.2999, lng: 103.9002, type: 'park',    tip: 'Small coastal park — check lamp posts and sea wall edges' },
+  { name: 'Geylang Park Connector',       lat: 1.3150, lng: 103.8850, type: 'park',    tip: 'Linear park along river — check lit bridges and grass banks' },
+  { name: 'Toa Payoh Town Park',          lat: 1.3330, lng: 103.8472, type: 'park',    tip: 'Central town park — check any lamp posts near grassy areas' },
+  { name: 'Ang Mo Kio Town Garden West',  lat: 1.3709, lng: 103.8461, type: 'garden',  tip: 'Dense planting areas — check lit shelters after rain' },
+  { name: 'Serangoon Garden Park',        lat: 1.3628, lng: 103.8673, type: 'park',    tip: 'Neighbourhood park — well-lit paths great for night checking' },
+];
 
 // ── Score ────────────────────────────────────────────────
 function calcScore(temp, humidity, wind, precip, eve) {
@@ -345,8 +353,7 @@ function calcScore(temp, humidity, wind, precip, eve) {
   const t = (temp >= 26 && temp <= 33) ? 20 : (temp >= 24) ? 10 : 0;
   const w = wind <= 8 ? 12 : wind <= 15 ? 6 : 0;
   const e = eve ? 8 : 0;
-  const score = Math.min(100, r+h+t+w+e);
-  return { score, factors: [
+  return { score: Math.min(100, r+h+t+w+e), factors: [
     { name: 'Recent rain',    pts: r, max: 35, val: precip.toFixed(1)+'mm' },
     { name: 'Humidity',       pts: h, max: 25, val: Math.round(humidity)+'%' },
     { name: 'Temperature',    pts: t, max: 20, val: temp.toFixed(1)+'°C' },
@@ -362,204 +369,122 @@ function verdict(score) {
   return              { text: '⬜ Low chance',           color: '#888780', ring: '#B4B2A9' };
 }
 
-// ── Haversine distance (km) ──────────────────────────────
 function distKm(lat1, lng1, lat2, lng2) {
   const R = 6371, d2r = Math.PI/180;
   const dLat = (lat2-lat1)*d2r, dLng = (lng2-lng1)*d2r;
   const a = Math.sin(dLat/2)**2 + Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
+function fmtDist(km) { return km < 1 ? Math.round(km*1000)+'m' : km.toFixed(1)+'km'; }
+function walkMin(km) { const m = Math.round(km/0.083); return m < 2 ? '<2 min walk' : m+'min walk'; }
 
-function fmtDist(km) {
-  return km < 1 ? Math.round(km*1000)+'m' : km.toFixed(1)+'km';
-}
-function walkMin(km) {
-  const m = Math.round(km / 0.08);
-  return m < 2 ? '< 2 min walk' : m+'min walk';
-}
-
-// ── Spot tips by type ────────────────────────────────────
-const TIPS = {
-  park:        'Check lit signboards and walls near grass after rain',
-  nature:      'Forest edge paths — bring a headlamp, check post-rain',
-  garden:      'Ornamental plants attract alates — check wall lights',
-  pitch:       'Grassy field edges near any flood-lit areas',
-  playground:  'Check lit walls and sandy edges nearby',
-  recreation:  'Lit car park edges and grassy borders',
-  default:     'Scan lit walls and grassy areas after dark'
-};
-
-const ICONS = {
-  park: '🌳', nature: '🌿', garden: '🌸', pitch: '⚽',
-  playground: '🛝', recreation: '🏞', default: '📍'
-};
-
-function spotTip(tags) {
-  if (!tags) return TIPS.default;
-  const t = JSON.stringify(tags).toLowerCase();
-  if (t.includes('nature') || t.includes('reserve')) return TIPS.nature;
-  if (t.includes('garden'))     return TIPS.garden;
-  if (t.includes('pitch'))      return TIPS.pitch;
-  if (t.includes('playground')) return TIPS.playground;
-  if (t.includes('recreation')) return TIPS.recreation;
-  return TIPS.park;
-}
-
-function spotIcon(tags) {
-  if (!tags) return ICONS.default;
-  const t = JSON.stringify(tags).toLowerCase();
-  if (t.includes('nature') || t.includes('reserve')) return ICONS.nature;
-  if (t.includes('garden'))     return ICONS.garden;
-  if (t.includes('pitch'))      return ICONS.pitch;
-  if (t.includes('playground')) return ICONS.playground;
-  if (t.includes('recreation')) return ICONS.recreation;
-  return ICONS.park;
-}
-
-function spotType(tags) {
-  if (!tags) return 'Green area';
-  const t = JSON.stringify(tags).toLowerCase();
-  if (t.includes('nature_reserve')) return 'Nature reserve';
-  if (t.includes('nature'))         return 'Nature area';
-  if (t.includes('garden'))         return 'Garden';
-  if (t.includes('pitch'))          return 'Sports field';
-  if (t.includes('playground'))     return 'Playground';
-  if (t.includes('recreation'))     return 'Recreation area';
-  return 'Park';
-}
-
-// ── Overpass query with multi-endpoint fallback ──────────
-async function queryOverpass(query) {
-  for (const endpoint of OVERPASS_ENDPOINTS) {
-    try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 10000);
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        body: 'data=' + encodeURIComponent(query),
-        signal: controller.signal,
-      });
-      clearTimeout(timer);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return await res.json();
-    } catch (err) {
-      console.warn('Overpass failed:', endpoint, err.message);
-      // try next endpoint
-    }
-  }
-  throw new Error('All Overpass endpoints failed');
-}
-
-// ── Fetch nearby parks ───────────────────────────────────
-async function fetchNearbySpots(lat, lng, score) {
+// ── Parks: instant, no API call ──────────────────────────
+function showNearbySpots(lat, lng, score) {
   const section = document.getElementById('spots-section');
   const listEl  = document.getElementById('spot-list');
   const subEl   = document.getElementById('spots-sub');
 
   if (score < 35) { section.style.display = 'none'; return; }
-
   section.style.display = 'block';
-  listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Finding spots near you...</div>';
 
-  const radius = 2500;
-  const query = `
-    [out:json][timeout:25];
-    (
-      node["leisure"="park"](around:${radius},${lat},${lng});
-      way["leisure"="park"](around:${radius},${lat},${lng});
-      way["leisure"="nature_reserve"](around:${radius},${lat},${lng});
-      way["leisure"="garden"](around:${radius},${lat},${lng});
-      way["leisure"="pitch"](around:${radius},${lat},${lng});
-      way["leisure"="recreation_ground"](around:${radius},${lat},${lng});
-    );
-    out center 20;
-  `;
+  const spots = SG_PARKS
+    .map(p => ({ ...p, km: distKm(lat, lng, p.lat, p.lng) }))
+    .sort((a, b) => a.km - b.km)
+    .slice(0, 5);
 
-  try {
-    const data = await queryOverpass(query);
+  subEl.textContent = `${spots.length} spots near you`;
 
-    const spots = data.elements
-      .map(el => {
-        const slat = el.lat ?? el.center?.lat;
-        const slng = el.lon ?? el.center?.lon;
-        if (!slat || !slng) return null;
-        const km   = distKm(lat, lng, slat, slng);
-        const name = el.tags?.name || el.tags?.['name:en'] || 'Unnamed green area';
-        return { name, tags: el.tags, lat: slat, lng: slng, km };
-      })
-      .filter(s => s && s.km <= 2.5)
-      .sort((a, b) => a.km - b.km)
-      .slice(0, 5);
+  const rankClass = ['gold','silver','bronze','',''];
+  const typeLabel = { park: 'Park', nature: 'Nature area', garden: 'Garden' };
+  const typeIcon  = { park: '🌳', nature: '🌿', garden: '🌸' };
 
-    if (!spots.length) {
-      listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">No parks found within 2.5km — try a larger area.</div>';
-      subEl.textContent = 'No nearby spots found';
-      return;
-    }
-
-    const rankClass = ['gold','silver','bronze','',''];
-    subEl.textContent = `${spots.length} spots within 2.5km of you`;
-
-    listEl.innerHTML = spots.map((s, i) => {
-      const icon = spotIcon(s.tags);
-      const type = spotType(s.tags);
-      const tip  = spotTip(s.tags);
-      const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=walking`;
-      return `
-        <div class="spot-card" onclick="navigate('${mapsUrl}')">
-          <div class="spot-rank ${rankClass[i]}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
-          <div class="spot-info">
-            <div class="spot-name">${icon} ${s.name}</div>
-            <div class="spot-type">${type}</div>
-            <div class="spot-meta">
-              <span class="spot-dist">${fmtDist(s.km)}</span>
-              <span class="spot-walk">· ${walkMin(s.km)}</span>
-            </div>
-            <div class="spot-tip">${tip}</div>
+  listEl.innerHTML = spots.map((s, i) => {
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=walking`;
+    return `
+      <div class="spot-card" onclick="navigate('${mapsUrl}')">
+        <div class="spot-rank ${rankClass[i]}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+        <div class="spot-info">
+          <div class="spot-name">${typeIcon[s.type]||'📍'} ${s.name}</div>
+          <div class="spot-type">${typeLabel[s.type]||'Green area'}</div>
+          <div class="spot-meta">
+            <span class="spot-dist">${fmtDist(s.km)}</span>
+            <span class="spot-walk">· ${walkMin(s.km)}</span>
           </div>
-          <button class="spot-nav" onclick="event.stopPropagation();navigate('${mapsUrl}')">
-            🧭 Go
-          </button>
-        </div>`;
-    }).join('');
+          <div class="spot-tip">${s.tip}</div>
+        </div>
+        <button class="spot-nav" onclick="event.stopPropagation();navigate('${mapsUrl}')">🧭 Go</button>
+      </div>`;
+  }).join('');
 
-    showMinimap(lat, lng, spots[0]);
-
-  } catch(e) {
-    listEl.innerHTML = `<div style="font-size:13px;color:var(--text-3);padding:8px 0;">
-      Couldn't load nearby spots —
-      <span onclick="fetchNearbySpots(${lat},${lng},${score})"
-            style="color:var(--green);cursor:pointer;text-decoration:underline;font-weight:600">
-        tap to retry
-      </span>
-    </div>`;
-    subEl.textContent = 'Connection issue';
-  }
+  showMinimap(lat, lng, spots[0]);
 }
 
-function navigate(url) {
-  window.open(url, '_blank');
-}
+function navigate(url) { window.open(url, '_blank'); }
 
 function showMinimap(lat, lng, nearest) {
   const wrap  = document.getElementById('minimap-wrap');
   const frame = document.getElementById('minimap');
   const label = document.getElementById('minimap-label');
-  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
-  frame.src = src;
+  frame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
   wrap.style.display = 'block';
   label.textContent  = nearest ? `Nearest: ${nearest.name} (${fmtDist(nearest.km)})` : 'Your area';
 }
 
-// ── GPS ──────────────────────────────────────────────────
-function requestLocation() {
-  setDot('searching'); setName('Locating you...');
+// ── Location: robust with retry + accuracy fallback ──────
+function startLocation() {
+  locAttempts = 0;
+  document.getElementById('location-screen').style.display = 'none';
+  tryGetPosition(true); // try high accuracy first
+}
+
+function retryLocation() {
+  locAttempts = 0;
+  tryGetPosition(true);
+}
+
+function tryGetPosition(highAccuracy) {
+  setDot('searching');
+  setName(highAccuracy ? 'Locating you...' : 'Locating (fallback)...');
+
   if (!navigator.geolocation) { useDefault(); return; }
+
   navigator.geolocation.getCurrentPosition(
     pos => onPos(pos),
-    err => { err.code === 1 ? (document.getElementById('location-screen').style.display='block', setDot('error'), setName('Location denied')) : useDefault(); },
-    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    err => {
+      console.warn('GPS error:', err.code, err.message);
+      if (err.code === 1) {
+        // Permission denied — show screen
+        setDot('error');
+        setName('Location denied — tap to retry');
+        document.getElementById('location-screen').style.display = 'block';
+      } else if (highAccuracy && locAttempts < 2) {
+        // Timeout or unavailable — retry with low accuracy
+        locAttempts++;
+        setTimeout(() => tryGetPosition(false), 500);
+      } else {
+        // All attempts failed — use cached or default
+        loadCachedOrDefault();
+      }
+    },
+    {
+      enableHighAccuracy: highAccuracy,
+      timeout: highAccuracy ? 12000 : 20000,
+      maximumAge: highAccuracy ? 30000 : 120000,
+    }
   );
+}
+
+function loadCachedOrDefault() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('ant-coords') || 'null');
+    if (saved && Date.now() - saved.ts < 7200000) { // 2hr cache
+      Object.assign(state, { lat: saved.lat, lng: saved.lng, locationName: saved.name + ' (cached)' });
+      document.getElementById('main-content').style.display = 'block';
+      setDot('ok'); setName(state.locationName);
+      fetchWeather(); return;
+    }
+  } catch(e) {}
+  useDefault();
 }
 
 async function onPos(pos) {
@@ -590,8 +515,8 @@ async function reverseGeocode(lat, lng) {
     setName(state.locationName);
     saveCoords();
   } catch(e) {
-    state.locationName = 'Your location';
-    setName(`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`);
+    state.locationName = `${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`;
+    setName(state.locationName);
     saveCoords();
   }
 }
@@ -624,7 +549,6 @@ async function fetchWeather() {
     ring.style.strokeDasharray  = CIRC.toFixed(1);
     ring.style.strokeDashoffset = (CIRC*(1-score/100)).toFixed(1);
     ring.setAttribute('stroke', v.ring);
-
     const num = document.getElementById('score-num');
     num.textContent = Math.round(score);
     num.style.color = v.ring;
@@ -635,22 +559,17 @@ async function fetchWeather() {
 
     const banner = document.getElementById('alert-banner');
     if (score >= 60) {
-      banner.className     = 'alert-banner alert-go';
-      banner.style.display = 'block';
-      banner.textContent   = `🐜 High flight chance near ${state.locationName}! Check the nearest spots below — head there after dark with your containers.`;
+      banner.className = 'alert-banner alert-go'; banner.style.display = 'block';
+      banner.textContent = `🐜 High flight chance near ${state.locationName}! Check the nearest spots below — head there after dark with your containers.`;
     } else if (score >= 35) {
-      banner.className     = 'alert-banner alert-mid';
-      banner.style.display = 'block';
-      banner.textContent   = `Moderate conditions — worth checking the nearest parks tonight.`;
-    } else {
-      banner.style.display = 'none';
-    }
+      banner.className = 'alert-banner alert-mid'; banner.style.display = 'block';
+      banner.textContent = `Moderate conditions — worth checking the nearest parks tonight.`;
+    } else { banner.style.display = 'none'; }
 
     renderFactors(factors);
     renderHourly(data.hourly);
     setName(state.locationName + ' · ' + new Date().toLocaleTimeString('en-SG', { hour:'2-digit', minute:'2-digit' }));
-
-    fetchNearbySpots(state.lat, state.lng, score);
+    showNearbySpots(state.lat, state.lng, score); // instant — no API call!
 
   } catch(e) { setName('Error — tap ↻ to retry'); }
   btn.innerHTML = '↻';
@@ -673,13 +592,11 @@ function renderHourly(hourly) {
   const now  = Date.now();
   const rows = hourly.time
     .map((t,i) => ({ time:t, temp:hourly.temperature_2m[i], humidity:hourly.relative_humidity_2m[i], wind:hourly.wind_speed_10m[i], rain:hourly.precipitation[i] }))
-    .filter(h => new Date(h.time).getTime() >= now - 1800000)
-    .slice(0,12);
-
+    .filter(h => new Date(h.time).getTime() >= now - 1800000).slice(0,12);
   document.getElementById('hourly-row').innerHTML = rows.map(h => {
-    const hr  = new Date(h.time).getHours();
+    const hr = new Date(h.time).getHours();
     const { score } = calcScore(h.temp, h.humidity, h.wind, h.rain, hr>=18&&hr<=23);
-    const v   = verdict(score);
+    const v = verdict(score);
     const cls = score >= 60 ? 'high' : score >= 35 ? 'mid' : '';
     return `<div class="hour-pill ${cls}">
       <div class="hour-time">${hr.toString().padStart(2,'0')}:00</div>
@@ -711,33 +628,36 @@ function updateNotifUI(on) {
   document.getElementById('notif-sub').textContent   = on ? `Watching ${state.locationName} · 60+ triggers alert` : 'Notify when flight chance ≥ 60/100';
 }
 
-// ── Helpers ──────────────────────────────────────────────
-function setDot(s)  { document.getElementById('loc-dot').className  = 'location-dot'+(s==='searching'?' searching':s==='error'?' error':''); }
+function setDot(s)  { document.getElementById('loc-dot').className = 'location-dot'+(s==='searching'?' searching':s==='error'?' error':''); }
 function setName(n) { document.getElementById('loc-name').textContent = n; }
-function fullRefresh() { requestLocation(); }
+function fullRefresh() { locAttempts = 0; tryGetPosition(true); }
 
 // ── Init ─────────────────────────────────────────────────
 async function init() {
   if ('serviceWorker' in navigator) { try { await navigator.serviceWorker.register('/sw.js'); } catch(e){} }
-
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
   if (!isStandalone) document.getElementById('install-hint').style.display = 'block';
 
+  // Try restoring cache for instant load while GPS fires
   try {
-    const saved = JSON.parse(localStorage.getItem('ant-coords')||'null');
-    if (saved && Date.now()-saved.ts < 3600000) {
-      Object.assign(state, { lat:saved.lat, lng:saved.lng, locationName:saved.name });
+    const saved = JSON.parse(localStorage.getItem('ant-coords') || 'null');
+    if (saved && Date.now() - saved.ts < 3600000) {
+      Object.assign(state, { lat: saved.lat, lng: saved.lng, locationName: saved.name });
       document.getElementById('main-content').style.display = 'block';
-      setName(saved.name+' (updating...)');
+      setName(saved.name + ' (updating...)');
       fetchWeather();
     }
   } catch(e) {}
 
   const perm = await navigator.permissions?.query({name:'geolocation'}).catch(()=>null);
-  if (perm?.state === 'granted')       { requestLocation(); }
-  else if (perm?.state === 'denied')   { setDot('error'); if (!state.lat) document.getElementById('location-screen').style.display='block'; }
-  else if (!state.lat)                 { document.getElementById('location-screen').style.display = 'block'; }
-  else                                 { requestLocation(); }
+  if (perm?.state === 'denied') {
+    setDot('error');
+    if (!state.lat) document.getElementById('location-screen').style.display = 'block';
+  } else if (!state.lat) {
+    document.getElementById('location-screen').style.display = 'block';
+  } else {
+    tryGetPosition(true); // refresh GPS in background
+  }
 
   clearInterval(refreshTimer);
   refreshTimer = setInterval(fullRefresh, 15*60*1000);
