@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Ant Alert"/>
+<meta name="theme-color" content="#1D9E75"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
+<title>Queen Ant Alert</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #085041;
+  --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #633806;
+  --red: #A32D2D;
+  --gray: #888780;
+  --bg: #f5f5f3; --surface: #ffffff;
+  --text: #1a1a18; --text-2: #5f5e5a; --text-3: #888780;
+  --border: rgba(0,0,0,0.09);
+  --radius: 16px; --radius-sm: 10px; --radius-xs: 8px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0f0e; --surface: #1c1c1a;
+    --text: #f0efe8; --text-2: #888780; --text-3: #5f5e5a;
+    --border: rgba(255,255,255,0.09);
+    --green-light: #04342C; --amber-light: #412402;
+  }
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100dvh;
+  padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 32px);
+  max-width: 440px; margin: 0 auto;
+}
+.header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+.app-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.location-row { display: flex; align-items: center; gap: 5px; margin-top: 3px; cursor: pointer; }
+.location-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.location-dot.searching { animation: pulse 1.2s infinite; background: var(--amber); }
+.location-dot.error { background: var(--red); }
+.location-name { font-size: 13px; color: var(--text-2); }
+.icon-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
+}
+.icon-btn:active { opacity: 0.5; }
+.location-screen {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px 24px; text-align: center; margin-bottom: 16px;
+}
+.location-screen .big-icon { font-size: 52px; margin-bottom: 16px; }
+.location-screen h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.location-screen p { font-size: 14px; color: var(--text-2); line-height: 1.5; margin-bottom: 20px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 6px; background: var(--green); color: white; border: none;
+  font-size: 15px; font-weight: 600; padding: 13px 24px; border-radius: 99px; cursor: pointer;
+  width: 100%; justify-content: center; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
+}
+.btn-primary:active { opacity: 0.8; }
+.btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--text-2); border: 1px solid var(--border);
+  font-size: 13px; padding: 10px 20px; border-radius: 99px;
+  cursor: pointer; margin-top: 10px; width: 100%; -webkit-tap-highlight-color: transparent;
+}
+.score-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 16px 16px; margin-bottom: 12px; text-align: center;
+}
+.score-ring-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 12px; }
+#score-ring { transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1), stroke 0.5s; }
+.score-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-big { font-size: 44px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
+.score-sub { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+.verdict { font-size: 19px; font-weight: 600; }
+.time-window { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+.alert-banner {
+  border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 12px;
+  font-size: 14px; font-weight: 500; line-height: 1.45; display: none;
+}
+.alert-go  { background: var(--green-light); color: var(--green-dark); border-left: 3px solid var(--green); }
+.alert-mid { background: var(--amber-light); color: var(--amber-dark); border-left: 3px solid var(--amber); }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 10px 8px; }
+.stat-label { font-size: 10px; color: var(--text-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-val { font-size: 14px; font-weight: 600; margin-top: 2px; }
+
+/* ── Species selector ───────────────────────────────────── */
+.species-section { margin-bottom: 12px; }
+.species-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+.species-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.species-scroll::-webkit-scrollbar { display: none; }
+.species-pill {
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 14px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; transition: all 0.15s; min-width: 72px;
+}
+.species-pill:active { opacity: 0.7; }
+.species-pill.active { border-color: var(--sp-color); background: var(--sp-bg); }
+.species-pill-icon { font-size: 22px; }
+.species-pill-name { font-size: 11px; font-weight: 600; color: var(--text-2); text-align: center; }
+.species-pill.active .species-pill-name { color: var(--sp-color); }
+
+/* Species condition card */
+.species-condition {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 12px; display: none;
+}
+.sp-cond-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.sp-cond-icon { font-size: 28px; flex-shrink: 0; }
+.sp-cond-name { font-size: 15px; font-weight: 700; }
+.sp-cond-latin { font-size: 11px; color: var(--text-3); font-style: italic; }
+.sp-cond-badge {
+  margin-left: auto; flex-shrink: 0; border-radius: 99px; padding: 4px 10px;
+  font-size: 12px; font-weight: 700;
+}
+.sp-cond-badge.prime  { background: var(--green-light); color: var(--green-dark); }
+.sp-cond-badge.good   { background: #E8F5FF; color: #1A5E8A; }
+.sp-cond-badge.fair   { background: var(--amber-light); color: var(--amber-dark); }
+.sp-cond-badge.low    { background: #F1F0EC; color: var(--text-3); }
+.sp-cond-factors { display: flex; flex-wrap: wrap; gap: 6px; }
+.sp-factor-chip {
+  font-size: 11px; padding: 3px 8px; border-radius: 99px; border: 1px solid var(--border);
+}
+.sp-factor-chip.ok  { background: var(--green-light); color: var(--green-dark); border-color: transparent; }
+.sp-factor-chip.mid { background: var(--amber-light); color: var(--amber-dark); border-color: transparent; }
+.sp-factor-chip.no  { background: #F1F0EC; color: var(--text-3); border-color: transparent; }
+.sp-flight-window { font-size: 12px; color: var(--text-2); margin-top: 8px; line-height: 1.5; }
+
+/* ── Spots ──────────────────────────────────────────────── */
+.spots-section { display: none; margin-bottom: 12px; }
+.spots-title { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
+.spots-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; margin-bottom: 8px; }
+.spot-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s;
+}
+.spot-card:active { border-color: var(--green); }
+.spot-rank {
+  width: 32px; height: 32px; border-radius: 50%; font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+.spot-info { flex: 1; min-width: 0; }
+.spot-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.spot-type { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.spot-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.spot-dist { font-size: 12px; font-weight: 600; color: var(--green); }
+.spot-walk { font-size: 11px; color: var(--text-3); }
+.spot-species-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.sp-tag { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 600; }
+.hunt-score-bar { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+.hunt-score-label { font-size: 10px; color: var(--text-3); white-space: nowrap; }
+.hunt-bar-bg { flex: 1; height: 5px; background: var(--bg); border-radius: 99px; }
+.hunt-bar-fill { height: 5px; border-radius: 99px; transition: width 0.6s ease; }
+.hunt-score-num { font-size: 11px; font-weight: 700; min-width: 50px; text-align: right; }
+.spot-tip { font-size: 11px; color: var(--text-2); margin-top: 4px; font-style: italic; }
+.spot-nav {
+  flex-shrink: 0; background: var(--green); color: white; border: none;
+  border-radius: var(--radius-xs); padding: 8px 12px; font-size: 12px; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; white-space: nowrap; margin-top: 2px;
+}
+.spot-nav:active { opacity: 0.8; }
+.minimap-wrap {
+  border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border);
+  margin-bottom: 12px; height: 160px; position: relative; display: none;
+}
+#minimap { width: 100%; height: 100%; border: none; }
+.minimap-overlay {
+  position: absolute; top: 8px; left: 8px; background: white; border-radius: var(--radius-xs);
+  padding: 4px 8px; font-size: 11px; font-weight: 600; color: var(--green-dark);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+.notif-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px; cursor: pointer;
+}
+.notif-icon { font-size: 24px; flex-shrink: 0; }
+.notif-title { font-size: 14px; font-weight: 600; }
+.notif-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+.toggle {
+  margin-left: auto; flex-shrink: 0; width: 46px; height: 27px; border-radius: 99px;
+  border: none; cursor: pointer; position: relative; transition: background 0.2s; background: var(--gray);
+}
+.toggle.on { background: var(--green); }
+.toggle::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 21px; height: 21px; border-radius: 50%; background: white; transition: transform 0.2s;
+}
+.toggle.on::after { transform: translateX(19px); }
+.section-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 7px; }
+.factor-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.factor-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.factor-row:last-child { border-bottom: none; }
+.factor-name { flex: 1; color: var(--text-2); font-size: 12px; }
+.factor-bar-bg { width: 70px; height: 4px; background: var(--bg); border-radius: 99px; }
+.factor-bar { height: 4px; border-radius: 99px; transition: width 0.7s ease; }
+.factor-val { font-size: 11px; color: var(--text-3); width: 42px; text-align: right; }
+.factor-pts { font-size: 13px; font-weight: 600; width: 24px; text-align: right; }
+.hourly-scroll { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.hourly-scroll::-webkit-scrollbar { display: none; }
+.hour-pill {
+  flex-shrink: 0; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-xs); padding: 9px 8px 7px; text-align: center; min-width: 54px;
+}
+.hour-pill.high { background: var(--green-light); border-color: rgba(29,158,117,0.25); }
+.hour-pill.mid  { background: var(--amber-light); border-color: rgba(186,117,23,0.25); }
+.hour-time  { font-size: 10px; color: var(--text-3); }
+.hour-score { font-size: 15px; font-weight: 700; margin: 2px 0 1px; }
+.hour-rain  { font-size: 10px; color: var(--text-3); }
+.install-hint {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs);
+  padding: 11px 14px; font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.5; display: none;
+}
+.footer { text-align: center; font-size: 11px; color: var(--text-3); margin-top: 12px; line-height: 1.6; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes spin   { to { transform: rotate(360deg); } }
+.spinning { animation: spin 1s linear infinite; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="app-name">🐜 Ant Alert</div>
+    <div class="location-row" onclick="retryLocation()">
+      <div class="location-dot searching" id="loc-dot"></div>
+      <span class="location-name" id="loc-name">Locating you...</span>
+    </div>
+  </div>
+  <div class="icon-btn" id="refresh-btn" onclick="fullRefresh()">↻</div>
+</div>
+
+<div id="location-screen" class="location-screen" style="display:none">
+  <div class="big-icon">📍</div>
+  <h2>Allow location access</h2>
+  <p>Ant Alert uses your GPS to check conditions and find the best nearby hunting spots for right now.</p>
+  <button class="btn-primary" onclick="startLocation()">📍 Use my location</button>
+  <button class="btn-secondary" onclick="useDefault()">Use Novena (default)</button>
+</div>
+
+<div id="alert-banner" class="alert-banner"></div>
+
+<div id="main-content" style="display:none">
+  <div class="score-card">
+    <div class="score-ring-wrap">
+      <svg width="140" height="140" viewBox="0 0 140 140" style="position:absolute;inset:0;">
+        <circle cx="70" cy="70" r="56" fill="none" stroke="var(--bg)" stroke-width="11"/>
+        <circle cx="70" cy="70" r="56" fill="none" id="score-ring"
+          stroke="#1D9E75" stroke-width="11" stroke-dasharray="352" stroke-dashoffset="352"
+          stroke-linecap="round" transform="rotate(-90 70 70)"/>
+      </svg>
+      <div class="score-center">
+        <div class="score-big" id="score-num" style="color:var(--green)">–</div>
+        <div class="score-sub">/ 100</div>
+      </div>
+    </div>
+    <div class="verdict" id="verdict-text">Checking conditions...</div>
+    <div class="time-window" id="time-window"></div>
+  </div>
+
+  <div class="grid4">
+    <div class="stat-card"><div class="stat-label">🌡 Temp</div><div class="stat-val" id="w-temp">–</div></div>
+    <div class="stat-card"><div class="stat-label">💧 Humid</div><div class="stat-val" id="w-humid">–</div></div>
+    <div class="stat-card"><div class="stat-label">💨 Wind</div><div class="stat-val" id="w-wind">–</div></div>
+    <div class="stat-card"><div class="stat-label">🌧 Rain</div><div class="stat-val" id="w-rain">–</div></div>
+  </div>
+
+  <!-- Species Selector -->
+  <div class="species-section" id="species-section" style="display:none">
+    <div class="species-label">🎯 I'm hunting</div>
+    <div class="species-scroll" id="species-scroll"></div>
+  </div>
+
+  <!-- Species Condition Card -->
+  <div class="species-condition" id="species-condition"></div>
+
+  <!-- Spots -->
+  <div class="spots-section" id="spots-section">
+    <div class="spots-title">🗺 Best spots right now</div>
+    <div class="spots-sub" id="spots-sub"></div>
+    <div id="minimap-wrap" class="minimap-wrap">
+      <iframe id="minimap" loading="lazy"></iframe>
+      <div class="minimap-overlay" id="minimap-label">Your area</div>
+    </div>
+    <div id="spot-list"></div>
+  </div>
+
+  <div class="notif-card" onclick="toggleNotifications()">
+    <div class="notif-icon" id="notif-icon">🔔</div>
+    <div style="flex:1">
+      <div class="notif-title" id="notif-title">Enable alerts</div>
+      <div class="notif-sub" id="notif-sub">Notify when flight chance ≥ 60/100</div>
+    </div>
+    <div class="toggle" id="notif-toggle"></div>
+  </div>
+
+  <div class="section-label">Score breakdown</div>
+  <div class="factor-list" id="factor-list"></div>
+  <div class="section-label">Next 12 hours</div>
+  <div class="hourly-scroll" id="hourly-row"></div>
+  <div id="install-hint" class="install-hint">📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"</div>
+  <div class="footer">Auto-refreshes every 15 min · Weather: Open-Meteo</div>
+</div>
+
+<script>
+const CIRC = 2 * Math.PI * 56;
+const FALLBACK = { lat: 1.3200, lng: 103.8440, name: 'Novena, Singapore' };
+let state = { lat: null, lng: null, locationName: '', notifEnabled: false };
+let currentWeather = null;
+let selectedSpecies = 'all';
+let refreshTimer, locAttempts = 0;
+
+// ── Species definitions ──────────────────────────────────
+const SPECIES = [
+  {
+    id: 'all',
+    name: 'All Species',
+    icon: '🐜',
+    color: '#1D9E75',
+    bg: '#E1F5EE',
+    latin: '',
+    minHabitat: 1,       // accepts all habitat types
+    prefersHabitat: [2,3,4,5],
+    flightTime: 'any',   // 'day' | 'evening' | 'night' | 'any'
+    needsRain: false,
+    idealTemp: [24, 34],
+    idealHumidity: [65, 100],
+    idealPrecip: 0,      // min precip that helps (mm)
+    needLit: false,
+    flightWindow: 'Generalised conditions — shows best spots for any species active now.',
+    huntTip: null,
+  },
+  {
+    id: 'fire',
+    name: 'Fire Ant',
+    icon: '🔥',
+    color: '#D44000',
+    bg: '#FDEEE8',
+    latin: 'Solenopsis geminata',
+    minHabitat: 1,
+    prefersHabitat: [1,2],   // open disturbed ground, grass verges, drains
+    flightTime: 'day',       // midday flier
+    needsRain: true,
+    idealTemp: [29, 35],     // loves the heat
+    idealHumidity: [70, 90],
+    idealPrecip: 0.5,
+    needLit: false,
+    flightWindow: 'Flies midday (10am–2pm) right after rain. Look for open grass, drain edges, and disturbed soil. Queens land fast — check the ground.',
+    huntTip: 'Scan open ground after morning rain. Sidewalks, drain covers, and grass verges near HDB blocks. Queens are small and fast — check within 30min of flights.',
+  },
+  {
+    id: 'giga',
+    name: 'Giga Ant',
+    icon: '👑',
+    color: '#7B3FA0',
+    bg: '#F3EAFF',
+    latin: 'Camponotus gigas',
+    minHabitat: 4,           // ONLY primary / secondary forest
+    prefersHabitat: [4,5],
+    flightTime: 'night',     // strictly nocturnal
+    needsRain: true,
+    idealTemp: [24, 30],
+    idealHumidity: [85, 100],
+    idealPrecip: 1,          // needs recent rain
+    needLit: false,          // lit doesn't help — deep forest
+    flightWindow: 'Strictly nocturnal. Flies 9pm–midnight after heavy rain with 85%+ humidity. Primary forest only — Bukit Timah and MacRitchie/CCNR are the go-to spots.',
+    huntTip: 'Walk forest trails slowly after 9pm with a red-light headlamp. Queens are huge — unmistakeable. Often found walking forest floor after de-alating. Check near large dipterocarp roots.',
+  },
+  {
+    id: 'trapjaw',
+    name: 'Trap Jaw',
+    icon: '⚡',
+    color: '#1A6BA0',
+    bg: '#E5F2FF',
+    latin: 'Odontomachus sp.',
+    minHabitat: 3,
+    prefersHabitat: [3,4,5],  // forest floor and leaf litter
+    flightTime: 'evening',    // dusk to night
+    needsRain: true,
+    idealTemp: [25, 31],
+    idealHumidity: [80, 100],
+    idealPrecip: 0.5,
+    needLit: true,            // attracted to lights at forest edge
+    flightWindow: 'Evening flier (6pm–11pm) after rain. Check forest trail edges and any lit surfaces near trees. Queens have distinctive mandibles — impossible to miss.',
+    huntTip: 'Walk forest trail edges at dusk. Trap jaw queens are attracted to lit path lamps near trees. Queens move fast — they\'ll run if disturbed. Check leaf litter around lamp bases.',
+  },
+  {
+    id: 'carpenter',
+    name: 'Silver Carpenter',
+    icon: '🪵',
+    color: '#7A6A00',
+    bg: '#FAFAE0',
+    latin: 'Camponotus sp.',
+    minHabitat: 3,
+    prefersHabitat: [3,4,5],  // forest edge, dead wood
+    flightTime: 'night',
+    needsRain: true,
+    idealTemp: [24, 30],
+    idealHumidity: [80, 100],
+    idealPrecip: 0.5,
+    needLit: true,
+    flightWindow: 'Night flier (8pm–midnight) after rain. Attracted to lit surfaces near trees and dead wood. Queens are large and silvery — check lit walls and any lamp posts near forest edge.',
+    huntTip: 'Check lit concrete walls and lamp posts near large trees after rain. Queens often de-alate near the base of a wall. Bring a container — they\'re strong and fast.',
+  },
+];
+
+// ── Singapore Parks with species presence ────────────────
+// speciesPresent: which species are actually found here
+// habitat: 1 manicured, 2 neighbourhood park, 3 park+forest edge, 4 secondary forest, 5 primary forest
+const SG_PARKS = [
+  { name: 'Bukit Timah Nature Reserve',       lat:1.3520,lng:103.7767, habitat:5, lit:false, species:['giga','trapjaw','carpenter'], tip:'Primary forest — THE spot for Giga queens after heavy rain. Check trail entrance lamp posts for Trap Jaw and Carpenter.' },
+  { name: 'Central Catchment (MacRitchie)',    lat:1.3419,lng:103.8198, habitat:5, lit:true,  species:['giga','trapjaw','carpenter'], tip:'Largest forest in SG — excellent for Giga and Trap Jaw. Check lit carpark edges and forest trail start points.' },
+  { name: 'CCNR — Upper/Lower Pierce entry',  lat:1.3699,lng:103.8148, habitat:5, lit:false,  species:['giga','trapjaw','carpenter'], tip:'Quieter CCNR entry point — less foot traffic, prime undisturbed forest floor for Giga hunting.' },
+  { name: 'Labrador Nature Reserve',          lat:1.2664,lng:103.8025, habitat:5, lit:true,  species:['trapjaw','carpenter'],        tip:'Coastal primary forest — check lit path lamps at cliff base for Trap Jaw and Carpenter queens.' },
+  { name: 'Sungei Buloh Wetland Reserve',     lat:1.4473,lng:103.7290, habitat:5, lit:false, species:['trapjaw','carpenter'],        tip:'Mangrove and wetland edge — excellent humid micro-habitat. Trap Jaw common along boardwalk edges.' },
+  { name: 'Thomson Nature Park',              lat:1.3707,lng:103.8243, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Tembusu forest and stream — Trap Jaw active along leaf litter trails post-rain.' },
+  { name: 'Springleaf Nature Park',           lat:1.3946,lng:103.8139, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Forest stream corridor — excellent humid micro-habitat for Trap Jaw and Carpenter.' },
+  { name: 'Dairy Farm Nature Park',           lat:1.3536,lng:103.7728, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Secondary forest + lit carpark — Carpenter queens often found on lit walls at forest edge.' },
+  { name: 'Zhenghua Nature Park',             lat:1.3712,lng:103.7683, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Young secondary forest — fast coloniser ants and Trap Jaw active after afternoon storms.' },
+  { name: 'Hindhede Nature Park',             lat:1.3538,lng:103.7772, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Quarry rim with forest — check lit shelter poles. Carpenter queens found here regularly.' },
+  { name: 'Clementi Forest',                  lat:1.3230,lng:103.7644, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Unofficial secondary growth — dense leaf litter, Trap Jaw very active here post-rain.' },
+  { name: 'Coney Island Park',                lat:1.4027,lng:103.9254, habitat:4, lit:false,  species:['giga','trapjaw','carpenter'], tip:'Island forest, low light pollution — Giga queens spotted here after heavy rain nights.' },
+  { name: 'Tampines Eco Green',               lat:1.3559,lng:103.9449, habitat:4, lit:true,  species:['trapjaw','carpenter','fire'], tip:'Secondary forest plots in East SG — Trap Jaw along trail edges, Fire ants on open grass fringes.' },
+  { name: 'Mandai Nature Trail',              lat:1.4036,lng:103.7934, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Forest trail near zoo — lit carpark edges good for Carpenter, trail for Trap Jaw.' },
+  { name: 'Kent Ridge Park',                  lat:1.2924,lng:103.7817, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Ridge forest — lit carpark at base excellent for Carpenter queen spotting after rain.' },
+  { name: 'Telok Blangah Hill Park',          lat:1.2794,lng:103.8081, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Forested urban hill — check trail entrances and lit lamp posts at base after rain.' },
+  { name: 'Southern Ridges',                  lat:1.2845,lng:103.8014, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Ridge forest and bridges — check under lit Henderson Waves bridge after evening rain.' },
+  { name: 'Bishan-Ang Mo Kio Park',           lat:1.3620,lng:103.8487, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Large park with river — Fire ant flights on open grass midday. Carpenter queens on lit walls at night.' },
+  { name: 'Pasir Ris Park',                   lat:1.3721,lng:103.9488, habitat:3, lit:true,  species:['fire','trapjaw','carpenter'], tip:'Forest fringe + beach — Fire ants on open grass, Trap Jaw near mangrove edge, Carpenter on lit structures.' },
+  { name: 'East Coast Park',                  lat:1.3005,lng:103.9121, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal strip — Fire ant flights on open grass midday. Carpenter queens check lit BBQ shelters at night.' },
+  { name: 'Bedok Reservoir Park',             lat:1.3393,lng:103.9317, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Reservoir loop — Fire ants on grass banks midday. Carpenter queens on lit lamp post bases at night.' },
+  { name: 'Jurong Lake Gardens',              lat:1.3344,lng:103.7262, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Lakeside with grassland — Fire ant flights midday near water. Carpenter queens check lit shelters.' },
+  { name: 'Punggol Waterway Park',            lat:1.4003,lng:103.9050, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Waterway corridor — Fire ants active on grassy banks midday after rain. Lit lamp posts for Carpenter.' },
+  { name: 'Singapore Botanic Gardens',        lat:1.3138,lng:103.8159, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Rich soil and tall trees — Fire ants near open lawn areas. Carpenter queens on lit walls at night.' },
+  { name: 'Fort Canning Park',                lat:1.2934,lng:103.8455, habitat:3, lit:true,  species:['trapjaw','carpenter'],       tip:'Forested urban hill — lit walkways and old walls great for Carpenter. Trap Jaw along trail edges.' },
+  { name: 'Bukit Batok Nature Park',          lat:1.3590,lng:103.7613, habitat:3, lit:true,  species:['trapjaw','carpenter'],       tip:'Quarry lake with secondary forest — check water\'s edge grass at dusk for Trap Jaw and Carpenter.' },
+  { name: 'West Coast Park',                  lat:1.2948,lng:103.7610, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal park — Fire ants on open grass midday. Carpenter queens on lit concrete walls at night.' },
+  { name: 'Sembawang Park',                   lat:1.4592,lng:103.8208, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal park with secondary forest nearby — Fire ants on grass edges, Carpenter on lit paths.' },
+  { name: 'Changi Beach Park',                lat:1.3876,lng:103.9862, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal grass and trees — Fire ants midday, Carpenter queens check lit wooden shelter posts at night.' },
+  { name: 'Admiralty Park',                   lat:1.4441,lng:103.7997, habitat:2, lit:true,  species:['fire'],                      tip:'Grassy park near mangroves — Fire ant flights active on open grass midday after rain.' },
+  { name: 'Yishun Park',                      lat:1.4192,lng:103.8339, habitat:2, lit:true,  species:['fire'],                      tip:'Open grassy park — Fire ant nuptial flights on grass midday. Check drain edges and open soil.' },
+  { name: 'Tampines Central Park',            lat:1.3531,lng:103.9430, habitat:2, lit:true,  species:['fire'],                      tip:'Open grass with lit paths — Fire ant flights midday. Check ground near drain covers and grass edges.' },
+  { name: 'Toa Payoh Town Park',              lat:1.3330,lng:103.8472, habitat:2, lit:true,  species:['fire'],                      tip:'Town park with open grass — Fire ants fly midday near drain edges and open disturbed soil.' },
+  { name: 'Punggol Point Park',               lat:1.4148,lng:103.9106, habitat:2, lit:true,  species:['fire'],                      tip:'Coastal open grass — Fire ant flights midday after rain. Check grass near any open soil patches.' },
+  { name: 'Sengkang Riverside Park',          lat:1.3903,lng:103.8974, habitat:2, lit:true,  species:['fire'],                      tip:'River corridor with grass banks — Fire ant flights on open grass midday after rain.' },
+];
+
+// ── Species flight condition scorer ─────────────────────
+function scoreSpeciesConditions(sp, weather, hour) {
+  if (!weather || sp.id === 'all') return null;
+  const { temp, humidity, precip } = weather;
+  const isDay  = hour >= 10 && hour <= 14;
+  const isEve  = hour >= 17 && hour <= 21;
+  const isNight= hour >= 20 || hour <= 2;
+
+  const chips = [];
+  let goodCount = 0, totalCount = 0;
+
+  // Time of day check
+  totalCount++;
+  const timeOk =
+    sp.flightTime === 'any'     ? true :
+    sp.flightTime === 'day'     ? isDay :
+    sp.flightTime === 'evening' ? isEve :
+    sp.flightTime === 'night'   ? isNight : false;
+  const timeLabel =
+    sp.flightTime === 'day'     ? '☀️ Midday window' :
+    sp.flightTime === 'evening' ? '🌆 Evening window' :
+    sp.flightTime === 'night'   ? '🌙 Night window' : '🕐 Any time';
+  chips.push({ label: timeLabel, state: timeOk ? 'ok' : 'no' });
+  if (timeOk) goodCount++;
+
+  // Temperature
+  totalCount++;
+  const tempOk = temp >= sp.idealTemp[0] && temp <= sp.idealTemp[1];
+  chips.push({ label: `🌡 ${temp.toFixed(1)}°C`, state: tempOk ? 'ok' : temp < sp.idealTemp[0] ? 'no' : 'mid' });
+  if (tempOk) goodCount++;
+
+  // Humidity
+  totalCount++;
+  const humOk = humidity >= sp.idealHumidity[0];
+  chips.push({ label: `💧 ${Math.round(humidity)}%`, state: humOk ? 'ok' : humidity >= sp.idealHumidity[0] - 10 ? 'mid' : 'no' });
+  if (humOk) goodCount++;
+
+  // Rain
+  if (sp.needsRain) {
+    totalCount++;
+    const rainOk = precip >= sp.idealPrecip;
+    chips.push({ label: rainOk ? `🌧 Rain ✓` : `🌧 Needs rain`, state: rainOk ? 'ok' : precip > 0 ? 'mid' : 'no' });
+    if (rainOk) goodCount++;
+  }
+
+  const ratio = goodCount / totalCount;
+  const badge = ratio >= 0.9 ? 'prime' : ratio >= 0.7 ? 'good' : ratio >= 0.5 ? 'fair' : 'low';
+  const badgeText = ratio >= 0.9 ? '🔥 Prime window' : ratio >= 0.7 ? '✅ Good' : ratio >= 0.5 ? '🟡 Fair' : '⬜ Low now';
+
+  return { chips, badge, badgeText };
+}
+
+// ── Hunt score per park for selected species ─────────────
+function calcHuntScore(park, km, weather, isEvening, precip, sp) {
+  // Habitat fit
+  let habitatPts;
+  if (sp.id === 'all') {
+    habitatPts = { 5:40, 4:32, 3:22, 2:12, 1:5 }[park.habitat] || 10;
+  } else {
+    // Does species actually live here?
+    if (park.habitat < sp.minHabitat) return 0; // wrong habitat entirely
+    if (!park.species.includes(sp.id))  return 0; // species not found here
+    // How preferred is this habitat?
+    const prefRank = sp.prefersHabitat.indexOf(park.habitat);
+    habitatPts = prefRank === 0 ? 40 : prefRank === 1 ? 35 : 28;
+  }
+
+  // Distance (0–30)
+  const distPts = Math.max(0, 30 - (km * 6));
+
+  // Weather synergy (0–20)
+  let weatherPts = 0;
+  if (sp.id === 'fire') {
+    // Fire ants: open ground, midday, loves rain + heat
+    weatherPts = (precip >= 0.5 && weather?.temp >= 29) ? 20 : precip >= 0.1 ? 12 : 6;
+  } else if (sp.id === 'giga') {
+    // Giga: needs heavy rain + high humidity in primary forest
+    weatherPts = (precip >= 1 && weather?.humidity >= 85) ? 20 : precip >= 0.5 ? 12 : 4;
+  } else if (sp.id === 'trapjaw') {
+    weatherPts = (precip >= 0.5 && isEvening) ? 20 : precip >= 0.1 ? 12 : park.lit ? 8 : 5;
+  } else if (sp.id === 'carpenter') {
+    weatherPts = (precip >= 0.5 && park.lit) ? 20 : precip >= 0.1 ? 12 : park.lit ? 10 : 4;
+  } else {
+    // All species
+    weatherPts = precip >= 1 ? (park.habitat >= 4 ? 20 : 14) : precip >= 0.1 ? 10 : park.lit ? 8 : 5;
+  }
+
+  // Time of day (0–10)
+  const h = new Date().getHours();
+  let timePts = 0;
+  if (sp.id === 'fire') {
+    timePts = (h >= 10 && h <= 14) ? 10 : 2;
+  } else if (sp.id === 'giga') {
+    timePts = (h >= 21 || h <= 2) ? 10 : (h >= 19) ? 5 : 1;
+  } else if (sp.id === 'trapjaw') {
+    timePts = (h >= 18 && h <= 22) ? 10 : (h >= 17 || h <= 23) ? 5 : 2;
+  } else if (sp.id === 'carpenter') {
+    timePts = (h >= 20 || h <= 1) ? 10 : (h >= 18) ? 6 : 2;
+  } else {
+    timePts = isEvening ? (park.lit ? 10 : 4) : (park.habitat >= 4 ? 8 : 4);
+  }
+
+  return Math.min(100, Math.round(habitatPts + distPts + weatherPts + timePts));
+}
+
+function huntScoreLabel(score) {
+  if (score >= 75) return '🔥 Prime';
+  if (score >= 55) return '✅ Good';
+  if (score >= 40) return '🟡 Fair';
+  return '⬜ Low';
+}
+function huntScoreColor(score) {
+  if (score >= 75) return '#1D9E75';
+  if (score >= 55) return '#5DCAA5';
+  if (score >= 40) return '#EF9F27';
+  return '#B4B2A9';
+}
+
+// ── Render species selector ──────────────────────────────
+function renderSpeciesSelector() {
+  const scroll = document.getElementById('species-scroll');
+  scroll.innerHTML = SPECIES.map(sp => `
+    <div class="species-pill ${selectedSpecies === sp.id ? 'active' : ''}"
+         style="--sp-color:${sp.color};--sp-bg:${sp.bg}"
+         onclick="selectSpecies('${sp.id}')">
+      <div class="species-pill-icon">${sp.icon}</div>
+      <div class="species-pill-name">${sp.name.replace(' Ant','').replace(' Jaw','')}</div>
+    </div>`).join('');
+  document.getElementById('species-section').style.display = 'block';
+}
+
+function selectSpecies(id) {
+  selectedSpecies = id;
+  renderSpeciesSelector();
+  if (state.lat && currentWeather) {
+    renderSpeciesCondition();
+    renderSpots();
+  }
+}
+
+// ── Render species condition card ────────────────────────
+function renderSpeciesCondition() {
+  const card = document.getElementById('species-condition');
+  const sp   = SPECIES.find(s => s.id === selectedSpecies);
+  if (!sp || sp.id === 'all' || !currentWeather) { card.style.display = 'none'; return; }
+
+  const h    = new Date().getHours();
+  const cond = scoreSpeciesConditions(sp, currentWeather, h);
+
+  card.style.display = 'block';
+  card.style.borderColor = sp.color + '44';
+  card.innerHTML = `
+    <div class="sp-cond-top">
+      <div class="sp-cond-icon">${sp.icon}</div>
+      <div>
+        <div class="sp-cond-name" style="color:${sp.color}">${sp.name}</div>
+        <div class="sp-cond-latin">${sp.latin}</div>
+      </div>
+      <div class="sp-cond-badge ${cond.badge}">${cond.badgeText}</div>
+    </div>
+    <div class="sp-cond-factors">
+      ${cond.chips.map(c => `<span class="sp-factor-chip ${c.state}">${c.label}</span>`).join('')}
+    </div>
+    <div class="sp-flight-window">${sp.flightWindow}</div>
+  `;
+}
+
+// ── Render spots ─────────────────────────────────────────
+function renderSpots() {
+  const section = document.getElementById('spots-section');
+  const listEl  = document.getElementById('spot-list');
+  const subEl   = document.getElementById('spots-sub');
+
+  // Always show spots if score >= 35
+  section.style.display = 'block';
+
+  const h      = new Date().getHours();
+  const isEve  = h >= 18 && h <= 23;
+  const precip = currentWeather?.precip ?? 0;
+  const sp     = SPECIES.find(s => s.id === selectedSpecies);
+
+  const ranked = SG_PARKS
+    .map(p => {
+      const km = distKm(state.lat, state.lng, p.lat, p.lng);
+      const hs = calcHuntScore(p, km, currentWeather, isEve, precip, sp);
+      return { ...p, km, huntScore: hs };
+    })
+    .filter(p => p.huntScore > 0)
+    .sort((a, b) => b.huntScore - a.huntScore)
+    .slice(0, 5);
+
+  if (!ranked.length) {
+    listEl.innerHTML = `<div style="font-size:13px;color:var(--text-3);padding:8px 0;">
+      No suitable spots found nearby for ${sp.name} right now. Try a different species or check conditions later.
+    </div>`;
+    subEl.textContent = 'No matching spots';
+    return;
+  }
+
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const habitatLabel = { 5:'Primary forest', 4:'Secondary forest', 3:'Park + forest edge', 2:'Neighbourhood park', 1:'Open ground' };
+  const topScore = ranked[0].huntScore;
+
+  const speciesColors = Object.fromEntries(SPECIES.map(s => [s.id, { color: s.color, bg: s.bg, icon: s.icon, name: s.name }]));
+
+  subEl.textContent = sp.id === 'all'
+    ? `Ranked by habitat + conditions + lighting`
+    : `Best spots for ${sp.name} right now`;
+
+  listEl.innerHTML = ranked.map((park, i) => {
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${park.lat},${park.lng}&travelmode=walking`;
+    const col = sp.id === 'all' ? huntScoreColor(park.huntScore) : sp.color;
+    const lbl = huntScoreLabel(park.huntScore);
+    const barPct = Math.round((park.huntScore / topScore) * 100);
+
+    // Species tags for this spot (only show in 'all' mode)
+    const speciesTags = sp.id === 'all'
+      ? park.species.map(sid => {
+          const s = speciesColors[sid];
+          return s ? `<span class="sp-tag" style="background:${s.bg};color:${s.color}">${s.icon} ${s.name.split(' ')[0]}</span>` : '';
+        }).join('')
+      : '';
+
+    return `
+      <div class="spot-card" onclick="navigate('${mapsUrl}')">
+        <div class="spot-rank" style="background:${col}22;color:${col};font-size:16px">${medals[i]}</div>
+        <div class="spot-info">
+          <div class="spot-name">${park.name}</div>
+          <div class="spot-type">${habitatLabel[park.habitat] || 'Green area'}${park.lit ? ' · 💡 lit' : ''}</div>
+          <div class="spot-meta">
+            <span class="spot-dist">${fmtDist(park.km)}</span>
+            <span class="spot-walk">· ${walkMin(park.km)}</span>
+          </div>
+          ${speciesTags ? `<div class="spot-species-tags">${speciesTags}</div>` : ''}
+          <div class="hunt-score-bar">
+            <span class="hunt-score-label">Hunt score</span>
+            <div class="hunt-bar-bg"><div class="hunt-bar-fill" style="width:${barPct}%;background:${col}"></div></div>
+            <span class="hunt-score-num" style="color:${col}">${lbl}</span>
+          </div>
+          <div class="spot-tip">${sp.id !== 'all' && sp.huntTip ? sp.huntTip : park.tip}</div>
+        </div>
+        <button class="spot-nav" onclick="event.stopPropagation();navigate('${mapsUrl}')" style="background:${col}">🧭 Go</button>
+      </div>`;
+  }).join('');
+
+  showMinimap(state.lat, state.lng, ranked[0]);
+}
+
+function showBestSpots(lat, lng, flightScore) {
+  const section = document.getElementById('spots-section');
+  if (flightScore < 35) { section.style.display = 'none'; return; }
+  renderSpeciesCondition();
+  renderSpots();
+}
+
+function navigate(url) { window.open(url, '_blank'); }
+
+function showMinimap(lat, lng, nearest) {
+  const wrap = document.getElementById('minimap-wrap');
+  const frame = document.getElementById('minimap');
+  const label = document.getElementById('minimap-label');
+  frame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
+  wrap.style.display = 'block';
+  label.textContent = nearest ? `#1: ${nearest.name} (${fmtDist(nearest.km)})` : 'Your area';
+}
+
+// ── Score + verdict ──────────────────────────────────────
+function calcScore(temp, humidity, wind, precip, eve) {
+  const r = precip >= 5 ? 35 : precip >= 1 ? 25 : precip >= 0.1 ? 12 : 0;
+  const h = humidity >= 85 ? 25 : humidity >= 75 ? 18 : humidity >= 65 ? 8 : 0;
+  const t = (temp >= 26 && temp <= 33) ? 20 : (temp >= 24) ? 10 : 0;
+  const w = wind <= 8 ? 12 : wind <= 15 ? 6 : 0;
+  const e = eve ? 8 : 0;
+  return { score: Math.min(100, r+h+t+w+e), factors: [
+    { name:'Recent rain',    pts:r, max:35, val:precip.toFixed(1)+'mm' },
+    { name:'Humidity',       pts:h, max:25, val:Math.round(humidity)+'%' },
+    { name:'Temperature',    pts:t, max:20, val:temp.toFixed(1)+'°C' },
+    { name:'Low wind',       pts:w, max:12, val:wind.toFixed(0)+'km/h' },
+    { name:'Evening 6–11pm', pts:e, max:8,  val:eve ? '✓ active' : 'not yet' },
+  ]};
+}
+function verdict(score) {
+  if (score >= 70) return { text:'🔥 Get outside NOW!', color:'#1D9E75', ring:'#1D9E75' };
+  if (score >= 55) return { text:'✅ Good conditions',  color:'#1D9E75', ring:'#5DCAA5' };
+  if (score >= 35) return { text:'🟡 Possible flights', color:'#BA7517', ring:'#EF9F27' };
+  return              { text:'⬜ Low chance',           color:'#888780', ring:'#B4B2A9' };
+}
+function distKm(lat1,lng1,lat2,lng2) {
+  const R=6371,d2r=Math.PI/180,dLat=(lat2-lat1)*d2r,dLng=(lng2-lng1)*d2r;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function fmtDist(km) { return km<1?Math.round(km*1000)+'m':km.toFixed(1)+'km'; }
+function walkMin(km) { const m=Math.round(km/0.083); return m<2?'<2 min':m+'min walk'; }
+
+// ── Location ─────────────────────────────────────────────
+function startLocation() { locAttempts=0; document.getElementById('location-screen').style.display='none'; tryGetPosition(true); }
+function retryLocation()  { locAttempts=0; tryGetPosition(true); }
+function tryGetPosition(hi) {
+  setDot('searching'); setName(hi?'Locating you...':'Locating (fallback)...');
+  if (!navigator.geolocation) { useDefault(); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos => onPos(pos),
+    err => {
+      if (err.code===1) { setDot('error'); setName('Location denied — tap to retry'); document.getElementById('location-screen').style.display='block'; }
+      else if (hi && locAttempts<2) { locAttempts++; setTimeout(()=>tryGetPosition(false),500); }
+      else loadCachedOrDefault();
+    },
+    { enableHighAccuracy:hi, timeout:hi?12000:20000, maximumAge:hi?30000:120000 }
+  );
+}
+function loadCachedOrDefault() {
+  try {
+    const saved=JSON.parse(localStorage.getItem('ant-coords')||'null');
+    if (saved&&Date.now()-saved.ts<7200000) { Object.assign(state,{lat:saved.lat,lng:saved.lng,locationName:saved.name+' (cached)'}); document.getElementById('main-content').style.display='block'; setDot('ok'); setName(state.locationName); fetchWeather(); return; }
+  } catch(e){}
+  useDefault();
+}
+async function onPos(pos) {
+  state.lat=pos.coords.latitude; state.lng=pos.coords.longitude;
+  document.getElementById('location-screen').style.display='none';
+  document.getElementById('main-content').style.display='block';
+  setDot('ok'); setName('Resolving...');
+  reverseGeocode(state.lat,state.lng); fetchWeather();
+}
+function useDefault() {
+  Object.assign(state,{lat:FALLBACK.lat,lng:FALLBACK.lng,locationName:FALLBACK.name});
+  document.getElementById('location-screen').style.display='none';
+  document.getElementById('main-content').style.display='block';
+  setDot('ok'); setName(FALLBACK.name); fetchWeather();
+}
+async function reverseGeocode(lat,lng) {
+  try {
+    const res=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=14`,{headers:{'Accept-Language':'en'}});
+    const data=await res.json(),a=data.address;
+    const name=a.suburb||a.neighbourhood||a.district||a.town||a.city||'Your location';
+    state.locationName=a.city?`${name}, ${a.city}`:name; setName(state.locationName); saveCoords();
+  } catch(e) { state.locationName=`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`; setName(state.locationName); saveCoords(); }
+}
+function saveCoords() {
+  try { localStorage.setItem('ant-coords',JSON.stringify({lat:state.lat,lng:state.lng,name:state.locationName,ts:Date.now()})); } catch(e){}
+  if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(r=>r.active?.postMessage({type:'SAVE_COORDS',lat:state.lat,lng:state.lng,locationName:state.locationName}));
+}
+
+// ── Weather ──────────────────────────────────────────────
+async function fetchWeather() {
+  if (!state.lat) return;
+  const btn=document.getElementById('refresh-btn');
+  btn.innerHTML='<span class="spinning">↻</span>';
+  try {
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lng}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&forecast_days=2&timezone=auto`;
+    const data=await (await fetch(url)).json(),c=data.current;
+    const h=new Date().getHours(),eve=h>=18&&h<=23;
+    const {score,factors}=calcScore(c.temperature_2m,c.relative_humidity_2m,c.wind_speed_10m,c.precipitation,eve);
+    const v=verdict(score);
+    currentWeather={temp:c.temperature_2m,humidity:c.relative_humidity_2m,wind:c.wind_speed_10m,precip:c.precipitation};
+    document.getElementById('w-temp').textContent=c.temperature_2m.toFixed(1)+'°C';
+    document.getElementById('w-humid').textContent=Math.round(c.relative_humidity_2m)+'%';
+    document.getElementById('w-wind').textContent=c.wind_speed_10m.toFixed(0)+'km/h';
+    document.getElementById('w-rain').textContent=c.precipitation.toFixed(1)+'mm';
+    const ring=document.getElementById('score-ring');
+    ring.style.strokeDasharray=CIRC.toFixed(1);
+    ring.style.strokeDashoffset=(CIRC*(1-score/100)).toFixed(1);
+    ring.setAttribute('stroke',v.ring);
+    const num=document.getElementById('score-num');
+    num.textContent=Math.round(score); num.style.color=v.ring;
+    document.getElementById('verdict-text').textContent=v.text;
+    document.getElementById('verdict-text').style.color=v.color;
+    document.getElementById('time-window').textContent=eve?'🌙 Evening window active':h<18?'Next window: today 6pm':'Next window: tomorrow 6pm';
+    const banner=document.getElementById('alert-banner');
+    if (score>=60) { banner.className='alert-banner alert-go'; banner.style.display='block'; banner.textContent=`🐜 High flight chance near ${state.locationName}! Pick your target species and go.`; }
+    else if (score>=35) { banner.className='alert-banner alert-mid'; banner.style.display='block'; banner.textContent=`Moderate conditions — pick your species and check the best ranked spots tonight.`; }
+    else banner.style.display='none';
+    renderFactors(factors); renderHourly(data.hourly);
+    setName(state.locationName+' · '+new Date().toLocaleTimeString('en-SG',{hour:'2-digit',minute:'2-digit'}));
+    renderSpeciesSelector();
+    showBestSpots(state.lat,state.lng,score);
+  } catch(e) { setName('Error — tap ↻ to retry'); }
+  btn.innerHTML='↻';
+}
+
+function renderFactors(factors) {
+  document.getElementById('factor-list').innerHTML=factors.map(f=>{
+    const pct=f.max>0?Math.round((f.pts/f.max)*100):0;
+    const col=f.pts>=f.max*0.66?'#1D9E75':f.pts>=f.max*0.33?'#EF9F27':'#E24B4A';
+    return `<div class="factor-row">
+      <span class="factor-name">${f.name}</span>
+      <div class="factor-bar-bg"><div class="factor-bar" style="width:${f.pts>0?Math.max(6,pct):0}%;background:${f.pts>0?col:'transparent'}"></div></div>
+      <span class="factor-val">${f.val}</span>
+      <span class="factor-pts" style="color:${f.pts>0?'var(--text)':'var(--text-3)'}">${f.pts}</span>
+    </div>`;
+  }).join('');
+}
+function renderHourly(hourly) {
+  const now=Date.now();
+  const rows=hourly.time.map((t,i)=>({time:t,temp:hourly.temperature_2m[i],humidity:hourly.relative_humidity_2m[i],wind:hourly.wind_speed_10m[i],rain:hourly.precipitation[i]}))
+    .filter(h=>new Date(h.time).getTime()>=now-1800000).slice(0,12);
+  document.getElementById('hourly-row').innerHTML=rows.map(h=>{
+    const hr=new Date(h.time).getHours();
+    const {score}=calcScore(h.temp,h.humidity,h.wind,h.rain,hr>=18&&hr<=23);
+    const v=verdict(score),cls=score>=60?'high':score>=35?'mid':'';
+    return `<div class="hour-pill ${cls}"><div class="hour-time">${hr.toString().padStart(2,'0')}:00</div><div class="hour-score" style="color:${v.color}">${Math.round(score)}</div><div class="hour-rain">${h.rain>0.05?h.rain.toFixed(1)+'mm':'dry'}</div></div>`;
+  }).join('');
+}
+
+async function toggleNotifications() {
+  if (state.notifEnabled){state.notifEnabled=false;updateNotifUI(false);return;}
+  if (!('Notification' in window)){alert('Install to home screen first.');return;}
+  const perm=await Notification.requestPermission();
+  if (perm==='granted'){
+    state.notifEnabled=true;updateNotifUI(true);
+    new Notification('Ant Alert active 🐜',{body:`Watching ${state.locationName} — alerts fire at 60+.`,icon:'/icon-192.png'});
+    if ('serviceWorker' in navigator){const reg=await navigator.serviceWorker.ready;if ('periodicSync' in reg){try{await reg.periodicSync.register('ant-weather-check',{minInterval:15*60*1000});}catch(e){}}}
+  } else alert('Notifications blocked. Enable in browser settings.');
+}
+function updateNotifUI(on){
+  document.getElementById('notif-toggle').className='toggle'+(on?' on':'');
+  document.getElementById('notif-title').textContent=on?'Alerts enabled':'Enable alerts';
+  document.getElementById('notif-icon').textContent=on?'🔔':'🔕';
+  document.getElementById('notif-sub').textContent=on?`Watching ${state.locationName} · 60+ triggers alert`:'Notify when flight chance ≥ 60/100';
+}
+function setDot(s){document.getElementById('loc-dot').className='location-dot'+(s==='searching'?' searching':s==='error'?' error':'');}
+function setName(n){document.getElementById('loc-name').textContent=n;}
+function fullRefresh(){locAttempts=0;tryGetPosition(true);}
+
+async function init() {
+  if ('serviceWorker' in navigator){try{await navigator.serviceWorker.register('/sw.js');}catch(e){}}
+  const isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  if (!isStandalone) document.getElementById('install-hint').style.display='block';
+  try {
+    const saved=JSON.parse(localStorage.getItem('ant-coords')||'null');
+    if (saved&&Date.now()-saved.ts<3600000){
+      Object.assign(state,{lat:saved.lat,lng:saved.lng,locationName:saved.name});
+      document.getElementById('main-content').style.display='block';
+      setName(saved.name+' (updating...)'); fetchWeather();
+    }
+  } catch(e){}
+  const perm=await navigator.permissions?.query({name:'geolocation'}).catch(()=>null);
+  if (perm?.state==='denied'){setDot('error');if (!state.lat) document.getElementById('location-screen').style.display='block';}
+  else if (!state.lat) document.getElementById('location-screen').style.display='block';
+  else tryGetPosition(true);
+  clearInterval(refreshTimer);
+  refreshTimer=setInterval(fullRefresh,15*60*1000);
+}
+init();
+</script>
+</body>
+</html>
