@@ -93,9 +93,7 @@ body {
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 10px 8px; }
 .stat-label { font-size: 10px; color: var(--text-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
 .stat-val { font-size: 14px; font-weight: 600; margin-top: 2px; }
-
-/* ── Species selector ───────────────────────────────────── */
-.species-section { margin-bottom: 12px; }
+.species-section { margin-bottom: 12px; display: none; }
 .species-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
 .species-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .species-scroll::-webkit-scrollbar { display: none; }
@@ -110,8 +108,6 @@ body {
 .species-pill-icon { font-size: 22px; }
 .species-pill-name { font-size: 11px; font-weight: 600; color: var(--text-2); text-align: center; }
 .species-pill.active .species-pill-name { color: var(--sp-color); }
-
-/* Species condition card */
 .species-condition {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 12px; display: none;
@@ -129,15 +125,11 @@ body {
 .sp-cond-badge.fair   { background: var(--amber-light); color: var(--amber-dark); }
 .sp-cond-badge.low    { background: #F1F0EC; color: var(--text-3); }
 .sp-cond-factors { display: flex; flex-wrap: wrap; gap: 6px; }
-.sp-factor-chip {
-  font-size: 11px; padding: 3px 8px; border-radius: 99px; border: 1px solid var(--border);
-}
+.sp-factor-chip { font-size: 11px; padding: 3px 8px; border-radius: 99px; border: 1px solid var(--border); }
 .sp-factor-chip.ok  { background: var(--green-light); color: var(--green-dark); border-color: transparent; }
 .sp-factor-chip.mid { background: var(--amber-light); color: var(--amber-dark); border-color: transparent; }
 .sp-factor-chip.no  { background: #F1F0EC; color: var(--text-3); border-color: transparent; }
 .sp-flight-window { font-size: 12px; color: var(--text-2); margin-top: 8px; line-height: 1.5; }
-
-/* ── Spots ──────────────────────────────────────────────── */
 .spots-section { display: none; margin-bottom: 12px; }
 .spots-title { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
 .spots-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; margin-bottom: 8px; }
@@ -217,9 +209,9 @@ body {
 }
 .hour-pill.high { background: var(--green-light); border-color: rgba(29,158,117,0.25); }
 .hour-pill.mid  { background: var(--amber-light); border-color: rgba(186,117,23,0.25); }
-.hour-time  { font-size: 10px; color: var(--text-3); }
+.hour-time { font-size: 10px; color: var(--text-3); }
 .hour-score { font-size: 15px; font-weight: 700; margin: 2px 0 1px; }
-.hour-rain  { font-size: 10px; color: var(--text-3); }
+.hour-rain { font-size: 10px; color: var(--text-3); }
 .install-hint {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs);
   padding: 11px 14px; font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.5; display: none;
@@ -278,16 +270,13 @@ body {
     <div class="stat-card"><div class="stat-label">🌧 Rain</div><div class="stat-val" id="w-rain">–</div></div>
   </div>
 
-  <!-- Species Selector -->
-  <div class="species-section" id="species-section" style="display:none">
+  <div class="species-section" id="species-section">
     <div class="species-label">🎯 I'm hunting</div>
     <div class="species-scroll" id="species-scroll"></div>
   </div>
 
-  <!-- Species Condition Card -->
   <div class="species-condition" id="species-condition"></div>
 
-  <!-- Spots -->
   <div class="spots-section" id="spots-section">
     <div class="spots-title">🗺 Best spots right now</div>
     <div class="spots-sub" id="spots-sub"></div>
@@ -326,204 +315,170 @@ let refreshTimer, locAttempts = 0;
 // ── Species definitions ──────────────────────────────────
 const SPECIES = [
   {
-    id: 'all',
-    name: 'All Species',
-    icon: '🐜',
-    color: '#1D9E75',
-    bg: '#E1F5EE',
-    latin: '',
-    minHabitat: 1,       // accepts all habitat types
-    prefersHabitat: [2,3,4,5],
-    flightTime: 'any',   // 'day' | 'evening' | 'night' | 'any'
-    needsRain: false,
-    idealTemp: [24, 34],
-    idealHumidity: [65, 100],
-    idealPrecip: 0,      // min precip that helps (mm)
-    needLit: false,
-    flightWindow: 'Generalised conditions — shows best spots for any species active now.',
+    id: 'all', name: 'All Species', icon: '🐜', color: '#1D9E75', bg: '#E1F5EE', latin: '',
+    minHabitat: 0, prefersHabitat: [0,1,2,3,4,5], flightTime: 'any',
+    needsRain: false, idealTemp: [24,34], idealHumidity: [65,100], idealPrecip: 0, needLit: false,
+    flightWindow: 'Showing all spot types — parks, nature reserves, HDB estates and urban areas.',
     huntTip: null,
   },
   {
-    id: 'fire',
-    name: 'Fire Ant',
-    icon: '🔥',
-    color: '#D44000',
-    bg: '#FDEEE8',
-    latin: 'Solenopsis geminata',
-    minHabitat: 1,
-    prefersHabitat: [1,2],   // open disturbed ground, grass verges, drains
-    flightTime: 'day',       // midday flier
-    needsRain: true,
-    idealTemp: [29, 35],     // loves the heat
-    idealHumidity: [70, 90],
-    idealPrecip: 0.5,
-    needLit: false,
-    flightWindow: 'Flies midday (10am–2pm) right after rain. Look for open grass, drain edges, and disturbed soil. Queens land fast — check the ground.',
-    huntTip: 'Scan open ground after morning rain. Sidewalks, drain covers, and grass verges near HDB blocks. Queens are small and fast — check within 30min of flights.',
+    id: 'fire', name: 'Fire Ant', icon: '🔥', color: '#D44000', bg: '#FDEEE8', latin: 'Solenopsis geminata',
+    minHabitat: 0, prefersHabitat: [0,1,2],
+    flightTime: 'day', needsRain: true, idealTemp: [29,35], idealHumidity: [70,90], idealPrecip: 0.5, needLit: false,
+    flightWindow: 'Flies midday (10am–2pm) right after rain. Loves open disturbed ground — HDB grass verges, drain edges, roadside soil. Queens land fast and shed wings quickly.',
+    huntTip: 'Scan grass verges, drain covers and open soil near HDB blocks midday after rain. Queens are small and shed wings fast — check within 30min of flights starting.',
   },
   {
-    id: 'giga',
-    name: 'Giga Ant',
-    icon: '👑',
-    color: '#7B3FA0',
-    bg: '#F3EAFF',
-    latin: 'Camponotus gigas',
-    minHabitat: 4,           // ONLY primary / secondary forest
-    prefersHabitat: [4,5],
-    flightTime: 'night',     // strictly nocturnal
-    needsRain: true,
-    idealTemp: [24, 30],
-    idealHumidity: [85, 100],
-    idealPrecip: 1,          // needs recent rain
-    needLit: false,          // lit doesn't help — deep forest
-    flightWindow: 'Strictly nocturnal. Flies 9pm–midnight after heavy rain with 85%+ humidity. Primary forest only — Bukit Timah and MacRitchie/CCNR are the go-to spots.',
-    huntTip: 'Walk forest trails slowly after 9pm with a red-light headlamp. Queens are huge — unmistakeable. Often found walking forest floor after de-alating. Check near large dipterocarp roots.',
+    id: 'giga', name: 'Giga Ant', icon: '👑', color: '#7B3FA0', bg: '#F3EAFF', latin: 'Camponotus gigas',
+    minHabitat: 4, prefersHabitat: [4,5],
+    flightTime: 'night', needsRain: true, idealTemp: [24,30], idealHumidity: [85,100], idealPrecip: 1, needLit: false,
+    flightWindow: 'Strictly nocturnal 9pm–midnight after heavy rain, 85%+ humidity. Primary/secondary forest only — Bukit Timah and MacRitchie are the go-to spots in SG.',
+    huntTip: 'Walk forest trails slowly after 9pm with a red-light headlamp. Queens are enormous — unmistakeable. Found walking forest floor after de-alating near large tree roots.',
   },
   {
-    id: 'trapjaw',
-    name: 'Trap Jaw',
-    icon: '⚡',
-    color: '#1A6BA0',
-    bg: '#E5F2FF',
-    latin: 'Odontomachus sp.',
-    minHabitat: 3,
-    prefersHabitat: [3,4,5],  // forest floor and leaf litter
-    flightTime: 'evening',    // dusk to night
-    needsRain: true,
-    idealTemp: [25, 31],
-    idealHumidity: [80, 100],
-    idealPrecip: 0.5,
-    needLit: true,            // attracted to lights at forest edge
-    flightWindow: 'Evening flier (6pm–11pm) after rain. Check forest trail edges and any lit surfaces near trees. Queens have distinctive mandibles — impossible to miss.',
-    huntTip: 'Walk forest trail edges at dusk. Trap jaw queens are attracted to lit path lamps near trees. Queens move fast — they\'ll run if disturbed. Check leaf litter around lamp bases.',
+    id: 'trapjaw', name: 'Trap Jaw', icon: '⚡', color: '#1A6BA0', bg: '#E5F2FF', latin: 'Odontomachus sp.',
+    minHabitat: 2, prefersHabitat: [2,3,4,5],
+    flightTime: 'evening', needsRain: true, idealTemp: [25,31], idealHumidity: [80,100], idealPrecip: 0.5, needLit: true,
+    flightWindow: 'Evening flier 6pm–11pm after rain. Forest trail edges and lit surfaces near trees — but also spotted at HDB corridor lights and stairwell lamps near greenery.',
+    huntTip: 'Check lit corridor lamps and stairwell lights on lower floors near any trees or grass after rain. Also walk forest trail edges at dusk. Queens have unmistakeable mandibles.',
   },
   {
-    id: 'carpenter',
-    name: 'Silver Carpenter',
-    icon: '🪵',
-    color: '#7A6A00',
-    bg: '#FAFAE0',
-    latin: 'Camponotus sp.',
-    minHabitat: 3,
-    prefersHabitat: [3,4,5],  // forest edge, dead wood
-    flightTime: 'night',
-    needsRain: true,
-    idealTemp: [24, 30],
-    idealHumidity: [80, 100],
-    idealPrecip: 0.5,
-    needLit: true,
-    flightWindow: 'Night flier (8pm–midnight) after rain. Attracted to lit surfaces near trees and dead wood. Queens are large and silvery — check lit walls and any lamp posts near forest edge.',
-    huntTip: 'Check lit concrete walls and lamp posts near large trees after rain. Queens often de-alate near the base of a wall. Bring a container — they\'re strong and fast.',
+    id: 'carpenter', name: 'Silver Carpenter', icon: '🪵', color: '#7A6A00', bg: '#FAFAE0', latin: 'Camponotus sp.',
+    minHabitat: 1, prefersHabitat: [1,2,3,4,5],
+    flightTime: 'night', needsRain: true, idealTemp: [24,30], idealHumidity: [80,100], idealPrecip: 0.5, needLit: true,
+    flightWindow: 'Night flier 8pm–midnight after rain. Attracted to lit surfaces — HDB void deck lights, corridor lamps, stairwell bulbs, and walls near trees are all productive.',
+    huntTip: 'Check void deck lights, corridor lamps and any bright wall near trees after rain. Queens are large, silvery and often de-alate right under the light. Bring a container.',
   },
 ];
 
-// ── Singapore Parks with species presence ────────────────
-// speciesPresent: which species are actually found here
-// habitat: 1 manicured, 2 neighbourhood park, 3 park+forest edge, 4 secondary forest, 5 primary forest
-const SG_PARKS = [
-  { name: 'Bukit Timah Nature Reserve',       lat:1.3520,lng:103.7767, habitat:5, lit:false, species:['giga','trapjaw','carpenter'], tip:'Primary forest — THE spot for Giga queens after heavy rain. Check trail entrance lamp posts for Trap Jaw and Carpenter.' },
-  { name: 'Central Catchment (MacRitchie)',    lat:1.3419,lng:103.8198, habitat:5, lit:true,  species:['giga','trapjaw','carpenter'], tip:'Largest forest in SG — excellent for Giga and Trap Jaw. Check lit carpark edges and forest trail start points.' },
-  { name: 'CCNR — Upper/Lower Pierce entry',  lat:1.3699,lng:103.8148, habitat:5, lit:false,  species:['giga','trapjaw','carpenter'], tip:'Quieter CCNR entry point — less foot traffic, prime undisturbed forest floor for Giga hunting.' },
-  { name: 'Labrador Nature Reserve',          lat:1.2664,lng:103.8025, habitat:5, lit:true,  species:['trapjaw','carpenter'],        tip:'Coastal primary forest — check lit path lamps at cliff base for Trap Jaw and Carpenter queens.' },
-  { name: 'Sungei Buloh Wetland Reserve',     lat:1.4473,lng:103.7290, habitat:5, lit:false, species:['trapjaw','carpenter'],        tip:'Mangrove and wetland edge — excellent humid micro-habitat. Trap Jaw common along boardwalk edges.' },
-  { name: 'Thomson Nature Park',              lat:1.3707,lng:103.8243, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Tembusu forest and stream — Trap Jaw active along leaf litter trails post-rain.' },
-  { name: 'Springleaf Nature Park',           lat:1.3946,lng:103.8139, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Forest stream corridor — excellent humid micro-habitat for Trap Jaw and Carpenter.' },
-  { name: 'Dairy Farm Nature Park',           lat:1.3536,lng:103.7728, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Secondary forest + lit carpark — Carpenter queens often found on lit walls at forest edge.' },
-  { name: 'Zhenghua Nature Park',             lat:1.3712,lng:103.7683, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Young secondary forest — fast coloniser ants and Trap Jaw active after afternoon storms.' },
-  { name: 'Hindhede Nature Park',             lat:1.3538,lng:103.7772, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Quarry rim with forest — check lit shelter poles. Carpenter queens found here regularly.' },
-  { name: 'Clementi Forest',                  lat:1.3230,lng:103.7644, habitat:4, lit:false,  species:['trapjaw','carpenter'],        tip:'Unofficial secondary growth — dense leaf litter, Trap Jaw very active here post-rain.' },
-  { name: 'Coney Island Park',                lat:1.4027,lng:103.9254, habitat:4, lit:false,  species:['giga','trapjaw','carpenter'], tip:'Island forest, low light pollution — Giga queens spotted here after heavy rain nights.' },
-  { name: 'Tampines Eco Green',               lat:1.3559,lng:103.9449, habitat:4, lit:true,  species:['trapjaw','carpenter','fire'], tip:'Secondary forest plots in East SG — Trap Jaw along trail edges, Fire ants on open grass fringes.' },
-  { name: 'Mandai Nature Trail',              lat:1.4036,lng:103.7934, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Forest trail near zoo — lit carpark edges good for Carpenter, trail for Trap Jaw.' },
-  { name: 'Kent Ridge Park',                  lat:1.2924,lng:103.7817, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Ridge forest — lit carpark at base excellent for Carpenter queen spotting after rain.' },
-  { name: 'Telok Blangah Hill Park',          lat:1.2794,lng:103.8081, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Forested urban hill — check trail entrances and lit lamp posts at base after rain.' },
-  { name: 'Southern Ridges',                  lat:1.2845,lng:103.8014, habitat:4, lit:true,  species:['trapjaw','carpenter'],        tip:'Ridge forest and bridges — check under lit Henderson Waves bridge after evening rain.' },
-  { name: 'Bishan-Ang Mo Kio Park',           lat:1.3620,lng:103.8487, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Large park with river — Fire ant flights on open grass midday. Carpenter queens on lit walls at night.' },
-  { name: 'Pasir Ris Park',                   lat:1.3721,lng:103.9488, habitat:3, lit:true,  species:['fire','trapjaw','carpenter'], tip:'Forest fringe + beach — Fire ants on open grass, Trap Jaw near mangrove edge, Carpenter on lit structures.' },
-  { name: 'East Coast Park',                  lat:1.3005,lng:103.9121, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal strip — Fire ant flights on open grass midday. Carpenter queens check lit BBQ shelters at night.' },
-  { name: 'Bedok Reservoir Park',             lat:1.3393,lng:103.9317, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Reservoir loop — Fire ants on grass banks midday. Carpenter queens on lit lamp post bases at night.' },
-  { name: 'Jurong Lake Gardens',              lat:1.3344,lng:103.7262, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Lakeside with grassland — Fire ant flights midday near water. Carpenter queens check lit shelters.' },
-  { name: 'Punggol Waterway Park',            lat:1.4003,lng:103.9050, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Waterway corridor — Fire ants active on grassy banks midday after rain. Lit lamp posts for Carpenter.' },
-  { name: 'Singapore Botanic Gardens',        lat:1.3138,lng:103.8159, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Rich soil and tall trees — Fire ants near open lawn areas. Carpenter queens on lit walls at night.' },
-  { name: 'Fort Canning Park',                lat:1.2934,lng:103.8455, habitat:3, lit:true,  species:['trapjaw','carpenter'],       tip:'Forested urban hill — lit walkways and old walls great for Carpenter. Trap Jaw along trail edges.' },
-  { name: 'Bukit Batok Nature Park',          lat:1.3590,lng:103.7613, habitat:3, lit:true,  species:['trapjaw','carpenter'],       tip:'Quarry lake with secondary forest — check water\'s edge grass at dusk for Trap Jaw and Carpenter.' },
-  { name: 'West Coast Park',                  lat:1.2948,lng:103.7610, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal park — Fire ants on open grass midday. Carpenter queens on lit concrete walls at night.' },
-  { name: 'Sembawang Park',                   lat:1.4592,lng:103.8208, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal park with secondary forest nearby — Fire ants on grass edges, Carpenter on lit paths.' },
-  { name: 'Changi Beach Park',                lat:1.3876,lng:103.9862, habitat:3, lit:true,  species:['fire','carpenter'],          tip:'Coastal grass and trees — Fire ants midday, Carpenter queens check lit wooden shelter posts at night.' },
-  { name: 'Admiralty Park',                   lat:1.4441,lng:103.7997, habitat:2, lit:true,  species:['fire'],                      tip:'Grassy park near mangroves — Fire ant flights active on open grass midday after rain.' },
-  { name: 'Yishun Park',                      lat:1.4192,lng:103.8339, habitat:2, lit:true,  species:['fire'],                      tip:'Open grassy park — Fire ant nuptial flights on grass midday. Check drain edges and open soil.' },
-  { name: 'Tampines Central Park',            lat:1.3531,lng:103.9430, habitat:2, lit:true,  species:['fire'],                      tip:'Open grass with lit paths — Fire ant flights midday. Check ground near drain covers and grass edges.' },
-  { name: 'Toa Payoh Town Park',              lat:1.3330,lng:103.8472, habitat:2, lit:true,  species:['fire'],                      tip:'Town park with open grass — Fire ants fly midday near drain edges and open disturbed soil.' },
-  { name: 'Punggol Point Park',               lat:1.4148,lng:103.9106, habitat:2, lit:true,  species:['fire'],                      tip:'Coastal open grass — Fire ant flights midday after rain. Check grass near any open soil patches.' },
-  { name: 'Sengkang Riverside Park',          lat:1.3903,lng:103.8974, habitat:2, lit:true,  species:['fire'],                      tip:'River corridor with grass banks — Fire ant flights on open grass midday after rain.' },
+// ── Locations database ───────────────────────────────────
+// habitat: 0=drain/construction, 1=HDB urban, 2=park+grass, 3=park+forest edge, 4=secondary forest, 5=primary forest
+// locationType: 'urban'|'park'|'nature'  (for display badge)
+const LOCATIONS = [
+  // ── PRIMARY / SECONDARY FOREST ──────────────────────────
+  { name:'Bukit Timah Nature Reserve',      lat:1.3520,lng:103.7767, habitat:5, lit:false, locationType:'nature', species:['giga','trapjaw','carpenter'], tip:'THE spot for Giga queens after heavy rain. Check trail entrance lamp posts for Trap Jaw and Carpenter at night.' },
+  { name:'MacRitchie Reservoir (CCNR)',     lat:1.3419,lng:103.8198, habitat:5, lit:true,  locationType:'nature', species:['giga','trapjaw','carpenter'], tip:'Largest forest in SG — Giga and Trap Jaw active along trail edges. Check lit carpark periphery for Carpenter.' },
+  { name:'CCNR – Pierce Reservoir entry',   lat:1.3699,lng:103.8148, habitat:5, lit:false, locationType:'nature', species:['giga','trapjaw','carpenter'], tip:'Quieter CCNR entry — undisturbed forest floor ideal for Giga hunting on post-rain nights.' },
+  { name:'Labrador Nature Reserve',         lat:1.2664,lng:103.8025, habitat:5, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Coastal primary forest — lit path lamps at cliff base great for Trap Jaw and Carpenter queens.' },
+  { name:'Sungei Buloh Wetland Reserve',    lat:1.4473,lng:103.7290, habitat:5, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Mangrove and wetland edge — excellent humid micro-habitat. Trap Jaw common along boardwalk edges after rain.' },
+  { name:'Thomson Nature Park',             lat:1.3707,lng:103.8243, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Tembusu forest and stream — Trap Jaw active along leaf litter trails post-rain.' },
+  { name:'Springleaf Nature Park',          lat:1.3946,lng:103.8139, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Forest stream corridor — excellent humid micro-habitat. Check ground near water after rain.' },
+  { name:'Dairy Farm Nature Park',          lat:1.3536,lng:103.7728, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Secondary forest + lit carpark — Carpenter queens found on lit walls at forest edge regularly.' },
+  { name:'Zhenghua Nature Park',            lat:1.3712,lng:103.7683, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Young secondary forest — fast coloniser ants and Trap Jaw very active after afternoon storms.' },
+  { name:'Hindhede Nature Park',            lat:1.3538,lng:103.7772, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Quarry rim with forest — check lit shelter poles. Carpenter queens found here regularly.' },
+  { name:'Clementi Forest',                 lat:1.3230,lng:103.7644, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Dense secondary growth — thick leaf litter, Trap Jaw very active post-rain. Check disturbed ground edges.' },
+  { name:'Coney Island Park',               lat:1.4027,lng:103.9254, habitat:4, lit:false, locationType:'nature', species:['giga','trapjaw','carpenter'],  tip:'Island forest, low light pollution — Giga queens spotted after heavy rain nights. Worth the walk.' },
+  { name:'Tampines Eco Green',              lat:1.3559,lng:103.9449, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter','fire'],  tip:'Secondary forest in East SG — Trap Jaw along trail edges, Fire ants on open grass fringes.' },
+  { name:'Kent Ridge Park',                 lat:1.2924,lng:103.7817, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Ridge forest — lit carpark at base excellent for Carpenter. Trap Jaw along trail edges at dusk.' },
+  { name:'Telok Blangah Hill Park',         lat:1.2794,lng:103.8081, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Forested urban hill — check trail entrances and lit lamp posts at base after rain.' },
+  { name:'Southern Ridges',                 lat:1.2845,lng:103.8014, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Ridge forest and bridges — lit Henderson Waves bridge underside great for Carpenter after evening rain.' },
+  // ── PARKS WITH FOREST EDGE ──────────────────────────────
+  { name:'Bishan-Ang Mo Kio Park',          lat:1.3620,lng:103.8487, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Large park with river — Fire ant flights on open grass midday. Carpenter queens on lit walls and shelters at night.' },
+  { name:'Pasir Ris Park',                  lat:1.3721,lng:103.9488, habitat:3, lit:true,  locationType:'park',   species:['fire','trapjaw','carpenter'],  tip:'Forest fringe + beach — Fire ants on open grass, Trap Jaw near mangrove edge, Carpenter on lit structures.' },
+  { name:'East Coast Park',                 lat:1.3005,lng:103.9121, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Long coastal strip — Fire ant flights on open grass midday. Carpenter queens on lit BBQ shelter walls at night.' },
+  { name:'Bedok Reservoir Park',            lat:1.3393,lng:103.9317, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Reservoir loop — Fire ants on grass banks midday. Carpenter queens on lit lamp post bases at night.' },
+  { name:'Jurong Lake Gardens',             lat:1.3344,lng:103.7262, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Lakeside with grassland — Fire ant flights near water midday. Carpenter queens check lit shelters.' },
+  { name:'Punggol Waterway Park',           lat:1.4003,lng:103.9050, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Waterway corridor — Fire ants on grassy banks midday after rain. Lit lamp posts for Carpenter at night.' },
+  { name:'Singapore Botanic Gardens',       lat:1.3138,lng:103.8159, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Rich soil and tall trees — Fire ants near lawn areas. Carpenter queens on lit walls and entrances at night.' },
+  { name:'Fort Canning Park',               lat:1.2934,lng:103.8455, habitat:3, lit:true,  locationType:'park',   species:['trapjaw','carpenter'],        tip:'Forested urban hill — lit walkways and old stone walls great for Carpenter. Trap Jaw along trail edges.' },
+  { name:'Bukit Batok Nature Park',         lat:1.3590,lng:103.7613, habitat:3, lit:true,  locationType:'park',   species:['trapjaw','carpenter'],        tip:'Quarry lake with secondary forest — check water edge grass at dusk for Trap Jaw and Carpenter.' },
+  { name:'West Coast Park',                 lat:1.2948,lng:103.7610, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Coastal park — Fire ants on open grass midday. Carpenter queens on lit concrete walls at night.' },
+  { name:'Sembawang Park',                  lat:1.4592,lng:103.8208, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Coastal park with forest nearby — Fire ants on grass edges, Carpenter on lit paths at night.' },
+  { name:'Changi Beach Park',               lat:1.3876,lng:103.9862, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Coastal grass and casuarina trees — Fire ants midday, Carpenter queens on lit shelter posts at night.' },
+  // ── HDB ESTATES ─────────────────────────────────────────
+  // Central
+  { name:'Toa Payoh HDB Estate',            lat:1.3330,lng:103.8472, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Void deck lights and corridor lamps after rain — Carpenter and Trap Jaw queens common. Fire ants on grass verges between blocks midday.' },
+  { name:'Bishan HDB Estate',               lat:1.3509,lng:103.8490, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Bishan Park — excellent crossover zone. Check void decks facing the park after rain for Carpenter and Trap Jaw.' },
+  { name:'Ang Mo Kio HDB Estate',           lat:1.3691,lng:103.8454, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Dense HDB town — check void deck lights and open grass verges between blocks. Fire ant columns visible midday after rain.' },
+  { name:'Novena / Thomson HDB',            lat:1.3200,lng:103.8440, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Thomson Nature Park — Trap Jaw and Carpenter queens attracted to corridor and stairwell lights facing greenery.' },
+  { name:'Serangoon HDB Estate',            lat:1.3496,lng:103.8734, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Check any grassy open areas between blocks for Fire ants midday. Carpenter queens on lit void deck pillars after dark.' },
+  // North
+  { name:'Yishun HDB Estate',               lat:1.4304,lng:103.8354, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Large HDB town — grass verges between blocks for Fire ants midday. Void deck and corridor lights for Carpenter at night.' },
+  { name:'Woodlands HDB Estate',            lat:1.4371,lng:103.7869, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Northern estates near Mandai forest fringe — Carpenter queens on any lit wall after rain. Fire ants on open grass.' },
+  { name:'Sembawang HDB Estate',            lat:1.4490,lng:103.8199, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near coastal greenery — check void deck lights and drain edges. Fire ant columns on open grass after morning rain.' },
+  { name:'Admiralty / Canberra HDB',        lat:1.4420,lng:103.8011, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Admiralty Park — good crossover zone. Check lit void decks and grass between blocks after rain.' },
+  // East
+  { name:'Tampines HDB Estate',             lat:1.3530,lng:103.9440, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Tampines Eco Green — Trap Jaw queens at corridor lights facing trees. Fire ants on any open grass midday.' },
+  { name:'Bedok HDB Estate',                lat:1.3236,lng:103.9273, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Check drain edges and grass between blocks for Fire ants midday. Void deck and stairwell lights for Carpenter at night.' },
+  { name:'Pasir Ris HDB Estate',            lat:1.3737,lng:103.9494, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Adjacent to Pasir Ris Park and forest — great crossover. Trap Jaw and Carpenter at corridor lights facing greenery.' },
+  { name:'Simei / Changi HDB',              lat:1.3434,lng:103.9534, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Eastern estates — check any grassy open areas for Fire ants midday, void deck lights for Carpenter after rain.' },
+  // West
+  { name:'Jurong West HDB Estate',          lat:1.3404,lng:103.7090, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Large western estate — Fire ant flights on grass between blocks midday. Carpenter queens on any lit void deck at night.' },
+  { name:'Jurong East HDB Estate',          lat:1.3330,lng:103.7436, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Jurong Lake — check grass edges facing the lake for Fire ants, and lit void decks for Carpenter after rain.' },
+  { name:'Clementi HDB Estate',             lat:1.3153,lng:103.7651, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Clementi Forest — Trap Jaw queens on stairwell lights facing the forest fringe. Fire ants on open grass midday.' },
+  { name:'Bukit Batok HDB Estate',          lat:1.3491,lng:103.7496, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Bukit Batok Nature Park — excellent crossover zone. Check corridor lights facing the park after rain.' },
+  { name:'Bukit Panjang HDB Estate',        lat:1.3779,lng:103.7719, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Right on Bukit Timah forest fringe — Trap Jaw and Carpenter queens common on any lit surface facing trees.' },
+  // NE / Punggol
+  { name:'Punggol HDB Estate',              lat:1.4043,lng:103.9022, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'New town with grassy corridors — Fire ants on any open grass midday. Carpenter queens at void deck and corridor lights.' },
+  { name:'Sengkang HDB Estate',             lat:1.3868,lng:103.8914, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Check grass between blocks for Fire ants midday. Lit stairwell and void deck lamps good for Carpenter after rain.' },
+  { name:'Hougang HDB Estate',              lat:1.3700,lng:103.8869, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Dense estate near parkland — check void deck lights and drain edges. Fire ants on grass verges after morning rain.' },
+  { name:'Buangkok / Compassvale HDB',      lat:1.3849,lng:103.8870, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Sengkang wetlands — good crossover zone. Check lit corridor lamps and open grass between blocks.' },
+  // South / Central
+  { name:'Queenstown HDB Estate',           lat:1.2941,lng:103.8057, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Southern Ridges forest — Carpenter queens on any lit wall facing trees after rain. Fire ants on grass verges.' },
+  { name:'Buona Vista / Dover HDB',         lat:1.3070,lng:103.7900, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Kent Ridge Park — excellent crossover. Check corridor lights on lower floors facing the park after rain.' },
+  // ── DRAINS / OPEN GROUND ────────────────────────────────
+  { name:'Kallang Riverside drain corridor', lat:1.3100,lng:103.8631, habitat:0, lit:true,  locationType:'urban',  species:['fire'],                       tip:'Open drain and grass verge — Fire ant columns highly visible after morning rain. Check any disturbed soil and drain covers.' },
+  { name:'Punggol waterway drain edges',    lat:1.3993,lng:103.9065, habitat:0, lit:true,  locationType:'urban',  species:['fire'],                       tip:'Waterway drain edges with grass — Fire ant nuptial flights very common here midday after rain.' },
+  { name:'Jurong Industrial drain area',    lat:1.3197,lng:103.6977, habitat:0, lit:true,  locationType:'urban',  species:['fire'],                       tip:'Industrial drain and open ground — disturbed soil perfect for Fire ants. Check midday after any rain.' },
+  { name:'Sungei Pandan / Clementi drain',  lat:1.3089,lng:103.7642, habitat:0, lit:false, locationType:'urban',  species:['fire'],                       tip:'Open drain corridor with grass verges — Fire ant flights common midday after rain in this area.' },
 ];
 
 // ── Species flight condition scorer ─────────────────────
 function scoreSpeciesConditions(sp, weather, hour) {
   if (!weather || sp.id === 'all') return null;
   const { temp, humidity, precip } = weather;
-  const isDay  = hour >= 10 && hour <= 14;
-  const isEve  = hour >= 17 && hour <= 21;
-  const isNight= hour >= 20 || hour <= 2;
-
-  const chips = [];
-  let goodCount = 0, totalCount = 0;
-
-  // Time of day check
-  totalCount++;
-  const timeOk =
-    sp.flightTime === 'any'     ? true :
-    sp.flightTime === 'day'     ? isDay :
-    sp.flightTime === 'evening' ? isEve :
-    sp.flightTime === 'night'   ? isNight : false;
-  const timeLabel =
-    sp.flightTime === 'day'     ? '☀️ Midday window' :
-    sp.flightTime === 'evening' ? '🌆 Evening window' :
-    sp.flightTime === 'night'   ? '🌙 Night window' : '🕐 Any time';
-  chips.push({ label: timeLabel, state: timeOk ? 'ok' : 'no' });
-  if (timeOk) goodCount++;
-
-  // Temperature
-  totalCount++;
-  const tempOk = temp >= sp.idealTemp[0] && temp <= sp.idealTemp[1];
-  chips.push({ label: `🌡 ${temp.toFixed(1)}°C`, state: tempOk ? 'ok' : temp < sp.idealTemp[0] ? 'no' : 'mid' });
-  if (tempOk) goodCount++;
-
-  // Humidity
-  totalCount++;
-  const humOk = humidity >= sp.idealHumidity[0];
-  chips.push({ label: `💧 ${Math.round(humidity)}%`, state: humOk ? 'ok' : humidity >= sp.idealHumidity[0] - 10 ? 'mid' : 'no' });
-  if (humOk) goodCount++;
-
-  // Rain
+  const isDay   = hour >= 10 && hour <= 14;
+  const isEve   = hour >= 17 && hour <= 21;
+  const isNight = hour >= 20 || hour <= 2;
+  const chips = []; let good = 0, total = 0;
+  total++;
+  const timeOk = sp.flightTime==='any'?true:sp.flightTime==='day'?isDay:sp.flightTime==='evening'?isEve:isNight;
+  const timeLabel = sp.flightTime==='day'?'☀️ Midday window':sp.flightTime==='evening'?'🌆 Evening window':sp.flightTime==='night'?'🌙 Night window':'🕐 Any time';
+  chips.push({ label: timeLabel, state: timeOk?'ok':'no' }); if (timeOk) good++;
+  total++; const tempOk = temp>=sp.idealTemp[0]&&temp<=sp.idealTemp[1];
+  chips.push({ label:`🌡 ${temp.toFixed(1)}°C`, state: tempOk?'ok':temp<sp.idealTemp[0]?'no':'mid' }); if (tempOk) good++;
+  total++; const humOk = humidity>=sp.idealHumidity[0];
+  chips.push({ label:`💧 ${Math.round(humidity)}%`, state: humOk?'ok':humidity>=sp.idealHumidity[0]-10?'mid':'no' }); if (humOk) good++;
   if (sp.needsRain) {
-    totalCount++;
-    const rainOk = precip >= sp.idealPrecip;
-    chips.push({ label: rainOk ? `🌧 Rain ✓` : `🌧 Needs rain`, state: rainOk ? 'ok' : precip > 0 ? 'mid' : 'no' });
-    if (rainOk) goodCount++;
+    total++; const rainOk = precip>=sp.idealPrecip;
+    chips.push({ label: rainOk?'🌧 Rain ✓':'🌧 Needs rain', state: rainOk?'ok':precip>0?'mid':'no' }); if (rainOk) good++;
   }
-
-  const ratio = goodCount / totalCount;
-  const badge = ratio >= 0.9 ? 'prime' : ratio >= 0.7 ? 'good' : ratio >= 0.5 ? 'fair' : 'low';
-  const badgeText = ratio >= 0.9 ? '🔥 Prime window' : ratio >= 0.7 ? '✅ Good' : ratio >= 0.5 ? '🟡 Fair' : '⬜ Low now';
-
+  const ratio = good/total;
+  const badge = ratio>=0.9?'prime':ratio>=0.7?'good':ratio>=0.5?'fair':'low';
+  const badgeText = ratio>=0.9?'🔥 Prime window':ratio>=0.7?'✅ Good':ratio>=0.5?'🟡 Fair':'⬜ Low now';
   return { chips, badge, badgeText };
 }
 
-// ── Hunt score per park for selected species ─────────────
-function calcHuntScore(park, km, weather, isEvening, precip, sp) {
-  // Habitat fit
+// ── Hunt score per location ──────────────────────────────
+function calcHuntScore(loc, km, weather, isEvening, precip, sp) {
+  const h = new Date().getHours();
+
+  // Filter by species habitat requirement
+  if (sp.id !== 'all') {
+    if (loc.habitat < sp.minHabitat) return 0;
+    if (!loc.species.includes(sp.id)) return 0;
+  }
+
+  // Habitat score (0–40)
   let habitatPts;
   if (sp.id === 'all') {
-    habitatPts = { 5:40, 4:32, 3:22, 2:12, 1:5 }[park.habitat] || 10;
+    habitatPts = { 5:40, 4:32, 3:22, 2:14, 1:12, 0:8 }[loc.habitat] ?? 8;
+  } else if (sp.id === 'fire') {
+    // Fire ants: urban and open ground are PRIME
+    habitatPts = { 0:40, 1:38, 2:30, 3:18, 4:5, 5:2 }[loc.habitat] ?? 10;
+  } else if (sp.id === 'giga') {
+    habitatPts = { 5:40, 4:32, 3:5, 2:0, 1:0, 0:0 }[loc.habitat] ?? 0;
+  } else if (sp.id === 'trapjaw') {
+    habitatPts = { 5:40, 4:35, 3:28, 2:22, 1:15, 0:0 }[loc.habitat] ?? 10;
+  } else if (sp.id === 'carpenter') {
+    // Carpenter: lit urban spots very productive
+    habitatPts = loc.lit
+      ? { 5:40, 4:36, 3:32, 2:28, 1:26, 0:0 }[loc.habitat] ?? 10
+      : { 5:40, 4:34, 3:28, 2:10, 1:5,  0:0 }[loc.habitat] ?? 10;
   } else {
-    // Does species actually live here?
-    if (park.habitat < sp.minHabitat) return 0; // wrong habitat entirely
-    if (!park.species.includes(sp.id))  return 0; // species not found here
-    // How preferred is this habitat?
-    const prefRank = sp.prefersHabitat.indexOf(park.habitat);
-    habitatPts = prefRank === 0 ? 40 : prefRank === 1 ? 35 : 28;
+    habitatPts = { 5:40, 4:32, 3:22, 1:12, 0:8 }[loc.habitat] ?? 10;
   }
+  if (habitatPts === 0) return 0;
 
   // Distance (0–30)
   const distPts = Math.max(0, 30 - (km * 6));
@@ -531,60 +486,49 @@ function calcHuntScore(park, km, weather, isEvening, precip, sp) {
   // Weather synergy (0–20)
   let weatherPts = 0;
   if (sp.id === 'fire') {
-    // Fire ants: open ground, midday, loves rain + heat
     weatherPts = (precip >= 0.5 && weather?.temp >= 29) ? 20 : precip >= 0.1 ? 12 : 6;
   } else if (sp.id === 'giga') {
-    // Giga: needs heavy rain + high humidity in primary forest
     weatherPts = (precip >= 1 && weather?.humidity >= 85) ? 20 : precip >= 0.5 ? 12 : 4;
   } else if (sp.id === 'trapjaw') {
-    weatherPts = (precip >= 0.5 && isEvening) ? 20 : precip >= 0.1 ? 12 : park.lit ? 8 : 5;
+    weatherPts = (precip >= 0.5 && (isEvening || loc.lit)) ? 20 : precip >= 0.1 ? 12 : loc.lit ? 8 : 4;
   } else if (sp.id === 'carpenter') {
-    weatherPts = (precip >= 0.5 && park.lit) ? 20 : precip >= 0.1 ? 12 : park.lit ? 10 : 4;
+    weatherPts = (precip >= 0.5 && loc.lit) ? 20 : precip >= 0.1 ? 14 : loc.lit ? 10 : 4;
   } else {
-    // All species
-    weatherPts = precip >= 1 ? (park.habitat >= 4 ? 20 : 14) : precip >= 0.1 ? 10 : park.lit ? 8 : 5;
+    weatherPts = precip >= 1 ? (loc.habitat >= 4 ? 20 : 14) : precip >= 0.1 ? 10 : loc.lit ? 8 : 5;
   }
 
   // Time of day (0–10)
-  const h = new Date().getHours();
   let timePts = 0;
-  if (sp.id === 'fire') {
-    timePts = (h >= 10 && h <= 14) ? 10 : 2;
-  } else if (sp.id === 'giga') {
-    timePts = (h >= 21 || h <= 2) ? 10 : (h >= 19) ? 5 : 1;
-  } else if (sp.id === 'trapjaw') {
-    timePts = (h >= 18 && h <= 22) ? 10 : (h >= 17 || h <= 23) ? 5 : 2;
-  } else if (sp.id === 'carpenter') {
-    timePts = (h >= 20 || h <= 1) ? 10 : (h >= 18) ? 6 : 2;
-  } else {
-    timePts = isEvening ? (park.lit ? 10 : 4) : (park.habitat >= 4 ? 8 : 4);
-  }
+  if (sp.id === 'fire')      timePts = (h>=10&&h<=14)?10:2;
+  else if (sp.id === 'giga') timePts = (h>=21||h<=2)?10:(h>=19)?5:1;
+  else if (sp.id === 'trapjaw') timePts = (h>=18&&h<=22)?10:(h>=17)?5:2;
+  else if (sp.id === 'carpenter') timePts = (h>=20||h<=1)?10:(h>=18)?6:2;
+  else timePts = isEvening?(loc.lit?10:4):(loc.habitat>=4?8:4);
 
   return Math.min(100, Math.round(habitatPts + distPts + weatherPts + timePts));
 }
 
-function huntScoreLabel(score) {
-  if (score >= 75) return '🔥 Prime';
-  if (score >= 55) return '✅ Good';
-  if (score >= 40) return '🟡 Fair';
-  return '⬜ Low';
-}
-function huntScoreColor(score) {
-  if (score >= 75) return '#1D9E75';
-  if (score >= 55) return '#5DCAA5';
-  if (score >= 40) return '#EF9F27';
-  return '#B4B2A9';
-}
+function huntScoreLabel(s) { return s>=75?'🔥 Prime':s>=55?'✅ Good':s>=40?'🟡 Fair':'⬜ Low'; }
+function huntScoreColor(s) { return s>=75?'#1D9E75':s>=55?'#5DCAA5':s>=40?'#EF9F27':'#B4B2A9'; }
+
+// ── Location type badge ──────────────────────────────────
+const LOC_BADGE = {
+  nature: { label:'Nature reserve', icon:'🌿' },
+  park:   { label:'Park',           icon:'🌳' },
+  urban:  { label:'HDB / Urban',    icon:'🏢' },
+};
+const HABITAT_LABEL = { 5:'Primary forest', 4:'Secondary forest', 3:'Park + forest edge', 2:'Neighbourhood park', 1:'HDB estate', 0:'Open ground / drain' };
 
 // ── Render species selector ──────────────────────────────
 function renderSpeciesSelector() {
   const scroll = document.getElementById('species-scroll');
+  if (!scroll) return;
   scroll.innerHTML = SPECIES.map(sp => `
-    <div class="species-pill ${selectedSpecies === sp.id ? 'active' : ''}"
+    <div class="species-pill ${selectedSpecies===sp.id?'active':''}"
          style="--sp-color:${sp.color};--sp-bg:${sp.bg}"
          onclick="selectSpecies('${sp.id}')">
       <div class="species-pill-icon">${sp.icon}</div>
-      <div class="species-pill-name">${sp.name.replace(' Ant','').replace(' Jaw','')}</div>
+      <div class="species-pill-name">${sp.name.replace(' Ant','').replace(' Jaw','').replace(' Carpenter','')}</div>
     </div>`).join('');
   document.getElementById('species-section').style.display = 'block';
 }
@@ -592,37 +536,25 @@ function renderSpeciesSelector() {
 function selectSpecies(id) {
   selectedSpecies = id;
   renderSpeciesSelector();
-  if (state.lat && currentWeather) {
-    renderSpeciesCondition();
-    renderSpots();
-  }
+  if (state.lat && currentWeather) { renderSpeciesCondition(); renderSpots(); }
 }
 
 // ── Render species condition card ────────────────────────
 function renderSpeciesCondition() {
   const card = document.getElementById('species-condition');
   const sp   = SPECIES.find(s => s.id === selectedSpecies);
-  if (!sp || sp.id === 'all' || !currentWeather) { card.style.display = 'none'; return; }
-
-  const h    = new Date().getHours();
-  const cond = scoreSpeciesConditions(sp, currentWeather, h);
-
+  if (!sp || sp.id==='all' || !currentWeather) { card.style.display='none'; return; }
+  const cond = scoreSpeciesConditions(sp, currentWeather, new Date().getHours());
   card.style.display = 'block';
-  card.style.borderColor = sp.color + '44';
+  card.style.borderColor = sp.color+'44';
   card.innerHTML = `
     <div class="sp-cond-top">
       <div class="sp-cond-icon">${sp.icon}</div>
-      <div>
-        <div class="sp-cond-name" style="color:${sp.color}">${sp.name}</div>
-        <div class="sp-cond-latin">${sp.latin}</div>
-      </div>
+      <div><div class="sp-cond-name" style="color:${sp.color}">${sp.name}</div><div class="sp-cond-latin">${sp.latin}</div></div>
       <div class="sp-cond-badge ${cond.badge}">${cond.badgeText}</div>
     </div>
-    <div class="sp-cond-factors">
-      ${cond.chips.map(c => `<span class="sp-factor-chip ${c.state}">${c.label}</span>`).join('')}
-    </div>
-    <div class="sp-flight-window">${sp.flightWindow}</div>
-  `;
+    <div class="sp-cond-factors">${cond.chips.map(c=>`<span class="sp-factor-chip ${c.state}">${c.label}</span>`).join('')}</div>
+    <div class="sp-flight-window">${sp.flightWindow}</div>`;
 }
 
 // ── Render spots ─────────────────────────────────────────
@@ -630,194 +562,168 @@ function renderSpots() {
   const section = document.getElementById('spots-section');
   const listEl  = document.getElementById('spot-list');
   const subEl   = document.getElementById('spots-sub');
-
-  // Always show spots if score >= 35
   section.style.display = 'block';
-
   const h      = new Date().getHours();
-  const isEve  = h >= 18 && h <= 23;
-  const precip = currentWeather?.precip ?? 0;
-  const sp     = SPECIES.find(s => s.id === selectedSpecies);
+  const isEve  = h>=18&&h<=23;
+  const precip = currentWeather?.precip??0;
+  const sp     = SPECIES.find(s=>s.id===selectedSpecies);
 
-  const ranked = SG_PARKS
-    .map(p => {
-      const km = distKm(state.lat, state.lng, p.lat, p.lng);
-      const hs = calcHuntScore(p, km, currentWeather, isEve, precip, sp);
-      return { ...p, km, huntScore: hs };
-    })
-    .filter(p => p.huntScore > 0)
-    .sort((a, b) => b.huntScore - a.huntScore)
-    .slice(0, 5);
+  const ranked = LOCATIONS
+    .map(loc => ({ ...loc, km: distKm(state.lat,state.lng,loc.lat,loc.lng), huntScore: calcHuntScore(loc,distKm(state.lat,state.lng,loc.lat,loc.lng),currentWeather,isEve,precip,sp) }))
+    .filter(l => l.huntScore > 0)
+    .sort((a,b) => b.huntScore - a.huntScore)
+    .slice(0,5);
 
   if (!ranked.length) {
-    listEl.innerHTML = `<div style="font-size:13px;color:var(--text-3);padding:8px 0;">
-      No suitable spots found nearby for ${sp.name} right now. Try a different species or check conditions later.
-    </div>`;
+    listEl.innerHTML = `<div style="font-size:13px;color:var(--text-3);padding:8px 0;">No suitable spots found for ${sp.name} right now. Try a different species or check later.</div>`;
     subEl.textContent = 'No matching spots';
     return;
   }
 
   const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const habitatLabel = { 5:'Primary forest', 4:'Secondary forest', 3:'Park + forest edge', 2:'Neighbourhood park', 1:'Open ground' };
   const topScore = ranked[0].huntScore;
+  const spColors = Object.fromEntries(SPECIES.map(s=>[s.id,{color:s.color,bg:s.bg,icon:s.icon,name:s.name}]));
 
-  const speciesColors = Object.fromEntries(SPECIES.map(s => [s.id, { color: s.color, bg: s.bg, icon: s.icon, name: s.name }]));
-
-  subEl.textContent = sp.id === 'all'
-    ? `Ranked by habitat + conditions + lighting`
+  subEl.textContent = sp.id==='all'
+    ? 'Parks, nature reserves and HDB spots — ranked by conditions now'
     : `Best spots for ${sp.name} right now`;
 
-  listEl.innerHTML = ranked.map((park, i) => {
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${park.lat},${park.lng}&travelmode=walking`;
-    const col = sp.id === 'all' ? huntScoreColor(park.huntScore) : sp.color;
-    const lbl = huntScoreLabel(park.huntScore);
-    const barPct = Math.round((park.huntScore / topScore) * 100);
-
-    // Species tags for this spot (only show in 'all' mode)
-    const speciesTags = sp.id === 'all'
-      ? park.species.map(sid => {
-          const s = speciesColors[sid];
-          return s ? `<span class="sp-tag" style="background:${s.bg};color:${s.color}">${s.icon} ${s.name.split(' ')[0]}</span>` : '';
-        }).join('')
+  listEl.innerHTML = ranked.map((loc,i) => {
+    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}&travelmode=walking`;
+    const col   = sp.id==='all' ? huntScoreColor(loc.huntScore) : sp.color;
+    const lbl   = huntScoreLabel(loc.huntScore);
+    const bar   = Math.round((loc.huntScore/topScore)*100);
+    const badge = LOC_BADGE[loc.locationType]||LOC_BADGE.park;
+    const speciesTags = sp.id==='all'
+      ? loc.species.map(sid=>{const s=spColors[sid];return s?`<span class="sp-tag" style="background:${s.bg};color:${s.color}">${s.icon} ${s.name.split(' ')[0]}</span>`:''}).join('')
       : '';
-
+    const tip = sp.id!=='all'&&sp.huntTip ? sp.huntTip : loc.tip;
     return `
       <div class="spot-card" onclick="navigate('${mapsUrl}')">
         <div class="spot-rank" style="background:${col}22;color:${col};font-size:16px">${medals[i]}</div>
         <div class="spot-info">
-          <div class="spot-name">${park.name}</div>
-          <div class="spot-type">${habitatLabel[park.habitat] || 'Green area'}${park.lit ? ' · 💡 lit' : ''}</div>
+          <div class="spot-name">${loc.name}</div>
+          <div class="spot-type">${badge.icon} ${badge.label} · ${HABITAT_LABEL[loc.habitat]||'Green area'}${loc.lit?' · 💡 lit':''}</div>
           <div class="spot-meta">
-            <span class="spot-dist">${fmtDist(park.km)}</span>
-            <span class="spot-walk">· ${walkMin(park.km)}</span>
+            <span class="spot-dist">${fmtDist(loc.km)}</span>
+            <span class="spot-walk">· ${walkMin(loc.km)}</span>
           </div>
-          ${speciesTags ? `<div class="spot-species-tags">${speciesTags}</div>` : ''}
+          ${speciesTags?`<div class="spot-species-tags">${speciesTags}</div>`:''}
           <div class="hunt-score-bar">
             <span class="hunt-score-label">Hunt score</span>
-            <div class="hunt-bar-bg"><div class="hunt-bar-fill" style="width:${barPct}%;background:${col}"></div></div>
+            <div class="hunt-bar-bg"><div class="hunt-bar-fill" style="width:${bar}%;background:${col}"></div></div>
             <span class="hunt-score-num" style="color:${col}">${lbl}</span>
           </div>
-          <div class="spot-tip">${sp.id !== 'all' && sp.huntTip ? sp.huntTip : park.tip}</div>
+          <div class="spot-tip">${tip}</div>
         </div>
         <button class="spot-nav" onclick="event.stopPropagation();navigate('${mapsUrl}')" style="background:${col}">🧭 Go</button>
       </div>`;
   }).join('');
 
-  showMinimap(state.lat, state.lng, ranked[0]);
+  showMinimap(state.lat,state.lng,ranked[0]);
 }
 
 function showBestSpots(lat, lng, flightScore) {
-  const section = document.getElementById('spots-section');
+  const section   = document.getElementById('spots-section');
   const spSection = document.getElementById('species-section');
-  if (flightScore < 35) {
-    section.style.display = 'none';
-    spSection.style.display = 'none';
-    return;
-  }
+  if (flightScore < 35) { section.style.display='none'; spSection.style.display='none'; return; }
   renderSpeciesSelector();
   renderSpeciesCondition();
   renderSpots();
 }
 
-function navigate(url) { window.open(url, '_blank'); }
-
-function showMinimap(lat, lng, nearest) {
-  const wrap = document.getElementById('minimap-wrap');
-  const frame = document.getElementById('minimap');
-  const label = document.getElementById('minimap-label');
-  frame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
-  wrap.style.display = 'block';
-  label.textContent = nearest ? `#1: ${nearest.name} (${fmtDist(nearest.km)})` : 'Your area';
+function navigate(url) { window.open(url,'_blank'); }
+function showMinimap(lat,lng,nearest) {
+  const wrap=document.getElementById('minimap-wrap'),frame=document.getElementById('minimap'),label=document.getElementById('minimap-label');
+  frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
+  wrap.style.display='block';
+  label.textContent=nearest?`#1: ${nearest.name} (${fmtDist(nearest.km)})`:'Your area';
 }
 
-// ── Score + verdict ──────────────────────────────────────
-function calcScore(temp, humidity, wind, precip, eve) {
-  const r = precip >= 5 ? 35 : precip >= 1 ? 25 : precip >= 0.1 ? 12 : 0;
-  const h = humidity >= 85 ? 25 : humidity >= 75 ? 18 : humidity >= 65 ? 8 : 0;
-  const t = (temp >= 26 && temp <= 33) ? 20 : (temp >= 24) ? 10 : 0;
-  const w = wind <= 8 ? 12 : wind <= 15 ? 6 : 0;
-  const e = eve ? 8 : 0;
-  return { score: Math.min(100, r+h+t+w+e), factors: [
-    { name:'Recent rain',    pts:r, max:35, val:precip.toFixed(1)+'mm' },
-    { name:'Humidity',       pts:h, max:25, val:Math.round(humidity)+'%' },
-    { name:'Temperature',    pts:t, max:20, val:temp.toFixed(1)+'°C' },
-    { name:'Low wind',       pts:w, max:12, val:wind.toFixed(0)+'km/h' },
-    { name:'Evening 6–11pm', pts:e, max:8,  val:eve ? '✓ active' : 'not yet' },
+// ── Score ────────────────────────────────────────────────
+function calcScore(temp,humidity,wind,precip,eve) {
+  const r=precip>=5?35:precip>=1?25:precip>=0.1?12:0;
+  const h=humidity>=85?25:humidity>=75?18:humidity>=65?8:0;
+  const t=(temp>=26&&temp<=33)?20:(temp>=24)?10:0;
+  const w=wind<=8?12:wind<=15?6:0;
+  const e=eve?8:0;
+  return { score:Math.min(100,r+h+t+w+e), factors:[
+    {name:'Recent rain',    pts:r,max:35,val:precip.toFixed(1)+'mm'},
+    {name:'Humidity',       pts:h,max:25,val:Math.round(humidity)+'%'},
+    {name:'Temperature',    pts:t,max:20,val:temp.toFixed(1)+'°C'},
+    {name:'Low wind',       pts:w,max:12,val:wind.toFixed(0)+'km/h'},
+    {name:'Evening 6–11pm', pts:e,max:8, val:eve?'✓ active':'not yet'},
   ]};
 }
-function verdict(score) {
-  if (score >= 70) return { text:'🔥 Get outside NOW!', color:'#1D9E75', ring:'#1D9E75' };
-  if (score >= 55) return { text:'✅ Good conditions',  color:'#1D9E75', ring:'#5DCAA5' };
-  if (score >= 35) return { text:'🟡 Possible flights', color:'#BA7517', ring:'#EF9F27' };
-  return              { text:'⬜ Low chance',           color:'#888780', ring:'#B4B2A9' };
+function verdict(s) {
+  if (s>=70) return {text:'🔥 Get outside NOW!',color:'#1D9E75',ring:'#1D9E75'};
+  if (s>=55) return {text:'✅ Good conditions', color:'#1D9E75',ring:'#5DCAA5'};
+  if (s>=35) return {text:'🟡 Possible flights',color:'#BA7517',ring:'#EF9F27'};
+  return            {text:'⬜ Low chance',       color:'#888780',ring:'#B4B2A9'};
 }
 function distKm(lat1,lng1,lat2,lng2) {
-  const R=6371,d2r=Math.PI/180,dLat=(lat2-lat1)*d2r,dLng=(lng2-lng1)*d2r;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
+  const R=6371,d=Math.PI/180,dLat=(lat2-lat1)*d,dLng=(lng2-lng1)*d;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*d)*Math.cos(lat2*d)*Math.sin(dLng/2)**2;
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
-function fmtDist(km) { return km<1?Math.round(km*1000)+'m':km.toFixed(1)+'km'; }
-function walkMin(km) { const m=Math.round(km/0.083); return m<2?'<2 min':m+'min walk'; }
+function fmtDist(km){return km<1?Math.round(km*1000)+'m':km.toFixed(1)+'km';}
+function walkMin(km){const m=Math.round(km/0.083);return m<2?'<2 min':m+'min walk';}
 
 // ── Location ─────────────────────────────────────────────
-function startLocation() { locAttempts=0; document.getElementById('location-screen').style.display='none'; tryGetPosition(true); }
-function retryLocation()  { locAttempts=0; tryGetPosition(true); }
-function tryGetPosition(hi) {
-  setDot('searching'); setName(hi?'Locating you...':'Locating (fallback)...');
-  if (!navigator.geolocation) { useDefault(); return; }
+function startLocation(){locAttempts=0;document.getElementById('location-screen').style.display='none';tryGetPosition(true);}
+function retryLocation(){locAttempts=0;tryGetPosition(true);}
+function tryGetPosition(hi){
+  setDot('searching');setName(hi?'Locating you...':'Locating (fallback)...');
+  if (!navigator.geolocation){useDefault();return;}
   navigator.geolocation.getCurrentPosition(
-    pos => onPos(pos),
-    err => {
-      if (err.code===1) { setDot('error'); setName('Location denied — tap to retry'); document.getElementById('location-screen').style.display='block'; }
-      else if (hi && locAttempts<2) { locAttempts++; setTimeout(()=>tryGetPosition(false),500); }
+    pos=>onPos(pos),
+    err=>{
+      if (err.code===1){setDot('error');setName('Location denied — tap to retry');document.getElementById('location-screen').style.display='block';}
+      else if (hi&&locAttempts<2){locAttempts++;setTimeout(()=>tryGetPosition(false),500);}
       else loadCachedOrDefault();
     },
-    { enableHighAccuracy:hi, timeout:hi?12000:20000, maximumAge:hi?30000:120000 }
+    {enableHighAccuracy:hi,timeout:hi?12000:20000,maximumAge:hi?30000:120000}
   );
 }
-function loadCachedOrDefault() {
-  try {
-    const saved=JSON.parse(localStorage.getItem('ant-coords')||'null');
-    if (saved&&Date.now()-saved.ts<7200000) { Object.assign(state,{lat:saved.lat,lng:saved.lng,locationName:saved.name+' (cached)'}); document.getElementById('main-content').style.display='block'; setDot('ok'); setName(state.locationName); fetchWeather(); return; }
-  } catch(e){}
+function loadCachedOrDefault(){
+  try{const s=JSON.parse(localStorage.getItem('ant-coords')||'null');if(s&&Date.now()-s.ts<7200000){Object.assign(state,{lat:s.lat,lng:s.lng,locationName:s.name+' (cached)'});document.getElementById('main-content').style.display='block';setDot('ok');setName(state.locationName);fetchWeather();return;}}catch(e){}
   useDefault();
 }
-async function onPos(pos) {
-  state.lat=pos.coords.latitude; state.lng=pos.coords.longitude;
+async function onPos(pos){
+  state.lat=pos.coords.latitude;state.lng=pos.coords.longitude;
   document.getElementById('location-screen').style.display='none';
   document.getElementById('main-content').style.display='block';
-  setDot('ok'); setName('Resolving...');
-  reverseGeocode(state.lat,state.lng); fetchWeather();
+  setDot('ok');setName('Resolving...');
+  reverseGeocode(state.lat,state.lng);fetchWeather();
 }
-function useDefault() {
+function useDefault(){
   Object.assign(state,{lat:FALLBACK.lat,lng:FALLBACK.lng,locationName:FALLBACK.name});
   document.getElementById('location-screen').style.display='none';
   document.getElementById('main-content').style.display='block';
-  setDot('ok'); setName(FALLBACK.name); fetchWeather();
+  setDot('ok');setName(FALLBACK.name);fetchWeather();
 }
-async function reverseGeocode(lat,lng) {
-  try {
+async function reverseGeocode(lat,lng){
+  try{
     const res=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=14`,{headers:{'Accept-Language':'en'}});
     const data=await res.json(),a=data.address;
     const name=a.suburb||a.neighbourhood||a.district||a.town||a.city||'Your location';
-    state.locationName=a.city?`${name}, ${a.city}`:name; setName(state.locationName); saveCoords();
-  } catch(e) { state.locationName=`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`; setName(state.locationName); saveCoords(); }
+    state.locationName=a.city?`${name}, ${a.city}`:name;setName(state.locationName);saveCoords();
+  }catch(e){state.locationName=`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`;setName(state.locationName);saveCoords();}
 }
-function saveCoords() {
-  try { localStorage.setItem('ant-coords',JSON.stringify({lat:state.lat,lng:state.lng,name:state.locationName,ts:Date.now()})); } catch(e){}
-  if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(r=>r.active?.postMessage({type:'SAVE_COORDS',lat:state.lat,lng:state.lng,locationName:state.locationName}));
+function saveCoords(){
+  try{localStorage.setItem('ant-coords',JSON.stringify({lat:state.lat,lng:state.lng,name:state.locationName,ts:Date.now()}));}catch(e){}
+  if('serviceWorker'in navigator)navigator.serviceWorker.ready.then(r=>r.active?.postMessage({type:'SAVE_COORDS',lat:state.lat,lng:state.lng,locationName:state.locationName}));
 }
 
 // ── Weather ──────────────────────────────────────────────
-async function fetchWeather() {
-  if (!state.lat) return;
-  const btn=document.getElementById('refresh-btn');
-  btn.innerHTML='<span class="spinning">↻</span>';
-  try {
+async function fetchWeather(){
+  if(!state.lat)return;
+  const btn=document.getElementById('refresh-btn');btn.innerHTML='<span class="spinning">↻</span>';
+  try{
     const url=`https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lng}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&forecast_days=2&timezone=auto`;
-    const data=await (await fetch(url)).json(),c=data.current;
+    const data=await(await fetch(url)).json(),c=data.current;
     const h=new Date().getHours(),eve=h>=18&&h<=23;
-    const {score,factors}=calcScore(c.temperature_2m,c.relative_humidity_2m,c.wind_speed_10m,c.precipitation,eve);
+    const{score,factors}=calcScore(c.temperature_2m,c.relative_humidity_2m,c.wind_speed_10m,c.precipitation,eve);
     const v=verdict(score);
     currentWeather={temp:c.temperature_2m,humidity:c.relative_humidity_2m,wind:c.wind_speed_10m,precip:c.precipitation};
     document.getElementById('w-temp').textContent=c.temperature_2m.toFixed(1)+'°C';
@@ -825,59 +731,42 @@ async function fetchWeather() {
     document.getElementById('w-wind').textContent=c.wind_speed_10m.toFixed(0)+'km/h';
     document.getElementById('w-rain').textContent=c.precipitation.toFixed(1)+'mm';
     const ring=document.getElementById('score-ring');
-    ring.style.strokeDasharray=CIRC.toFixed(1);
-    ring.style.strokeDashoffset=(CIRC*(1-score/100)).toFixed(1);
-    ring.setAttribute('stroke',v.ring);
-    const num=document.getElementById('score-num');
-    num.textContent=Math.round(score); num.style.color=v.ring;
-    document.getElementById('verdict-text').textContent=v.text;
-    document.getElementById('verdict-text').style.color=v.color;
+    ring.style.strokeDasharray=CIRC.toFixed(1);ring.style.strokeDashoffset=(CIRC*(1-score/100)).toFixed(1);ring.setAttribute('stroke',v.ring);
+    const num=document.getElementById('score-num');num.textContent=Math.round(score);num.style.color=v.ring;
+    document.getElementById('verdict-text').textContent=v.text;document.getElementById('verdict-text').style.color=v.color;
     document.getElementById('time-window').textContent=eve?'🌙 Evening window active':h<18?'Next window: today 6pm':'Next window: tomorrow 6pm';
     const banner=document.getElementById('alert-banner');
-    if (score>=60) { banner.className='alert-banner alert-go'; banner.style.display='block'; banner.textContent=`🐜 High flight chance near ${state.locationName}! Pick your target species and go.`; }
-    else if (score>=35) { banner.className='alert-banner alert-mid'; banner.style.display='block'; banner.textContent=`Moderate conditions — pick your species and check the best ranked spots tonight.`; }
+    if(score>=60){banner.className='alert-banner alert-go';banner.style.display='block';banner.textContent=`🐜 High flight chance near ${state.locationName}! Pick your target species below and go.`;}
+    else if(score>=35){banner.className='alert-banner alert-mid';banner.style.display='block';banner.textContent=`Moderate conditions — pick your species and check the best ranked spots.`;}
     else banner.style.display='none';
-    renderFactors(factors); renderHourly(data.hourly);
+    renderFactors(factors);renderHourly(data.hourly);
     setName(state.locationName+' · '+new Date().toLocaleTimeString('en-SG',{hour:'2-digit',minute:'2-digit'}));
-    renderSpeciesSelector();
     showBestSpots(state.lat,state.lng,score);
-  } catch(e) { setName('Error — tap ↻ to retry'); }
+  }catch(e){setName('Error — tap ↻ to retry');}
   btn.innerHTML='↻';
 }
-
-function renderFactors(factors) {
+function renderFactors(factors){
   document.getElementById('factor-list').innerHTML=factors.map(f=>{
     const pct=f.max>0?Math.round((f.pts/f.max)*100):0;
     const col=f.pts>=f.max*0.66?'#1D9E75':f.pts>=f.max*0.33?'#EF9F27':'#E24B4A';
-    return `<div class="factor-row">
-      <span class="factor-name">${f.name}</span>
-      <div class="factor-bar-bg"><div class="factor-bar" style="width:${f.pts>0?Math.max(6,pct):0}%;background:${f.pts>0?col:'transparent'}"></div></div>
-      <span class="factor-val">${f.val}</span>
-      <span class="factor-pts" style="color:${f.pts>0?'var(--text)':'var(--text-3)'}">${f.pts}</span>
-    </div>`;
+    return `<div class="factor-row"><span class="factor-name">${f.name}</span><div class="factor-bar-bg"><div class="factor-bar" style="width:${f.pts>0?Math.max(6,pct):0}%;background:${f.pts>0?col:'transparent'}"></div></div><span class="factor-val">${f.val}</span><span class="factor-pts" style="color:${f.pts>0?'var(--text)':'var(--text-3)'}">${f.pts}</span></div>`;
   }).join('');
 }
-function renderHourly(hourly) {
+function renderHourly(hourly){
   const now=Date.now();
-  const rows=hourly.time.map((t,i)=>({time:t,temp:hourly.temperature_2m[i],humidity:hourly.relative_humidity_2m[i],wind:hourly.wind_speed_10m[i],rain:hourly.precipitation[i]}))
-    .filter(h=>new Date(h.time).getTime()>=now-1800000).slice(0,12);
+  const rows=hourly.time.map((t,i)=>({time:t,temp:hourly.temperature_2m[i],humidity:hourly.relative_humidity_2m[i],wind:hourly.wind_speed_10m[i],rain:hourly.precipitation[i]})).filter(h=>new Date(h.time).getTime()>=now-1800000).slice(0,12);
   document.getElementById('hourly-row').innerHTML=rows.map(h=>{
-    const hr=new Date(h.time).getHours();
-    const {score}=calcScore(h.temp,h.humidity,h.wind,h.rain,hr>=18&&hr<=23);
-    const v=verdict(score),cls=score>=60?'high':score>=35?'mid':'';
+    const hr=new Date(h.time).getHours();const{score}=calcScore(h.temp,h.humidity,h.wind,h.rain,hr>=18&&hr<=23);const v=verdict(score);const cls=score>=60?'high':score>=35?'mid':'';
     return `<div class="hour-pill ${cls}"><div class="hour-time">${hr.toString().padStart(2,'0')}:00</div><div class="hour-score" style="color:${v.color}">${Math.round(score)}</div><div class="hour-rain">${h.rain>0.05?h.rain.toFixed(1)+'mm':'dry'}</div></div>`;
   }).join('');
 }
-
-async function toggleNotifications() {
-  if (state.notifEnabled){state.notifEnabled=false;updateNotifUI(false);return;}
-  if (!('Notification' in window)){alert('Install to home screen first.');return;}
+async function toggleNotifications(){
+  if(state.notifEnabled){state.notifEnabled=false;updateNotifUI(false);return;}
+  if(!('Notification'in window)){alert('Install to home screen first.');return;}
   const perm=await Notification.requestPermission();
-  if (perm==='granted'){
-    state.notifEnabled=true;updateNotifUI(true);
-    new Notification('Ant Alert active 🐜',{body:`Watching ${state.locationName} — alerts fire at 60+.`,icon:'/icon-192.png'});
-    if ('serviceWorker' in navigator){const reg=await navigator.serviceWorker.ready;if ('periodicSync' in reg){try{await reg.periodicSync.register('ant-weather-check',{minInterval:15*60*1000});}catch(e){}}}
-  } else alert('Notifications blocked. Enable in browser settings.');
+  if(perm==='granted'){state.notifEnabled=true;updateNotifUI(true);new Notification('Ant Alert active 🐜',{body:`Watching ${state.locationName} — alerts fire at 60+.`,icon:'/icon-192.png'});
+    if('serviceWorker'in navigator){const reg=await navigator.serviceWorker.ready;if('periodicSync'in reg){try{await reg.periodicSync.register('ant-weather-check',{minInterval:15*60*1000});}catch(e){}}}
+  }else alert('Notifications blocked. Enable in browser settings.');
 }
 function updateNotifUI(on){
   document.getElementById('notif-toggle').className='toggle'+(on?' on':'');
@@ -889,24 +778,19 @@ function setDot(s){document.getElementById('loc-dot').className='location-dot'+(
 function setName(n){document.getElementById('loc-name').textContent=n;}
 function fullRefresh(){locAttempts=0;tryGetPosition(true);}
 
-async function init() {
-  if ('serviceWorker' in navigator){try{await navigator.serviceWorker.register('/sw.js');}catch(e){}}
+async function init(){
+  if('serviceWorker'in navigator){try{await navigator.serviceWorker.register('/sw.js');}catch(e){}}
   const isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-  if (!isStandalone) document.getElementById('install-hint').style.display='block';
-  try {
+  if(!isStandalone)document.getElementById('install-hint').style.display='block';
+  try{
     const saved=JSON.parse(localStorage.getItem('ant-coords')||'null');
-    if (saved&&Date.now()-saved.ts<3600000){
-      Object.assign(state,{lat:saved.lat,lng:saved.lng,locationName:saved.name});
-      document.getElementById('main-content').style.display='block';
-      setName(saved.name+' (updating...)'); fetchWeather();
-    }
-  } catch(e){}
+    if(saved&&Date.now()-saved.ts<3600000){Object.assign(state,{lat:saved.lat,lng:saved.lng,locationName:saved.name});document.getElementById('main-content').style.display='block';setName(saved.name+' (updating...)');fetchWeather();}
+  }catch(e){}
   const perm=await navigator.permissions?.query({name:'geolocation'}).catch(()=>null);
-  if (perm?.state==='denied'){setDot('error');if (!state.lat) document.getElementById('location-screen').style.display='block';}
-  else if (!state.lat) document.getElementById('location-screen').style.display='block';
+  if(perm?.state==='denied'){setDot('error');if(!state.lat)document.getElementById('location-screen').style.display='block';}
+  else if(!state.lat)document.getElementById('location-screen').style.display='block';
   else tryGetPosition(true);
-  clearInterval(refreshTimer);
-  refreshTimer=setInterval(fullRefresh,15*60*1000);
+  clearInterval(refreshTimer);refreshTimer=setInterval(fullRefresh,15*60*1000);
 }
 init();
 </script>
