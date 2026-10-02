@@ -212,6 +212,21 @@ body {
 .hour-time { font-size: 10px; color: var(--text-3); }
 .hour-score { font-size: 15px; font-weight: 700; margin: 2px 0 1px; }
 .hour-rain { font-size: 10px; color: var(--text-3); }
+.sightings-section { display:none; margin-bottom:12px; }
+.sightings-title { font-size:13px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:0.05em; }
+.sightings-sub { font-size:11px; color:var(--text-3); margin-top:2px; margin-bottom:8px; }
+.sighting-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-xs); padding:11px 13px; margin-bottom:8px;
+}
+.sighting-source { font-size:10px; font-weight:600; color:var(--green); text-transform:uppercase; letter-spacing:0.04em; }
+.sighting-title { font-size:13px; font-weight:600; margin-top:3px; line-height:1.4; }
+.sighting-snippet { font-size:11px; color:var(--text-2); margin-top:3px; line-height:1.4; }
+.sighting-meta { display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+.sighting-time { font-size:10px; color:var(--text-3); }
+.sighting-link { font-size:11px; font-weight:600; color:var(--green); text-decoration:none; }
+.sightings-empty { font-size:13px; color:var(--text-3); padding:8px 0; }
+.sightings-loading { font-size:13px; color:var(--text-3); padding:8px 0; }
 .install-hint {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs);
   padding: 11px 14px; font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.5; display: none;
@@ -285,6 +300,13 @@ body {
       <div class="minimap-overlay" id="minimap-label">Your area</div>
     </div>
     <div id="spot-list"></div>
+  </div>
+
+  <!-- Sightings feed -->
+  <div class="sightings-section" id="sightings-section">
+    <div class="sightings-title">🌐 Latest sightings online</div>
+    <div class="sightings-sub" id="sightings-sub">Searching recent posts...</div>
+    <div id="sightings-list"></div>
   </div>
 
   <div class="notif-card" onclick="toggleNotifications()">
@@ -536,7 +558,7 @@ function renderSpeciesSelector() {
 function selectSpecies(id) {
   selectedSpecies = id;
   renderSpeciesSelector();
-  if (state.lat && currentWeather) { renderSpeciesCondition(); renderSpots(); }
+  if (state.lat && currentWeather) { renderSpeciesCondition(); renderSpots(); fetchSightings(id); }
 }
 
 // ── Render species condition card ────────────────────────
@@ -630,6 +652,7 @@ function showBestSpots(lat, lng, flightScore) {
   renderSpeciesSelector();
   renderSpeciesCondition();
   renderSpots();
+  fetchSightings(selectedSpecies);
 }
 
 function navigate(url) { window.open(url,'_blank'); }
@@ -774,6 +797,53 @@ function updateNotifUI(on){
   document.getElementById('notif-icon').textContent=on?'🔔':'🔕';
   document.getElementById('notif-sub').textContent=on?`Watching ${state.locationName} · 60+ triggers alert`:'Notify when flight chance ≥ 60/100';
 }
+
+// ── Sightings feed ──────────────────────────────────────
+function timeAgo(ts) {
+  const mins = Math.floor((Date.now()-ts)/60000);
+  if (mins < 2)  return 'just now';
+  if (mins < 60) return mins+'m ago';
+  const hrs = Math.floor(mins/60);
+  if (hrs < 24)  return hrs+'h ago';
+  const days = Math.floor(hrs/24);
+  if (days < 7)  return days+'d ago';
+  return Math.floor(days/7)+'w ago';
+}
+
+async function fetchSightings(speciesId) {
+  const section = document.getElementById('sightings-section');
+  const listEl  = document.getElementById('sightings-list');
+  const subEl   = document.getElementById('sightings-sub');
+  section.style.display = 'block';
+  listEl.innerHTML = '<div class="sightings-loading">🔍 Searching recent posts...</div>';
+  subEl.textContent = 'Searching Reddit and forums...';
+  try {
+    const res  = await fetch('/api/sightings?species=' + speciesId);
+    const data = await res.json();
+    if (!data.posts || !data.posts.length) {
+      listEl.innerHTML = '<div class="sightings-empty">No recent posts found — try r/antkeeping or Singapore ant keeping Facebook groups.</div>';
+      subEl.textContent = 'No recent posts found';
+      return;
+    }
+    subEl.textContent = data.posts.length + ' recent posts found';
+    listEl.innerHTML = data.posts.map(p => {
+      const snippet = p.snippet ? '<div class="sighting-snippet">' + p.snippet + '...</div>' : '';
+      return '<div class="sighting-card">' +
+        '<div class="sighting-source">' + p.source + '</div>' +
+        '<div class="sighting-title">' + p.title + '</div>' +
+        snippet +
+        '<div class="sighting-meta">' +
+          '<span class="sighting-time">' + timeAgo(p.created) + '</span>' +
+          '<a class="sighting-link" href="' + p.url + '" target="_blank" rel="noopener">Read post →</a>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  } catch(e) {
+    listEl.innerHTML = '<div class="sightings-empty">Could not load sightings — check your connection.</div>';
+    subEl.textContent = 'Search failed';
+  }
+}
+
 function setDot(s){document.getElementById('loc-dot').className='location-dot'+(s==='searching'?' searching':s==='error'?' error':'');}
 function setName(n){document.getElementById('loc-name').textContent=n;}
 function fullRefresh(){locAttempts=0;tryGetPosition(true);}
