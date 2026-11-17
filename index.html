@@ -348,6 +348,66 @@ body {
 }
 .footer { text-align: center; font-size: 11px; color: var(--text-3); margin-top: 12px; line-height: 1.6; }
 
+
+/* ── DECLUTTER (v5) ───────────────────────────────────── */
+.alert-banner { display: none !important; }
+#main-content { padding-bottom: 84px; }
+.score-card { display: flex; align-items: center; gap: 14px; text-align: left; padding: 14px; margin-bottom: 10px; }
+.score-ring-wrap { width: 92px; height: 92px; margin: 0; flex-shrink: 0; }
+.score-ring-wrap svg { width: 100%; height: 100%; }
+.score-big { font-size: 30px; letter-spacing: -1px; }
+.score-sub { font-size: 10px; }
+.score-right { flex: 1; min-width: 0; }
+.verdict { font-size: 17px; line-height: 1.2; }
+.time-window { margin-top: 2px; }
+.score-right .grid4 { margin: 8px 0 0; gap: 4px; }
+.score-right .stat-card { padding: 4px 2px; border: none; background: var(--bg); text-align: center; }
+.score-right .stat-label { font-size: 11px; letter-spacing: 0; }
+.score-right .stat-val { font-size: 12px; margin-top: 0; }
+
+.spots-section { margin-bottom: 10px; }
+.spots-sub { margin: 2px 0 8px; }
+.minimap-wrap { height: 130px; margin-bottom: 8px; }
+.spot-card { padding: 10px 12px; margin-bottom: 6px; }
+.spot-card.more { display: none; }
+#spot-list.show-more .spot-card.more { display: block; }
+.more-btn {
+  width: 100%; background: transparent; border: 1px dashed var(--border); color: var(--text-2);
+  border-radius: var(--radius-xs); padding: 9px; font-size: 12px; font-weight: 600; margin-bottom: 6px; cursor: pointer;
+}
+.spots-foot { font-size: 10px; margin-top: 2px; }
+.chips { margin-top: 6px; }
+.spot-actions { margin-top: 8px; }
+
+.acc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; }
+.acc > summary {
+  list-style: none; padding: 13px 14px; font-size: 14px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.acc > summary::-webkit-details-marker { display: none; }
+.acc > summary .peek { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--text-3); }
+.acc > summary::after { content: '▾'; color: var(--text-3); transition: transform 0.2s; }
+.acc[open] > summary::after { transform: rotate(180deg); }
+.acc-body { padding: 0 14px 14px; }
+.acc .finds-card, .acc .season-card { background: none; border: none; padding: 0; margin: 0; }
+.acc .season-title, .acc .finds-head .season-title, .acc .add-btn { display: none; }
+.acc .season-sub { margin: 0 0 4px; }
+.acc .factor-list { border: none; }
+
+.notif-card { padding: 11px 14px; margin-bottom: 8px; }
+.notif-icon { font-size: 20px; }
+.notif-title { font-size: 13px; }
+.notif-sub { font-size: 11px; }
+.footer { margin-top: 8px; }
+
+.fab {
+  position: fixed; right: 16px; bottom: calc(var(--safe-bottom, 0px) + 16px); z-index: 20;
+  background: var(--green); color: #fff; border: none; border-radius: 99px;
+  padding: 13px 18px; font-size: 14px; font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.fab:active { opacity: 0.8; }
+
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 @keyframes spin   { to { transform: rotate(360deg); } }
 .spinning { animation: spin 1s linear infinite; display: inline-block; }
@@ -381,7 +441,7 @@ body {
 
   <div class="score-card">
     <div class="score-ring-wrap">
-      <svg width="140" height="140" viewBox="0 0 140 140" style="position:absolute;inset:0;">
+      <svg viewBox="0 0 140 140" style="position:absolute;inset:0;">
         <circle cx="70" cy="70" r="56" fill="none" stroke="var(--bg)" stroke-width="11"/>
         <circle cx="70" cy="70" r="56" fill="none" id="score-ring"
           stroke="#1D9E75" stroke-width="11"
@@ -393,18 +453,19 @@ body {
         <div class="score-sub">/ 100</div>
       </div>
     </div>
-    <div class="verdict" id="verdict-text">Checking conditions...</div>
-    <div class="time-window" id="time-window"></div>
+    <div class="score-right">
+      <div class="verdict" id="verdict-text">Checking conditions...</div>
+      <div class="time-window" id="time-window"></div>
+      <div class="grid4">
+        <div class="stat-card"><div class="stat-label">🌡</div><div class="stat-val" id="w-temp">–</div></div>
+        <div class="stat-card"><div class="stat-label">💧</div><div class="stat-val" id="w-humid">–</div></div>
+        <div class="stat-card"><div class="stat-label">💨</div><div class="stat-val" id="w-wind">–</div></div>
+        <div class="stat-card"><div class="stat-label">🌧3h</div><div class="stat-val" id="w-rain">–</div></div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid4">
-    <div class="stat-card"><div class="stat-label">🌡 Temp</div><div class="stat-val" id="w-temp">–</div></div>
-    <div class="stat-card"><div class="stat-label">💧 Humid</div><div class="stat-val" id="w-humid">–</div></div>
-    <div class="stat-card"><div class="stat-label">💨 Wind</div><div class="stat-val" id="w-wind">–</div></div>
-    <div class="stat-card"><div class="stat-label">🌧 Rain 3h</div><div class="stat-val" id="w-rain">–</div></div>
-  </div>
-
-  <!-- BEST BETS: always shown, so you can scout by day -->
+  <!-- BEST BETS -->
   <div class="spots-section" id="spots-section">
     <div class="spots-title">🎯 Best bets near you</div>
     <div class="spots-sub" id="spots-sub">Finding spots near you...</div>
@@ -413,46 +474,7 @@ body {
       <div class="minimap-overlay" id="minimap-label">Your area</div>
     </div>
     <div id="spot-list"></div>
-    <div class="spots-foot">Hotspot score is a rule of thumb: bright lights, grass close by, and your own past finds. It points you to promising places, it doesn't guarantee a queen.</div>
-  </div>
-
-  <!-- MY FINDS -->
-  <div class="finds-card">
-    <div class="finds-head">
-      <div>
-        <div class="season-title">⭐ My finds</div>
-        <div class="season-sub" id="finds-sub"></div>
-      </div>
-      <button class="add-btn" onclick="openFind()">+ Log a find</button>
-    </div>
-    <div id="finds-list"></div>
-    <div id="finds-insight"></div>
-    <div class="finds-foot">Saved on this phone, in this app only. If you also use the Safari version, finds won't carry across. <a onclick="exportFinds()">Copy backup</a></div>
-  </div>
-
-  <!-- SEASON GUIDE -->
-  <div class="season-card">
-    <div class="season-title" id="season-title">🗓 In season this month</div>
-    <div class="season-sub" id="season-sub"></div>
-    <div class="sp-now" id="season-now"></div>
-    <div class="season-foot" id="season-foot"></div>
-
-    <details class="cal-details">
-      <summary>Full-year calendar · all species</summary>
-      <div class="cal-wrap">
-        <div class="cal-head" id="cal-head"></div>
-        <div id="cal-rows"></div>
-        <div class="cal-legend">
-          <span><i style="background:var(--green)"></i>High chance</span>
-          <span><i style="background:#EF9F27"></i>Medium</span>
-          <span><i style="background:repeating-linear-gradient(45deg,var(--gray) 0 2px,transparent 2px 5px);opacity:.6"></i>Timing unclear</span>
-        </div>
-        <div class="cal-detail" id="cal-detail"></div>
-        <div class="season-foot" style="border-top:none;padding-top:0;margin-top:10px;">
-          Windows come from hobbyist reports around Singapore and Malaysia, not lab data. Treat them as a guide: the weather score decides the actual night.
-        </div>
-      </div>
-    </details>
+    <div class="spots-foot">Ranked by bright lights, nearby grass and your own finds. A guide, not a guarantee.</div>
   </div>
 
   <div class="notif-card" onclick="toggleNotifications()">
@@ -464,21 +486,74 @@ body {
     <div class="toggle" id="notif-toggle"></div>
   </div>
 
-  <div class="section-label">Score breakdown</div>
-  <div class="factor-list" id="factor-list"></div>
+  <!-- MY FINDS -->
+  <details class="acc">
+    <summary>⭐ My finds <span class="peek" id="finds-peek"></span></summary>
+    <div class="acc-body">
+      <div class="finds-card">
+        <div class="finds-head">
+          <div>
+            <div class="season-title">⭐ My finds</div>
+            <div class="season-sub" id="finds-sub"></div>
+          </div>
+          <button class="add-btn" onclick="openFind()">+ Log a find</button>
+        </div>
+        <div id="finds-list"></div>
+        <div id="finds-insight"></div>
+        <div class="finds-foot">Saved on this phone, in this app only. <a onclick="exportFinds()">Copy backup</a></div>
+      </div>
+    </div>
+  </details>
 
-  <div class="section-label">Next 12 hours</div>
-  <div class="hourly-scroll" id="hourly-row"></div>
+  <!-- SEASON GUIDE -->
+  <details class="acc">
+    <summary>🗓 What's in season <span class="peek" id="season-peek"></span></summary>
+    <div class="acc-body">
+      <div class="season-card">
+        <div class="season-title" id="season-title">🗓 In season this month</div>
+        <div class="season-sub" id="season-sub"></div>
+        <div class="sp-now" id="season-now"></div>
+        <div class="season-foot" id="season-foot"></div>
+
+        <details class="cal-details">
+          <summary>Full-year calendar · all species</summary>
+          <div class="cal-wrap">
+            <div class="cal-head" id="cal-head"></div>
+            <div id="cal-rows"></div>
+            <div class="cal-legend">
+              <span><i style="background:var(--green)"></i>High chance</span>
+              <span><i style="background:#EF9F27"></i>Medium</span>
+              <span><i style="background:repeating-linear-gradient(45deg,var(--gray) 0 2px,transparent 2px 5px);opacity:.6"></i>Timing unclear</span>
+            </div>
+            <div class="cal-detail" id="cal-detail"></div>
+            <div class="season-foot" style="border-top:none;padding-top:0;margin-top:10px;">
+              Windows come from hobbyist reports around Singapore and Malaysia, not lab data. Treat them as a guide: the weather score decides the actual night.
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>📊 Why this score</summary>
+    <div class="acc-body"><div class="factor-list" id="factor-list"></div></div>
+  </details>
+
+  <details class="acc">
+    <summary>🕐 Next 12 hours</summary>
+    <div class="acc-body"><div class="hourly-scroll" id="hourly-row"></div></div>
+  </details>
 
   <div id="install-hint" class="install-hint">
     📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"
   </div>
 
-  <div class="footer">
-    Auto-refreshes every 15 min · Weather: Open-Meteo · Spots: OpenStreetMap
-  </div>
+  <div class="footer">Auto-refreshes every 15 min · Weather: Open-Meteo · Spots: OpenStreetMap</div>
 
 </div>
+
+<button class="fab" onclick="openFind()">＋ Log a find</button>
 
 <!-- LOG A FIND (bottom sheet) -->
 <div class="modal" id="find-modal" onclick="if(event.target===this)closeFind()">
@@ -739,7 +814,23 @@ async function loadSpots(lat, lng) {
         throw err;
       } finally { clearTimeout(timer); }
     });
-    data = await Promise.any(asks);
+    const proxyAsk = (async () => {
+      const ctl = new AbortController();
+      ctls.push(ctl);
+      const timer = setTimeout(() => ctl.abort(), 28000);
+      try {
+        const res = await fetch(`/api/nearby?lat=${lat.toFixed(3)}&lng=${lng.toFixed(3)}`, { signal: ctl.signal });
+        if (!res.ok) throw new Error('our server → HTTP ' + res.status);
+        const j = await res.json();
+        if (!j || !Array.isArray(j.elements)) throw new Error('our server → bad data');
+        return j;
+      } catch (err) {
+        if (err.name === 'AbortError') throw new Error('our server → timed out');
+        if (err instanceof TypeError) throw new Error('our server → unreachable');
+        throw err;
+      } finally { clearTimeout(timer); }
+    })();
+    data = await Promise.any([proxyAsk, ...asks]);
     ctls.forEach(c => { try { c.abort(); } catch (e) {} });
   } catch (e) {
     data = null;
@@ -828,17 +919,17 @@ function rankSpots() {
   }
 
   subEl.textContent = lastScore >= 35
-    ? `${topSpots.length} best bets within 2.5km, ranked by lights, nearby grass and your own finds.`
-    : `Conditions are quiet right now (score ${Math.round(lastScore)}). Scout these by day so you know exactly where to go on the right night.`;
+    ? `Top picks within 2.5 km. Go where it's bright and grassy.`
+    : `Quiet right now (score ${Math.round(lastScore)}). Scout these by day, return on a wet evening.`;
 
   listEl.innerHTML = topSpots.map((s, i) => {
     const k   = KIND[s.kind];
     const url = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=walking`;
     const hc  = s.hot >= 70 ? 'h3' : s.hot >= 50 ? 'h2' : 'h1';
     const tip = s.kind === 'pitch' && s.lit ? 'Floodlit field: check the light poles, walls and grass edges after rain' : k.tip;
-    const chips = s.why.map(w => `<span class="chip ${w.startsWith('⭐')?'star':''}">${esc(w)}</span>`).join('');
+    const chips = s.why.slice().sort((a, b) => (b.startsWith('⭐') ? 1 : 0) - (a.startsWith('⭐') ? 1 : 0)).slice(0,2).map(w => `<span class="chip ${w.startsWith('⭐')?'star':''}">${esc(w)}</span>`).join('');
     return `
-      <div class="spot-card ${i===0?'top':''}">
+      <div class="spot-card ${i===0?'top':''} ${i>=3?'more':''}">
         <div class="spot-top">
           <div class="spot-rank">${i+1}</div>
           <div class="spot-info">
@@ -852,13 +943,14 @@ function rankSpots() {
           <div class="hot ${hc}"><b>${s.hot}</b><span>hotspot</span></div>
         </div>
         ${chips ? `<div class="chips">${chips}</div>` : ''}
-        <div class="spot-tip">${esc(tip)}</div>
         <div class="spot-actions">
           <button class="btn-go" onclick="navigate('${url}')">🧭 Go</button>
           <button class="btn-log" onclick="openFind(${i})">⭐ Log a find here</button>
         </div>
       </div>`;
-  }).join('');
+  }).join('') + (topSpots.length > 3
+    ? `<button class="more-btn" onclick="toggleMore(this)">${listEl.classList.contains('show-more') ? 'Show fewer' : 'Show ' + (topSpots.length - 3) + ' more'}</button>`
+    : '');
 
   showMinimap(state.lat, state.lng, topSpots[0]);
 }
@@ -880,13 +972,19 @@ async function refreshSpots() {
     const q = t => `https://www.google.com/maps/search/${encodeURIComponent(t)}/@${state.lat},${state.lng},15z`;
     subEl.textContent = 'Spot lookup is unavailable right now.';
     listEl.innerHTML =
-      '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Couldn\'t load the ranked list. Tap the refresh arrow to retry, or open these in Google Maps (look for bright lights next to grass):</div>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;">' +
-      [['🏊 Pools','swimming pool'],['🌳 Parks','park'],['⚽ Sports fields','sports field'],['⛽ Petrol stations','petrol station'],['🍔 Fast food','fast food']]
-        .map(([l,t]) => `<a href="${q(t)}" target="_blank" rel="noopener" style="padding:8px 12px;border:1px solid var(--border);border-radius:999px;font-size:13px;text-decoration:none;color:inherit;">${l}</a>`).join('') +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 6px;">' +
+      [['🏊 Pools','swimming pool'],['🌳 Parks','park'],['⚽ Fields','sports field']]
+        .map(([l,t]) => `<a href="${q(t)}" target="_blank" rel="noopener" style="padding:8px 12px;border:1px solid var(--border);border-radius:999px;font-size:13px;text-decoration:none;color:inherit;">${l} ↗</a>`).join('') +
+      '<a href="#" onclick="refreshSpots();return false;" style="padding:8px 12px;border:1px solid var(--border);border-radius:999px;font-size:13px;text-decoration:none;color:inherit;">↻ Retry</a>' +
       '</div>' +
-      (lastSpotError ? `<div style="font-size:11px;color:var(--text-3);word-break:break-word;">Why: ${String(lastSpotError).replace(/</g,'&lt;')}</div>` : '');
+      (lastSpotError ? `<div style="font-size:10px;color:var(--text-3);word-break:break-word;">${String(lastSpotError).replace(/</g,'&lt;')}</div>` : '');
   }
+}
+
+function toggleMore(btn) {
+  const el = document.getElementById('spot-list');
+  el.classList.toggle('show-more');
+  btn.textContent = el.classList.contains('show-more') ? 'Show fewer' : 'Show ' + (topSpots.length - 3) + ' more';
 }
 
 function navigate(url) { window.open(url, '_blank'); }
@@ -1009,6 +1107,7 @@ async function ensureFind(f) {
 
 function renderFinds() {
   const listEl = document.getElementById('finds-list');
+  document.getElementById('finds-peek').textContent = finds.length ? finds.length + ' logged' : 'none yet';
   document.getElementById('finds-sub').textContent = finds.length
     ? `${finds.length} queen${finds.length===1?'':'s'} logged. Spots near your finds get a boost in Best bets.`
     : 'Log every queen you catch. The app learns which spots and nights work for you.';
@@ -1308,6 +1407,7 @@ function fullRefresh() { requestLocation(); }
 // ── Init ─────────────────────────────────────────────────
 async function init() {
   renderSeason();
+  try { const n = document.querySelectorAll('#season-now .sp-row').length; document.getElementById('season-peek').textContent = n + ' flying now'; } catch (e) {}
   buildFindForm();
   initFinds();
   renderFinds();
