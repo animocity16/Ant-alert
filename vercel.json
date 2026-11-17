@@ -14,5 +14,8 @@
         { "key": "X-Content-Type-Options", "value": "nosniff" }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/nearby.js": { "maxDuration": 30 }
+  }
 }
