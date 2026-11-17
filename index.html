@@ -15,8 +15,8 @@
 :root {
   --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #085041;
   --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #633806;
-  --red: #A32D2D;
-  --gray: #888780;
+  --red: #A32D2D; --red-light: #FCEBEB;
+  --gray: #888780; --gray-light: #F1EFE8;
   --bg: #f5f5f3; --surface: #ffffff;
   --text: #1a1a18; --text-2: #5f5e5a; --text-3: #888780;
   --border: rgba(0,0,0,0.09);
@@ -27,17 +27,21 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0f0f0e; --surface: #1c1c1a;
-    --text: #f0efe8; --text-2: #888780; --text-3: #5f5e5a;
+    --text: #f0efe8; --text-2: #a8a69e; --text-3: #7d7b74;
     --border: rgba(255,255,255,0.09);
-    --green-light: #04342C; --amber-light: #412402;
+    --green-light: #04342C; --green-dark: #9FE1CB;
+    --amber-light: #412402; --amber-dark: #FAC775;
+    --red-light: #501313; --gray-light: #2C2C2A;
   }
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
-  background: var(--bg); color: var(--text); min-height: 100dvh;
+  background: var(--bg); color: var(--text);
+  min-height: 100dvh;
   padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 32px);
   max-width: 440px; margin: 0 auto;
 }
+
 .header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
 .app-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
 .location-row { display: flex; align-items: center; gap: 5px; margin-top: 3px; cursor: pointer; }
@@ -53,96 +57,137 @@ body {
   -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
 }
 .icon-btn:active { opacity: 0.5; }
+
 .location-screen {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 32px 24px; text-align: center; margin-bottom: 16px;
+  border-radius: var(--radius); padding: 32px 24px;
+  text-align: center; margin-bottom: 16px;
 }
 .location-screen .big-icon { font-size: 52px; margin-bottom: 16px; }
 .location-screen h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
 .location-screen p { font-size: 14px; color: var(--text-2); line-height: 1.5; margin-bottom: 20px; }
 .btn-primary {
-  display: inline-flex; align-items: center; gap: 6px; background: var(--green); color: white; border: none;
-  font-size: 15px; font-weight: 600; padding: 13px 24px; border-radius: 99px; cursor: pointer;
-  width: 100%; justify-content: center; -webkit-tap-highlight-color: transparent; transition: opacity 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--green); color: white; border: none;
+  font-size: 15px; font-weight: 600; padding: 13px 24px;
+  border-radius: 99px; cursor: pointer; width: 100%;
+  justify-content: center; -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s;
 }
 .btn-primary:active { opacity: 0.8; }
 .btn-secondary {
   display: inline-flex; align-items: center; justify-content: center;
   background: transparent; color: var(--text-2); border: 1px solid var(--border);
   font-size: 13px; padding: 10px 20px; border-radius: 99px;
-  cursor: pointer; margin-top: 10px; width: 100%; -webkit-tap-highlight-color: transparent;
+  cursor: pointer; margin-top: 10px; width: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
+
 .score-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px 16px 16px; margin-bottom: 12px; text-align: center;
+  border-radius: var(--radius); padding: 20px 16px 16px;
+  margin-bottom: 12px; text-align: center;
 }
 .score-ring-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 12px; }
 #score-ring { transition: stroke-dashoffset 1s cubic-bezier(.4,0,.2,1), stroke 0.5s; }
-.score-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
 .score-big { font-size: 44px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
 .score-sub { font-size: 12px; color: var(--text-3); margin-top: 1px; }
 .verdict { font-size: 19px; font-weight: 600; }
 .time-window { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+
 .alert-banner {
-  border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 12px;
-  font-size: 14px; font-weight: 500; line-height: 1.45; display: none;
+  border-radius: var(--radius-sm); padding: 13px 15px;
+  margin-bottom: 12px; font-size: 14px; font-weight: 500;
+  line-height: 1.45; display: none;
 }
 .alert-go  { background: var(--green-light); color: var(--green-dark); border-left: 3px solid var(--green); }
 .alert-mid { background: var(--amber-light); color: var(--amber-dark); border-left: 3px solid var(--amber); }
+
 .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 10px 8px; }
 .stat-label { font-size: 10px; color: var(--text-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
 .stat-val { font-size: 14px; font-weight: 600; margin-top: 2px; }
-.species-section { margin-bottom: 12px; display: none; }
-.species-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-.species-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-.species-scroll::-webkit-scrollbar { display: none; }
-.species-pill {
-  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 10px 14px; cursor: pointer;
-  -webkit-tap-highlight-color: transparent; transition: all 0.15s; min-width: 72px;
-}
-.species-pill:active { opacity: 0.7; }
-.species-pill.active { border-color: var(--sp-color); background: var(--sp-bg); }
-.species-pill-icon { font-size: 22px; }
-.species-pill-name { font-size: 11px; font-weight: 600; color: var(--text-2); text-align: center; }
-.species-pill.active .species-pill-name { color: var(--sp-color); }
-.species-condition {
+
+/* ── SEASON GUIDE ──────────────────────────────────────── */
+.season-card, .finds-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 13px 15px; margin-bottom: 12px; display: none;
+  border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px;
 }
-.sp-cond-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.sp-cond-icon { font-size: 28px; flex-shrink: 0; }
-.sp-cond-name { font-size: 15px; font-weight: 700; }
-.sp-cond-latin { font-size: 11px; color: var(--text-3); font-style: italic; }
-.sp-cond-badge {
-  margin-left: auto; flex-shrink: 0; border-radius: 99px; padding: 4px 10px;
-  font-size: 12px; font-weight: 700;
+.season-title { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
+.season-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; line-height: 1.4; }
+.sp-now { margin-top: 8px; }
+.sp-row {
+  padding: 10px 0; border-top: 1px solid var(--border);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
-.sp-cond-badge.prime  { background: var(--green-light); color: var(--green-dark); }
-.sp-cond-badge.good   { background: #E8F5FF; color: #1A5E8A; }
-.sp-cond-badge.fair   { background: var(--amber-light); color: var(--amber-dark); }
-.sp-cond-badge.low    { background: #F1F0EC; color: var(--text-3); }
-.sp-cond-factors { display: flex; flex-wrap: wrap; gap: 6px; }
-.sp-factor-chip { font-size: 11px; padding: 3px 8px; border-radius: 99px; border: 1px solid var(--border); }
-.sp-factor-chip.ok  { background: var(--green-light); color: var(--green-dark); border-color: transparent; }
-.sp-factor-chip.mid { background: var(--amber-light); color: var(--amber-dark); border-color: transparent; }
-.sp-factor-chip.no  { background: #F1F0EC; color: var(--text-3); border-color: transparent; }
-.sp-flight-window { font-size: 12px; color: var(--text-2); margin-top: 8px; line-height: 1.5; }
-.spots-section { display: none; margin-bottom: 12px; }
+.sp-row-top { display: flex; align-items: center; gap: 10px; }
+.sp-main { flex: 1; min-width: 0; }
+.sp-name { font-size: 14px; font-weight: 600; }
+.sp-sci { font-size: 11px; color: var(--text-3); font-style: italic; margin-top: 1px; }
+.sp-time { font-size: 11px; color: var(--text-2); margin-top: 3px; }
+.sp-note { display: none; font-size: 12px; color: var(--text-2); line-height: 1.5; margin-top: 6px; }
+.sp-row.open .sp-note { display: block; }
+.chance {
+  font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px;
+  text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0;
+}
+.chance.high { background: var(--green-light); color: var(--green-dark); }
+.chance.med  { background: var(--amber-light); color: var(--amber-dark); }
+.chance.rare { background: var(--gray-light);  color: var(--text-2); }
+.season-foot { font-size: 11px; color: var(--text-3); line-height: 1.5; margin-top: 4px; border-top: 1px solid var(--border); padding-top: 8px; }
+
+.cal-details { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+.cal-details summary {
+  font-size: 12px; font-weight: 600; color: var(--text-2);
+  cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;
+  -webkit-tap-highlight-color: transparent;
+}
+.cal-details summary::-webkit-details-marker { display: none; }
+.cal-details summary::after { content: '▾'; color: var(--text-3); transition: transform 0.2s; }
+.cal-details[open] summary::after { transform: rotate(180deg); }
+.cal-wrap { margin-top: 10px; }
+.cal-head, .cal-row { display: grid; grid-template-columns: 100px repeat(12, 1fr); gap: 2px; align-items: center; }
+.cal-head { margin-bottom: 4px; }
+.cal-head span { font-size: 10px; color: var(--text-3); text-align: center; }
+.cal-head span.now { color: var(--green); font-weight: 800; }
+.cal-row { padding: 3px 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.cal-row.sel .cal-name { color: var(--green); }
+.cal-name { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 4px; }
+.cal-cell { height: 16px; border-radius: 3px; background: var(--bg); }
+.cal-cell.high { background: var(--green); }
+.cal-cell.med  { background: #EF9F27; }
+.cal-cell.unk  { background: repeating-linear-gradient(45deg, var(--gray) 0 2px, transparent 2px 5px); opacity: 0.55; }
+.cal-cell.now  { outline: 1.5px solid var(--text-3); outline-offset: 0; }
+.cal-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10px; color: var(--text-3); margin-top: 8px; }
+.cal-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+.cal-detail {
+  margin-top: 10px; background: var(--bg); border-radius: var(--radius-xs);
+  padding: 10px 12px; font-size: 12px; color: var(--text-2); line-height: 1.5; display: none;
+}
+.cal-detail strong { color: var(--text); font-size: 13px; }
+
+/* ── BEST BETS ─────────────────────────────────────────── */
+.spots-section { margin-bottom: 12px; }
 .spots-title { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
-.spots-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; margin-bottom: 8px; }
+.spots-sub { font-size: 11px; color: var(--text-3); margin: 2px 0 8px; line-height: 1.45; }
+
 .spot-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 12px 14px;
-  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px;
-  cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s;
+  margin-bottom: 8px; color: inherit;
 }
-.spot-card:active { border-color: var(--green); }
+.spot-card.top { border-color: rgba(29,158,117,0.5); }
+.spot-top { display: flex; align-items: flex-start; gap: 12px; }
 .spot-rank {
-  width: 32px; height: 32px; border-radius: 50%; font-size: 13px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--green-light); color: var(--green-dark);
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 .spot-info { flex: 1; min-width: 0; }
 .spot-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -150,57 +195,139 @@ body {
 .spot-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
 .spot-dist { font-size: 12px; font-weight: 600; color: var(--green); }
 .spot-walk { font-size: 11px; color: var(--text-3); }
-.spot-species-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
-.sp-tag { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 600; }
-.hunt-score-bar { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
-.hunt-score-label { font-size: 10px; color: var(--text-3); white-space: nowrap; }
-.hunt-bar-bg { flex: 1; height: 5px; background: var(--bg); border-radius: 99px; }
-.hunt-bar-fill { height: 5px; border-radius: 99px; transition: width 0.6s ease; }
-.hunt-score-num { font-size: 11px; font-weight: 700; min-width: 50px; text-align: right; }
-.spot-tip { font-size: 11px; color: var(--text-2); margin-top: 4px; font-style: italic; }
-.spot-nav {
-  flex-shrink: 0; background: var(--green); color: white; border: none;
-  border-radius: var(--radius-xs); padding: 8px 12px; font-size: 12px; font-weight: 600;
-  cursor: pointer; -webkit-tap-highlight-color: transparent; white-space: nowrap; margin-top: 2px;
+.hot {
+  flex-shrink: 0; text-align: center; border-radius: var(--radius-xs);
+  padding: 4px 9px; min-width: 52px;
 }
-.spot-nav:active { opacity: 0.8; }
+.hot b { display: block; font-size: 17px; line-height: 1.1; }
+.hot span { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; }
+.hot.h3 { background: var(--green-light); color: var(--green-dark); }
+.hot.h2 { background: var(--amber-light); color: var(--amber-dark); }
+.hot.h1 { background: var(--gray-light);  color: var(--text-2); }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.chip { font-size: 10px; padding: 3px 8px; border-radius: 99px; background: var(--bg); color: var(--text-2); }
+.chip.star { background: var(--amber-light); color: var(--amber-dark); font-weight: 600; }
+.spot-tip { font-size: 11px; color: var(--text-2); margin-top: 8px; font-style: italic; line-height: 1.4; }
+.spot-actions { display: flex; gap: 8px; margin-top: 10px; }
+.btn-go, .btn-log {
+  flex: 1; border: none; border-radius: var(--radius-xs);
+  padding: 9px 10px; font-size: 12px; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; white-space: nowrap;
+}
+.btn-go  { background: var(--green); color: white; }
+.btn-log { background: var(--amber-light); color: var(--amber-dark); }
+.btn-go:active, .btn-log:active { opacity: 0.75; }
+
 .minimap-wrap {
-  border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border);
-  margin-bottom: 12px; height: 160px; position: relative; display: none;
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid var(--border); margin-bottom: 10px;
+  height: 160px; position: relative; display: none;
 }
 #minimap { width: 100%; height: 100%; border: none; }
 .minimap-overlay {
-  position: absolute; top: 8px; left: 8px; background: white; border-radius: var(--radius-xs);
-  padding: 4px 8px; font-size: 11px; font-weight: 600; color: var(--green-dark);
+  position: absolute; top: 8px; left: 8px;
+  background: white; border-radius: var(--radius-xs);
+  padding: 4px 8px; font-size: 11px; font-weight: 600; color: #085041;
   box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
+.spots-foot { font-size: 11px; color: var(--text-3); line-height: 1.5; margin-top: 4px; }
+
+/* ── MY FINDS ──────────────────────────────────────────── */
+.finds-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.add-btn {
+  background: var(--green); color: white; border: none; border-radius: 99px;
+  font-size: 12px; font-weight: 700; padding: 8px 14px; cursor: pointer; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.add-btn:active { opacity: 0.75; }
+#finds-list { margin-top: 8px; }
+.find {
+  border-top: 1px solid var(--border); padding: 10px 0;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.find-icon { font-size: 20px; line-height: 1.2; flex-shrink: 0; }
+.find-main { flex: 1; min-width: 0; }
+.find-title { font-size: 14px; font-weight: 600; }
+.find-sub { font-size: 11px; color: var(--text-2); margin-top: 2px; line-height: 1.4; }
+.find-wx { font-size: 11px; margin-top: 4px; color: var(--text-2); }
+.find-wx b { color: var(--green); }
+.find-notes { font-size: 12px; color: var(--text-2); margin-top: 4px; line-height: 1.45; }
+.find-btns { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+.mini {
+  width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--bg); font-size: 14px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mini:active { opacity: 0.5; }
+.insight {
+  margin-top: 6px; background: var(--bg); border-radius: var(--radius-xs);
+  padding: 10px 12px; font-size: 12px; color: var(--text-2); line-height: 1.55;
+}
+.finds-foot { font-size: 11px; color: var(--text-3); line-height: 1.5; margin-top: 10px; }
+.finds-foot a { color: var(--green); text-decoration: underline; cursor: pointer; }
+
+/* ── MODAL ─────────────────────────────────────────────── */
+.modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  display: none; align-items: flex-end; justify-content: center; z-index: 50;
+}
+.modal.open { display: flex; }
+.sheet {
+  background: var(--surface); width: 100%; max-width: 440px;
+  border-radius: 20px 20px 0 0;
+  padding: 18px 16px calc(var(--safe-bottom) + 18px);
+  max-height: 92dvh; overflow-y: auto;
+}
+.sheet-title { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+.sheet label { display: block; font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+.sheet input, .sheet select, .sheet textarea {
+  display: block; width: 100%; margin-top: 4px;
+  font: inherit; font-size: 16px; text-transform: none; letter-spacing: 0; font-weight: 400;
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+}
+.sheet textarea { resize: vertical; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.loc-line { font-size: 11px; color: var(--text-3); line-height: 1.45; margin: 2px 0 12px; }
+
+/* ── Notifications ─────────────────────────────────────── */
 .notif-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px; margin-bottom: 12px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .notif-icon { font-size: 24px; flex-shrink: 0; }
 .notif-title { font-size: 14px; font-weight: 600; }
 .notif-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
 .toggle {
-  margin-left: auto; flex-shrink: 0; width: 46px; height: 27px; border-radius: 99px;
-  border: none; cursor: pointer; position: relative; transition: background 0.2s; background: var(--gray);
+  margin-left: auto; flex-shrink: 0;
+  width: 46px; height: 27px; border-radius: 99px;
+  border: none; cursor: pointer; position: relative;
+  transition: background 0.2s; background: var(--gray);
 }
 .toggle.on { background: var(--green); }
 .toggle::after {
   content: ''; position: absolute; top: 3px; left: 3px;
-  width: 21px; height: 21px; border-radius: 50%; background: white; transition: transform 0.2s;
+  width: 21px; height: 21px; border-radius: 50%;
+  background: white; transition: transform 0.2s;
 }
 .toggle.on::after { transform: translateX(19px); }
+
 .section-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 7px; }
 .factor-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
-.factor-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.factor-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+}
 .factor-row:last-child { border-bottom: none; }
 .factor-name { flex: 1; color: var(--text-2); font-size: 12px; }
 .factor-bar-bg { width: 70px; height: 4px; background: var(--bg); border-radius: 99px; }
 .factor-bar { height: 4px; border-radius: 99px; transition: width 0.7s ease; }
 .factor-val { font-size: 11px; color: var(--text-3); width: 42px; text-align: right; }
 .factor-pts { font-size: 13px; font-weight: 600; width: 24px; text-align: right; }
+
 .hourly-scroll { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .hourly-scroll::-webkit-scrollbar { display: none; }
 .hour-pill {
@@ -209,29 +336,18 @@ body {
 }
 .hour-pill.high { background: var(--green-light); border-color: rgba(29,158,117,0.25); }
 .hour-pill.mid  { background: var(--amber-light); border-color: rgba(186,117,23,0.25); }
-.hour-time { font-size: 10px; color: var(--text-3); }
+.hour-time  { font-size: 10px; color: var(--text-3); }
 .hour-score { font-size: 15px; font-weight: 700; margin: 2px 0 1px; }
-.hour-rain { font-size: 10px; color: var(--text-3); }
-.sightings-section { display:none; margin-bottom:12px; }
-.sightings-title { font-size:13px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:0.05em; }
-.sightings-sub { font-size:11px; color:var(--text-3); margin-top:2px; margin-bottom:8px; }
-.sighting-card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:var(--radius-xs); padding:11px 13px; margin-bottom:8px;
-}
-.sighting-source { font-size:10px; font-weight:600; color:var(--green); text-transform:uppercase; letter-spacing:0.04em; }
-.sighting-title { font-size:13px; font-weight:600; margin-top:3px; line-height:1.4; }
-.sighting-snippet { font-size:11px; color:var(--text-2); margin-top:3px; line-height:1.4; }
-.sighting-meta { display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
-.sighting-time { font-size:10px; color:var(--text-3); }
-.sighting-link { font-size:11px; font-weight:600; color:var(--green); text-decoration:none; }
-.sightings-empty { font-size:13px; color:var(--text-3); padding:8px 0; }
-.sightings-loading { font-size:13px; color:var(--text-3); padding:8px 0; }
+.hour-rain  { font-size: 10px; color: var(--text-3); }
+
 .install-hint {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xs);
-  padding: 11px 14px; font-size: 12px; color: var(--text-2); margin-bottom: 12px; line-height: 1.5; display: none;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-xs); padding: 11px 14px;
+  font-size: 12px; color: var(--text-2); margin-bottom: 12px;
+  line-height: 1.5; display: none;
 }
 .footer { text-align: center; font-size: 11px; color: var(--text-3); margin-top: 12px; line-height: 1.6; }
+
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 @keyframes spin   { to { transform: rotate(360deg); } }
 .spinning { animation: spin 1s linear infinite; display: inline-block; }
@@ -242,7 +358,7 @@ body {
 <div class="header">
   <div>
     <div class="app-name">🐜 Ant Alert</div>
-    <div class="location-row" onclick="retryLocation()">
+    <div class="location-row" onclick="requestLocation()">
       <div class="location-dot searching" id="loc-dot"></div>
       <span class="location-name" id="loc-name">Locating you...</span>
     </div>
@@ -250,23 +366,26 @@ body {
   <div class="icon-btn" id="refresh-btn" onclick="fullRefresh()">↻</div>
 </div>
 
+<!-- GPS permission screen -->
 <div id="location-screen" class="location-screen" style="display:none">
   <div class="big-icon">📍</div>
   <h2>Allow location access</h2>
-  <p>Ant Alert uses your GPS to check conditions and find the best nearby hunting spots for right now.</p>
-  <button class="btn-primary" onclick="startLocation()">📍 Use my location</button>
+  <p>Ant Alert uses your GPS to check conditions exactly where you are and rank the best nearby hunting spots.</p>
+  <button class="btn-primary" onclick="requestLocation()">📍 Use my location</button>
   <button class="btn-secondary" onclick="useDefault()">Use Novena (default)</button>
 </div>
 
 <div id="alert-banner" class="alert-banner"></div>
 
 <div id="main-content" style="display:none">
+
   <div class="score-card">
     <div class="score-ring-wrap">
       <svg width="140" height="140" viewBox="0 0 140 140" style="position:absolute;inset:0;">
         <circle cx="70" cy="70" r="56" fill="none" stroke="var(--bg)" stroke-width="11"/>
         <circle cx="70" cy="70" r="56" fill="none" id="score-ring"
-          stroke="#1D9E75" stroke-width="11" stroke-dasharray="352" stroke-dashoffset="352"
+          stroke="#1D9E75" stroke-width="11"
+          stroke-dasharray="352" stroke-dashoffset="352"
           stroke-linecap="round" transform="rotate(-90 70 70)"/>
       </svg>
       <div class="score-center">
@@ -282,31 +401,58 @@ body {
     <div class="stat-card"><div class="stat-label">🌡 Temp</div><div class="stat-val" id="w-temp">–</div></div>
     <div class="stat-card"><div class="stat-label">💧 Humid</div><div class="stat-val" id="w-humid">–</div></div>
     <div class="stat-card"><div class="stat-label">💨 Wind</div><div class="stat-val" id="w-wind">–</div></div>
-    <div class="stat-card"><div class="stat-label">🌧 Rain</div><div class="stat-val" id="w-rain">–</div></div>
+    <div class="stat-card"><div class="stat-label">🌧 Rain 3h</div><div class="stat-val" id="w-rain">–</div></div>
   </div>
 
-  <div class="species-section" id="species-section">
-    <div class="species-label">🎯 I'm hunting</div>
-    <div class="species-scroll" id="species-scroll"></div>
-  </div>
-
-  <div class="species-condition" id="species-condition"></div>
-
+  <!-- BEST BETS: always shown, so you can scout by day -->
   <div class="spots-section" id="spots-section">
-    <div class="spots-title">🗺 Best spots right now</div>
-    <div class="spots-sub" id="spots-sub"></div>
+    <div class="spots-title">🎯 Best bets near you</div>
+    <div class="spots-sub" id="spots-sub">Finding spots near you...</div>
     <div id="minimap-wrap" class="minimap-wrap">
       <iframe id="minimap" loading="lazy"></iframe>
       <div class="minimap-overlay" id="minimap-label">Your area</div>
     </div>
     <div id="spot-list"></div>
+    <div class="spots-foot">Hotspot score is a rule of thumb: bright lights, grass close by, and your own past finds. It points you to promising places, it doesn't guarantee a queen.</div>
   </div>
 
-  <!-- Sightings feed -->
-  <div class="sightings-section" id="sightings-section">
-    <div class="sightings-title">🌐 Latest sightings online</div>
-    <div class="sightings-sub" id="sightings-sub">Searching recent posts...</div>
-    <div id="sightings-list"></div>
+  <!-- MY FINDS -->
+  <div class="finds-card">
+    <div class="finds-head">
+      <div>
+        <div class="season-title">⭐ My finds</div>
+        <div class="season-sub" id="finds-sub"></div>
+      </div>
+      <button class="add-btn" onclick="openFind()">+ Log a find</button>
+    </div>
+    <div id="finds-list"></div>
+    <div id="finds-insight"></div>
+    <div class="finds-foot">Saved on this phone, in this app only. If you also use the Safari version, finds won't carry across. <a onclick="exportFinds()">Copy backup</a></div>
+  </div>
+
+  <!-- SEASON GUIDE -->
+  <div class="season-card">
+    <div class="season-title" id="season-title">🗓 In season this month</div>
+    <div class="season-sub" id="season-sub"></div>
+    <div class="sp-now" id="season-now"></div>
+    <div class="season-foot" id="season-foot"></div>
+
+    <details class="cal-details">
+      <summary>Full-year calendar · all species</summary>
+      <div class="cal-wrap">
+        <div class="cal-head" id="cal-head"></div>
+        <div id="cal-rows"></div>
+        <div class="cal-legend">
+          <span><i style="background:var(--green)"></i>High chance</span>
+          <span><i style="background:#EF9F27"></i>Medium</span>
+          <span><i style="background:repeating-linear-gradient(45deg,var(--gray) 0 2px,transparent 2px 5px);opacity:.6"></i>Timing unclear</span>
+        </div>
+        <div class="cal-detail" id="cal-detail"></div>
+        <div class="season-foot" style="border-top:none;padding-top:0;margin-top:10px;">
+          Windows come from hobbyist reports around Singapore and Malaysia, not lab data. Treat them as a guide: the weather score decides the actual night.
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="notif-card" onclick="toggleNotifications()">
@@ -320,547 +466,821 @@ body {
 
   <div class="section-label">Score breakdown</div>
   <div class="factor-list" id="factor-list"></div>
+
   <div class="section-label">Next 12 hours</div>
   <div class="hourly-scroll" id="hourly-row"></div>
-  <div id="install-hint" class="install-hint">📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"</div>
-  <div class="footer">Auto-refreshes every 15 min · Weather: Open-Meteo</div>
+
+  <div id="install-hint" class="install-hint">
+    📲 <strong>Add to Home Screen:</strong> Safari → Share → "Add to Home Screen"
+  </div>
+
+  <div class="footer">
+    Auto-refreshes every 15 min · Weather: Open-Meteo · Spots: OpenStreetMap
+  </div>
+
+</div>
+
+<!-- LOG A FIND (bottom sheet) -->
+<div class="modal" id="find-modal" onclick="if(event.target===this)closeFind()">
+  <div class="sheet">
+    <div class="sheet-title">⭐ Log a queen find</div>
+    <label>Species
+      <select id="f-species"></select>
+    </label>
+    <label>Where did you find her?
+      <select id="f-kind"></select>
+    </label>
+    <label>Place name
+      <input id="f-place" type="text" placeholder="e.g. Pool at the swimming club"/>
+    </label>
+    <div class="row2">
+      <label>Date<input id="f-date" type="date"/></label>
+      <label>Time (optional)<input id="f-time" type="time"/></label>
+    </div>
+    <label>Notes
+      <textarea id="f-notes" rows="2" placeholder="Wings, size, what she was doing, eggs..."></textarea>
+    </label>
+    <div class="loc-line" id="f-loc"></div>
+    <button class="btn-primary" onclick="saveFind()">Save find</button>
+    <button class="btn-secondary" onclick="closeFind()">Cancel</button>
+  </div>
 </div>
 
 <script>
 const CIRC = 2 * Math.PI * 56;
 const FALLBACK = { lat: 1.3200, lng: 103.8440, name: 'Novena, Singapore' };
+
 let state = { lat: null, lng: null, locationName: '', notifEnabled: false };
-let currentWeather = null;
-let selectedSpecies = 'all';
-let refreshTimer, locAttempts = 0;
+let refreshTimer;
+let lastScore = 0;
 
-// ── Species definitions ──────────────────────────────────
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+// ── Season guide data ────────────────────────────────────
+const MONTH_LETTERS = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+const MONTH_NAMES   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const ALL_YEAR = [1,2,3,4,5,6,7,8,9,10,11,12];
+
 const SPECIES = [
-  {
-    id: 'all', name: 'All Species', icon: '🐜', color: '#1D9E75', bg: '#E1F5EE', latin: '',
-    minHabitat: 0, prefersHabitat: [0,1,2,3,4,5], flightTime: 'any',
-    needsRain: false, idealTemp: [24,34], idealHumidity: [65,100], idealPrecip: 0, needLit: false,
-    flightWindow: 'Showing all spot types — parks, nature reserves, HDB estates and urban areas.',
-    huntTip: null,
-  },
-  {
-    id: 'fire', name: 'Fire Ant', icon: '🔥', color: '#D44000', bg: '#FDEEE8', latin: 'Solenopsis geminata',
-    minHabitat: 0, prefersHabitat: [0,1,2],
-    flightTime: 'day', needsRain: true, idealTemp: [29,35], idealHumidity: [70,90], idealPrecip: 0.5, needLit: false,
-    flightWindow: 'Flies midday (10am–2pm) right after rain. Loves open disturbed ground — HDB grass verges, drain edges, roadside soil. Queens land fast and shed wings quickly.',
-    huntTip: 'Scan grass verges, drain covers and open soil near HDB blocks midday after rain. Queens are small and shed wings fast — check within 30min of flights starting.',
-  },
-  {
-    id: 'giga', name: 'Giga Ant', icon: '👑', color: '#7B3FA0', bg: '#F3EAFF', latin: 'Camponotus gigas',
-    minHabitat: 4, prefersHabitat: [4,5],
-    flightTime: 'night', needsRain: true, idealTemp: [24,30], idealHumidity: [85,100], idealPrecip: 1, needLit: false,
-    flightWindow: 'Strictly nocturnal 9pm–midnight after heavy rain, 85%+ humidity. Primary/secondary forest only — Bukit Timah and MacRitchie are the go-to spots in SG.',
-    huntTip: 'Walk forest trails slowly after 9pm with a red-light headlamp. Queens are enormous — unmistakeable. Found walking forest floor after de-alating near large tree roots.',
-  },
-  {
-    id: 'trapjaw', name: 'Trap Jaw', icon: '⚡', color: '#1A6BA0', bg: '#E5F2FF', latin: 'Odontomachus sp.',
-    minHabitat: 2, prefersHabitat: [2,3,4,5],
-    flightTime: 'evening', needsRain: true, idealTemp: [25,31], idealHumidity: [80,100], idealPrecip: 0.5, needLit: true,
-    flightWindow: 'Evening flier 6pm–11pm after rain. Forest trail edges and lit surfaces near trees — but also spotted at HDB corridor lights and stairwell lamps near greenery.',
-    huntTip: 'Check lit corridor lamps and stairwell lights on lower floors near any trees or grass after rain. Also walk forest trail edges at dusk. Queens have unmistakeable mandibles.',
-  },
-  {
-    id: 'carpenter', name: 'Silver Carpenter', icon: '🪵', color: '#7A6A00', bg: '#FAFAE0', latin: 'Camponotus sp.',
-    minHabitat: 1, prefersHabitat: [1,2,3,4,5],
-    flightTime: 'night', needsRain: true, idealTemp: [24,30], idealHumidity: [80,100], idealPrecip: 0.5, needLit: true,
-    flightWindow: 'Night flier 8pm–midnight after rain. Attracted to lit surfaces — HDB void deck lights, corridor lamps, stairwell bulbs, and walls near trees are all productive.',
-    huntTip: 'Check void deck lights, corridor lamps and any bright wall near trees after rain. Queens are large, silvery and often de-alate right under the light. Bring a container.',
-  },
+  { id:'fire',    name:'Fire ant',          sci:'Solenopsis geminata',      months:[1,3,4,5,11,12], chance:'high', window:'Mar – May & Nov – Jan',
+    time:'Morning to midday', note:'Flies at the rainy-season transitions. The sting is nasty, so wear gloves.' },
+  { id:'crazy',   name:'Black crazy ant',   sci:'Paratrechina longicornis', months:ALL_YEAR,        chance:'high', window:'Year-round',
+    time:'Any time', note:'Flies all year, most in warm months. The easiest starter queen.' },
+  { id:'pheidole',name:'Big-headed ant',    sci:'Pheidole spp.',            months:[5,6,7,8],       chance:'high', window:'May – Aug',
+    time:'Evening to nightfall', note:'Swarms lit signboards heavily. Very common in urban Singapore.' },
+  { id:'weaver',  name:'Weaver ant',        sci:'Oecophylla smaragdina',    months:[5,6,7],         chance:'high', window:'May – Jul',
+    time:'Evening after rain', note:'Start of the wet season. Common near big trees in parks. Queens shed wings fast.' },
+  { id:'carebara',name:'Marauder ant',      sci:'Carebara diversa',         months:[4,5,6,7],       chance:'med',  window:'Apr – Jul',
+    time:'Dusk to night', note:'Huge queen (about 20mm). Flies at the start of the rainy season. Hard to keep alive.' },
+  { id:'campo',   name:'Carpenter ant',     sci:'Camponotus spp.',          months:[5,6,8,9,10,11,12], chance:'med', window:'May – Jun & Aug – Dec',
+    time:'Late afternoon to evening', note:'Two peaks a year. Sightings reported in Singapore in May – Jun too.' },
+  { id:'meran',   name:'Shield ant',        sci:'Meranoplus bicolor',       months:[8,9,10,11,12,1],chance:'med',  window:'Aug – Jan',
+    time:'Daytime to dusk', note:'A long window. Spiny thorax. Look in grassy areas.' },
+  { id:'odonto',  name:'Trap-jaw ant',      sci:'Odontomachus simillimus',  months:[1,2],           chance:'med',  window:'Jan – Feb',
+    time:'Nightfall', note:'Short window, near forested areas. Painful sting.' },
+  { id:'polyr',   name:'Spiny ant',         sci:'Polyrhachis spp.',         months:[2,3],           chance:'med',  window:'Feb – Mar',
+    time:'Evening', note:'Near vegetation and tree bark. A stunning spiny queen.' },
+  { id:'gigas',   name:'Giant forest ant',  sci:'Dinomyrmex gigas',         months:[],              chance:'rare', window:'About twice a year, timing unclear',
+    time:'Night', note:'The grail queen (around 2 inches). Bukit Timah and Central Catchment. Watch after heavy rain.' },
 ];
 
-// ── Locations database ───────────────────────────────────
-// habitat: 0=drain/construction, 1=HDB urban, 2=park+grass, 3=park+forest edge, 4=secondary forest, 5=primary forest
-// locationType: 'urban'|'park'|'nature'  (for display badge)
-const LOCATIONS = [
-  // ── PRIMARY / SECONDARY FOREST ──────────────────────────
-  { name:'Bukit Timah Nature Reserve',      lat:1.3520,lng:103.7767, habitat:5, lit:false, locationType:'nature', species:['giga','trapjaw','carpenter'], tip:'THE spot for Giga queens after heavy rain. Check trail entrance lamp posts for Trap Jaw and Carpenter at night.' },
-  { name:'MacRitchie Reservoir (CCNR)',     lat:1.3419,lng:103.8198, habitat:5, lit:true,  locationType:'nature', species:['giga','trapjaw','carpenter'], tip:'Largest forest in SG — Giga and Trap Jaw active along trail edges. Check lit carpark periphery for Carpenter.' },
-  { name:'CCNR – Pierce Reservoir entry',   lat:1.3699,lng:103.8148, habitat:5, lit:false, locationType:'nature', species:['giga','trapjaw','carpenter'], tip:'Quieter CCNR entry — undisturbed forest floor ideal for Giga hunting on post-rain nights.' },
-  { name:'Labrador Nature Reserve',         lat:1.2664,lng:103.8025, habitat:5, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Coastal primary forest — lit path lamps at cliff base great for Trap Jaw and Carpenter queens.' },
-  { name:'Sungei Buloh Wetland Reserve',    lat:1.4473,lng:103.7290, habitat:5, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Mangrove and wetland edge — excellent humid micro-habitat. Trap Jaw common along boardwalk edges after rain.' },
-  { name:'Thomson Nature Park',             lat:1.3707,lng:103.8243, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Tembusu forest and stream — Trap Jaw active along leaf litter trails post-rain.' },
-  { name:'Springleaf Nature Park',          lat:1.3946,lng:103.8139, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Forest stream corridor — excellent humid micro-habitat. Check ground near water after rain.' },
-  { name:'Dairy Farm Nature Park',          lat:1.3536,lng:103.7728, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Secondary forest + lit carpark — Carpenter queens found on lit walls at forest edge regularly.' },
-  { name:'Zhenghua Nature Park',            lat:1.3712,lng:103.7683, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Young secondary forest — fast coloniser ants and Trap Jaw very active after afternoon storms.' },
-  { name:'Hindhede Nature Park',            lat:1.3538,lng:103.7772, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Quarry rim with forest — check lit shelter poles. Carpenter queens found here regularly.' },
-  { name:'Clementi Forest',                 lat:1.3230,lng:103.7644, habitat:4, lit:false, locationType:'nature', species:['trapjaw','carpenter'],         tip:'Dense secondary growth — thick leaf litter, Trap Jaw very active post-rain. Check disturbed ground edges.' },
-  { name:'Coney Island Park',               lat:1.4027,lng:103.9254, habitat:4, lit:false, locationType:'nature', species:['giga','trapjaw','carpenter'],  tip:'Island forest, low light pollution — Giga queens spotted after heavy rain nights. Worth the walk.' },
-  { name:'Tampines Eco Green',              lat:1.3559,lng:103.9449, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter','fire'],  tip:'Secondary forest in East SG — Trap Jaw along trail edges, Fire ants on open grass fringes.' },
-  { name:'Kent Ridge Park',                 lat:1.2924,lng:103.7817, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Ridge forest — lit carpark at base excellent for Carpenter. Trap Jaw along trail edges at dusk.' },
-  { name:'Telok Blangah Hill Park',         lat:1.2794,lng:103.8081, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Forested urban hill — check trail entrances and lit lamp posts at base after rain.' },
-  { name:'Southern Ridges',                 lat:1.2845,lng:103.8014, habitat:4, lit:true,  locationType:'nature', species:['trapjaw','carpenter'],         tip:'Ridge forest and bridges — lit Henderson Waves bridge underside great for Carpenter after evening rain.' },
-  // ── PARKS WITH FOREST EDGE ──────────────────────────────
-  { name:'Bishan-Ang Mo Kio Park',          lat:1.3620,lng:103.8487, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Large park with river — Fire ant flights on open grass midday. Carpenter queens on lit walls and shelters at night.' },
-  { name:'Pasir Ris Park',                  lat:1.3721,lng:103.9488, habitat:3, lit:true,  locationType:'park',   species:['fire','trapjaw','carpenter'],  tip:'Forest fringe + beach — Fire ants on open grass, Trap Jaw near mangrove edge, Carpenter on lit structures.' },
-  { name:'East Coast Park',                 lat:1.3005,lng:103.9121, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Long coastal strip — Fire ant flights on open grass midday. Carpenter queens on lit BBQ shelter walls at night.' },
-  { name:'Bedok Reservoir Park',            lat:1.3393,lng:103.9317, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Reservoir loop — Fire ants on grass banks midday. Carpenter queens on lit lamp post bases at night.' },
-  { name:'Jurong Lake Gardens',             lat:1.3344,lng:103.7262, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Lakeside with grassland — Fire ant flights near water midday. Carpenter queens check lit shelters.' },
-  { name:'Punggol Waterway Park',           lat:1.4003,lng:103.9050, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Waterway corridor — Fire ants on grassy banks midday after rain. Lit lamp posts for Carpenter at night.' },
-  { name:'Singapore Botanic Gardens',       lat:1.3138,lng:103.8159, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Rich soil and tall trees — Fire ants near lawn areas. Carpenter queens on lit walls and entrances at night.' },
-  { name:'Fort Canning Park',               lat:1.2934,lng:103.8455, habitat:3, lit:true,  locationType:'park',   species:['trapjaw','carpenter'],        tip:'Forested urban hill — lit walkways and old stone walls great for Carpenter. Trap Jaw along trail edges.' },
-  { name:'Bukit Batok Nature Park',         lat:1.3590,lng:103.7613, habitat:3, lit:true,  locationType:'park',   species:['trapjaw','carpenter'],        tip:'Quarry lake with secondary forest — check water edge grass at dusk for Trap Jaw and Carpenter.' },
-  { name:'West Coast Park',                 lat:1.2948,lng:103.7610, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Coastal park — Fire ants on open grass midday. Carpenter queens on lit concrete walls at night.' },
-  { name:'Sembawang Park',                  lat:1.4592,lng:103.8208, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Coastal park with forest nearby — Fire ants on grass edges, Carpenter on lit paths at night.' },
-  { name:'Changi Beach Park',               lat:1.3876,lng:103.9862, habitat:3, lit:true,  locationType:'park',   species:['fire','carpenter'],           tip:'Coastal grass and casuarina trees — Fire ants midday, Carpenter queens on lit shelter posts at night.' },
-  // ── HDB ESTATES ─────────────────────────────────────────
-  // Central
-  { name:'Toa Payoh HDB Estate',            lat:1.3330,lng:103.8472, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Void deck lights and corridor lamps after rain — Carpenter and Trap Jaw queens common. Fire ants on grass verges between blocks midday.' },
-  { name:'Bishan HDB Estate',               lat:1.3509,lng:103.8490, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Bishan Park — excellent crossover zone. Check void decks facing the park after rain for Carpenter and Trap Jaw.' },
-  { name:'Ang Mo Kio HDB Estate',           lat:1.3691,lng:103.8454, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Dense HDB town — check void deck lights and open grass verges between blocks. Fire ant columns visible midday after rain.' },
-  { name:'Novena / Thomson HDB',            lat:1.3200,lng:103.8440, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Thomson Nature Park — Trap Jaw and Carpenter queens attracted to corridor and stairwell lights facing greenery.' },
-  { name:'Serangoon HDB Estate',            lat:1.3496,lng:103.8734, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Check any grassy open areas between blocks for Fire ants midday. Carpenter queens on lit void deck pillars after dark.' },
-  // North
-  { name:'Yishun HDB Estate',               lat:1.4304,lng:103.8354, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Large HDB town — grass verges between blocks for Fire ants midday. Void deck and corridor lights for Carpenter at night.' },
-  { name:'Woodlands HDB Estate',            lat:1.4371,lng:103.7869, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Northern estates near Mandai forest fringe — Carpenter queens on any lit wall after rain. Fire ants on open grass.' },
-  { name:'Sembawang HDB Estate',            lat:1.4490,lng:103.8199, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near coastal greenery — check void deck lights and drain edges. Fire ant columns on open grass after morning rain.' },
-  { name:'Admiralty / Canberra HDB',        lat:1.4420,lng:103.8011, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Admiralty Park — good crossover zone. Check lit void decks and grass between blocks after rain.' },
-  // East
-  { name:'Tampines HDB Estate',             lat:1.3530,lng:103.9440, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Tampines Eco Green — Trap Jaw queens at corridor lights facing trees. Fire ants on any open grass midday.' },
-  { name:'Bedok HDB Estate',                lat:1.3236,lng:103.9273, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Check drain edges and grass between blocks for Fire ants midday. Void deck and stairwell lights for Carpenter at night.' },
-  { name:'Pasir Ris HDB Estate',            lat:1.3737,lng:103.9494, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Adjacent to Pasir Ris Park and forest — great crossover. Trap Jaw and Carpenter at corridor lights facing greenery.' },
-  { name:'Simei / Changi HDB',              lat:1.3434,lng:103.9534, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Eastern estates — check any grassy open areas for Fire ants midday, void deck lights for Carpenter after rain.' },
-  // West
-  { name:'Jurong West HDB Estate',          lat:1.3404,lng:103.7090, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Large western estate — Fire ant flights on grass between blocks midday. Carpenter queens on any lit void deck at night.' },
-  { name:'Jurong East HDB Estate',          lat:1.3330,lng:103.7436, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Jurong Lake — check grass edges facing the lake for Fire ants, and lit void decks for Carpenter after rain.' },
-  { name:'Clementi HDB Estate',             lat:1.3153,lng:103.7651, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Clementi Forest — Trap Jaw queens on stairwell lights facing the forest fringe. Fire ants on open grass midday.' },
-  { name:'Bukit Batok HDB Estate',          lat:1.3491,lng:103.7496, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Bukit Batok Nature Park — excellent crossover zone. Check corridor lights facing the park after rain.' },
-  { name:'Bukit Panjang HDB Estate',        lat:1.3779,lng:103.7719, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Right on Bukit Timah forest fringe — Trap Jaw and Carpenter queens common on any lit surface facing trees.' },
-  // NE / Punggol
-  { name:'Punggol HDB Estate',              lat:1.4043,lng:103.9022, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'New town with grassy corridors — Fire ants on any open grass midday. Carpenter queens at void deck and corridor lights.' },
-  { name:'Sengkang HDB Estate',             lat:1.3868,lng:103.8914, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Check grass between blocks for Fire ants midday. Lit stairwell and void deck lamps good for Carpenter after rain.' },
-  { name:'Hougang HDB Estate',              lat:1.3700,lng:103.8869, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Dense estate near parkland — check void deck lights and drain edges. Fire ants on grass verges after morning rain.' },
-  { name:'Buangkok / Compassvale HDB',      lat:1.3849,lng:103.8870, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Sengkang wetlands — good crossover zone. Check lit corridor lamps and open grass between blocks.' },
-  // South / Central
-  { name:'Queenstown HDB Estate',           lat:1.2941,lng:103.8057, habitat:1, lit:true,  locationType:'urban',  species:['fire','carpenter'],           tip:'Near Southern Ridges forest — Carpenter queens on any lit wall facing trees after rain. Fire ants on grass verges.' },
-  { name:'Buona Vista / Dover HDB',         lat:1.3070,lng:103.7900, habitat:1, lit:true,  locationType:'urban',  species:['fire','trapjaw','carpenter'],  tip:'Near Kent Ridge Park — excellent crossover. Check corridor lights on lower floors facing the park after rain.' },
-  // ── DRAINS / OPEN GROUND ────────────────────────────────
-  { name:'Kallang Riverside drain corridor', lat:1.3100,lng:103.8631, habitat:0, lit:true,  locationType:'urban',  species:['fire'],                       tip:'Open drain and grass verge — Fire ant columns highly visible after morning rain. Check any disturbed soil and drain covers.' },
-  { name:'Punggol waterway drain edges',    lat:1.3993,lng:103.9065, habitat:0, lit:true,  locationType:'urban',  species:['fire'],                       tip:'Waterway drain edges with grass — Fire ant nuptial flights very common here midday after rain.' },
-  { name:'Jurong Industrial drain area',    lat:1.3197,lng:103.6977, habitat:0, lit:true,  locationType:'urban',  species:['fire'],                       tip:'Industrial drain and open ground — disturbed soil perfect for Fire ants. Check midday after any rain.' },
-  { name:'Sungei Pandan / Clementi drain',  lat:1.3089,lng:103.7642, habitat:0, lit:false, locationType:'urban',  species:['fire'],                       tip:'Open drain corridor with grass verges — Fire ant flights common midday after rain in this area.' },
-];
+const CHANCE_LABEL = { high:'High', med:'Medium', rare:'Rare' };
+const CHANCE_ORDER = { high:0, med:1, rare:2 };
 
-// ── Species flight condition scorer ─────────────────────
-function scoreSpeciesConditions(sp, weather, hour) {
-  if (!weather || sp.id === 'all') return null;
-  const { temp, humidity, precip } = weather;
-  const isDay   = hour >= 10 && hour <= 14;
-  const isEve   = hour >= 17 && hour <= 21;
-  const isNight = hour >= 20 || hour <= 2;
-  const chips = []; let good = 0, total = 0;
-  total++;
-  const timeOk = sp.flightTime==='any'?true:sp.flightTime==='day'?isDay:sp.flightTime==='evening'?isEve:isNight;
-  const timeLabel = sp.flightTime==='day'?'☀️ Midday window':sp.flightTime==='evening'?'🌆 Evening window':sp.flightTime==='night'?'🌙 Night window':'🕐 Any time';
-  chips.push({ label: timeLabel, state: timeOk?'ok':'no' }); if (timeOk) good++;
-  total++; const tempOk = temp>=sp.idealTemp[0]&&temp<=sp.idealTemp[1];
-  chips.push({ label:`🌡 ${temp.toFixed(1)}°C`, state: tempOk?'ok':temp<sp.idealTemp[0]?'no':'mid' }); if (tempOk) good++;
-  total++; const humOk = humidity>=sp.idealHumidity[0];
-  chips.push({ label:`💧 ${Math.round(humidity)}%`, state: humOk?'ok':humidity>=sp.idealHumidity[0]-10?'mid':'no' }); if (humOk) good++;
-  if (sp.needsRain) {
-    total++; const rainOk = precip>=sp.idealPrecip;
-    chips.push({ label: rainOk?'🌧 Rain ✓':'🌧 Needs rain', state: rainOk?'ok':precip>0?'mid':'no' }); if (rainOk) good++;
-  }
-  const ratio = good/total;
-  const badge = ratio>=0.9?'prime':ratio>=0.7?'good':ratio>=0.5?'fair':'low';
-  const badgeText = ratio>=0.9?'🔥 Prime window':ratio>=0.7?'✅ Good':ratio>=0.5?'🟡 Fair':'⬜ Low now';
-  return { chips, badge, badgeText };
-}
+function inSeason(sp, m) { return sp.months.includes(m); }
 
-// ── Hunt score per location ──────────────────────────────
-function calcHuntScore(loc, km, weather, isEvening, precip, sp) {
-  const h = new Date().getHours();
+function renderSeason() {
+  const now = new Date();
+  const m   = now.getMonth() + 1;
 
-  // Filter by species habitat requirement
-  if (sp.id !== 'all') {
-    if (loc.habitat < sp.minHabitat) return 0;
-    if (!loc.species.includes(sp.id)) return 0;
-  }
+  document.getElementById('season-title').textContent = `🗓 In season in ${MONTH_NAMES[m-1]}`;
 
-  // Habitat score (0–40)
-  let habitatPts;
-  if (sp.id === 'all') {
-    habitatPts = { 5:40, 4:32, 3:22, 2:14, 1:12, 0:8 }[loc.habitat] ?? 8;
-  } else if (sp.id === 'fire') {
-    // Fire ants: urban and open ground are PRIME
-    habitatPts = { 0:40, 1:38, 2:30, 3:18, 4:5, 5:2 }[loc.habitat] ?? 10;
-  } else if (sp.id === 'giga') {
-    habitatPts = { 5:40, 4:32, 3:5, 2:0, 1:0, 0:0 }[loc.habitat] ?? 0;
-  } else if (sp.id === 'trapjaw') {
-    habitatPts = { 5:40, 4:35, 3:28, 2:22, 1:15, 0:0 }[loc.habitat] ?? 10;
-  } else if (sp.id === 'carpenter') {
-    // Carpenter: lit urban spots very productive
-    habitatPts = loc.lit
-      ? { 5:40, 4:36, 3:32, 2:28, 1:26, 0:0 }[loc.habitat] ?? 10
-      : { 5:40, 4:34, 3:28, 2:10, 1:5,  0:0 }[loc.habitat] ?? 10;
-  } else {
-    habitatPts = { 5:40, 4:32, 3:22, 1:12, 0:8 }[loc.habitat] ?? 10;
-  }
-  if (habitatPts === 0) return 0;
+  const active = SPECIES.filter(sp => inSeason(sp, m))
+    .sort((a, b) => CHANCE_ORDER[a.chance] - CHANCE_ORDER[b.chance] || a.name.localeCompare(b.name));
 
-  // Distance (0–30)
-  const distPts = Math.max(0, 30 - (km * 6));
+  document.getElementById('season-sub').textContent =
+    `${active.length} species in their flying window. Tap one for details. The weather score above picks the actual night.`;
 
-  // Weather synergy (0–20)
-  let weatherPts = 0;
-  if (sp.id === 'fire') {
-    weatherPts = (precip >= 0.5 && weather?.temp >= 29) ? 20 : precip >= 0.1 ? 12 : 6;
-  } else if (sp.id === 'giga') {
-    weatherPts = (precip >= 1 && weather?.humidity >= 85) ? 20 : precip >= 0.5 ? 12 : 4;
-  } else if (sp.id === 'trapjaw') {
-    weatherPts = (precip >= 0.5 && (isEvening || loc.lit)) ? 20 : precip >= 0.1 ? 12 : loc.lit ? 8 : 4;
-  } else if (sp.id === 'carpenter') {
-    weatherPts = (precip >= 0.5 && loc.lit) ? 20 : precip >= 0.1 ? 14 : loc.lit ? 10 : 4;
-  } else {
-    weatherPts = precip >= 1 ? (loc.habitat >= 4 ? 20 : 14) : precip >= 0.1 ? 10 : loc.lit ? 8 : 5;
-  }
-
-  // Time of day (0–10)
-  let timePts = 0;
-  if (sp.id === 'fire')      timePts = (h>=10&&h<=14)?10:2;
-  else if (sp.id === 'giga') timePts = (h>=21||h<=2)?10:(h>=19)?5:1;
-  else if (sp.id === 'trapjaw') timePts = (h>=18&&h<=22)?10:(h>=17)?5:2;
-  else if (sp.id === 'carpenter') timePts = (h>=20||h<=1)?10:(h>=18)?6:2;
-  else timePts = isEvening?(loc.lit?10:4):(loc.habitat>=4?8:4);
-
-  return Math.min(100, Math.round(habitatPts + distPts + weatherPts + timePts));
-}
-
-function huntScoreLabel(s) { return s>=75?'🔥 Prime':s>=55?'✅ Good':s>=40?'🟡 Fair':'⬜ Low'; }
-function huntScoreColor(s) { return s>=75?'#1D9E75':s>=55?'#5DCAA5':s>=40?'#EF9F27':'#B4B2A9'; }
-
-// ── Location type badge ──────────────────────────────────
-const LOC_BADGE = {
-  nature: { label:'Nature reserve', icon:'🌿' },
-  park:   { label:'Park',           icon:'🌳' },
-  urban:  { label:'HDB / Urban',    icon:'🏢' },
-};
-const HABITAT_LABEL = { 5:'Primary forest', 4:'Secondary forest', 3:'Park + forest edge', 2:'Neighbourhood park', 1:'HDB estate', 0:'Open ground / drain' };
-
-// ── Render species selector ──────────────────────────────
-function renderSpeciesSelector() {
-  const scroll = document.getElementById('species-scroll');
-  if (!scroll) return;
-  scroll.innerHTML = SPECIES.map(sp => `
-    <div class="species-pill ${selectedSpecies===sp.id?'active':''}"
-         style="--sp-color:${sp.color};--sp-bg:${sp.bg}"
-         onclick="selectSpecies('${sp.id}')">
-      <div class="species-pill-icon">${sp.icon}</div>
-      <div class="species-pill-name">${sp.name.replace(' Ant','').replace(' Jaw','').replace(' Carpenter','')}</div>
-    </div>`).join('');
-  document.getElementById('species-section').style.display = 'block';
-}
-
-function selectSpecies(id) {
-  selectedSpecies = id;
-  renderSpeciesSelector();
-  if (state.lat && currentWeather) { renderSpeciesCondition(); renderSpots(); fetchSightings(id); }
-}
-
-// ── Render species condition card ────────────────────────
-function renderSpeciesCondition() {
-  const card = document.getElementById('species-condition');
-  const sp   = SPECIES.find(s => s.id === selectedSpecies);
-  if (!sp || sp.id==='all' || !currentWeather) { card.style.display='none'; return; }
-  const cond = scoreSpeciesConditions(sp, currentWeather, new Date().getHours());
-  card.style.display = 'block';
-  card.style.borderColor = sp.color+'44';
-  card.innerHTML = `
-    <div class="sp-cond-top">
-      <div class="sp-cond-icon">${sp.icon}</div>
-      <div><div class="sp-cond-name" style="color:${sp.color}">${sp.name}</div><div class="sp-cond-latin">${sp.latin}</div></div>
-      <div class="sp-cond-badge ${cond.badge}">${cond.badgeText}</div>
-    </div>
-    <div class="sp-cond-factors">${cond.chips.map(c=>`<span class="sp-factor-chip ${c.state}">${c.label}</span>`).join('')}</div>
-    <div class="sp-flight-window">${sp.flightWindow}</div>`;
-}
-
-// ── Render spots ─────────────────────────────────────────
-function renderSpots() {
-  const section = document.getElementById('spots-section');
-  const listEl  = document.getElementById('spot-list');
-  const subEl   = document.getElementById('spots-sub');
-  section.style.display = 'block';
-  const h      = new Date().getHours();
-  const isEve  = h>=18&&h<=23;
-  const precip = currentWeather?.precip??0;
-  const sp     = SPECIES.find(s=>s.id===selectedSpecies);
-
-  const ranked = LOCATIONS
-    .map(loc => ({ ...loc, km: distKm(state.lat,state.lng,loc.lat,loc.lng), huntScore: calcHuntScore(loc,distKm(state.lat,state.lng,loc.lat,loc.lng),currentWeather,isEve,precip,sp) }))
-    .filter(l => l.huntScore > 0)
-    .sort((a,b) => b.huntScore - a.huntScore)
-    .slice(0,5);
-
-  if (!ranked.length) {
-    listEl.innerHTML = `<div style="font-size:13px;color:var(--text-3);padding:8px 0;">No suitable spots found for ${sp.name} right now. Try a different species or check later.</div>`;
-    subEl.textContent = 'No matching spots';
-    return;
-  }
-
-  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const topScore = ranked[0].huntScore;
-  const spColors = Object.fromEntries(SPECIES.map(s=>[s.id,{color:s.color,bg:s.bg,icon:s.icon,name:s.name}]));
-
-  subEl.textContent = sp.id==='all'
-    ? 'Parks, nature reserves and HDB spots — ranked by conditions now'
-    : `Best spots for ${sp.name} right now`;
-
-  listEl.innerHTML = ranked.map((loc,i) => {
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}&travelmode=walking`;
-    const col   = sp.id==='all' ? huntScoreColor(loc.huntScore) : sp.color;
-    const lbl   = huntScoreLabel(loc.huntScore);
-    const bar   = Math.round((loc.huntScore/topScore)*100);
-    const badge = LOC_BADGE[loc.locationType]||LOC_BADGE.park;
-    const speciesTags = sp.id==='all'
-      ? loc.species.map(sid=>{const s=spColors[sid];return s?`<span class="sp-tag" style="background:${s.bg};color:${s.color}">${s.icon} ${s.name.split(' ')[0]}</span>`:''}).join('')
-      : '';
-    const tip = sp.id!=='all'&&sp.huntTip ? sp.huntTip : loc.tip;
-    return `
-      <div class="spot-card" onclick="navigate('${mapsUrl}')">
-        <div class="spot-rank" style="background:${col}22;color:${col};font-size:16px">${medals[i]}</div>
-        <div class="spot-info">
-          <div class="spot-name">${loc.name}</div>
-          <div class="spot-type">${badge.icon} ${badge.label} · ${HABITAT_LABEL[loc.habitat]||'Green area'}${loc.lit?' · 💡 lit':''}</div>
-          <div class="spot-meta">
-            <span class="spot-dist">${fmtDist(loc.km)}</span>
-            <span class="spot-walk">· ${walkMin(loc.km)}</span>
-          </div>
-          ${speciesTags?`<div class="spot-species-tags">${speciesTags}</div>`:''}
-          <div class="hunt-score-bar">
-            <span class="hunt-score-label">Hunt score</span>
-            <div class="hunt-bar-bg"><div class="hunt-bar-fill" style="width:${bar}%;background:${col}"></div></div>
-            <span class="hunt-score-num" style="color:${col}">${lbl}</span>
-          </div>
-          <div class="spot-tip">${tip}</div>
+  document.getElementById('season-now').innerHTML = active.map(sp => `
+    <div class="sp-row" onclick="this.classList.toggle('open')">
+      <div class="sp-row-top">
+        <div class="sp-main">
+          <div class="sp-name">${esc(sp.name)}</div>
+          <div class="sp-sci">${esc(sp.sci)}</div>
+          <div class="sp-time">🕐 ${esc(sp.time)} · ${esc(sp.window)}</div>
         </div>
-        <button class="spot-nav" onclick="event.stopPropagation();navigate('${mapsUrl}')" style="background:${col}">🧭 Go</button>
-      </div>`;
+        <span class="chance ${sp.chance}">${CHANCE_LABEL[sp.chance]}</span>
+      </div>
+      <div class="sp-note">${esc(sp.note)}</div>
+    </div>`).join('');
+
+  const rare = SPECIES.filter(sp => sp.chance === 'rare').map(sp => sp.name).join(', ');
+  document.getElementById('season-foot').textContent =
+    `Also worth a night walk after heavy rain: ${rare} (flies a couple of times a year, dates unclear).`;
+
+  document.getElementById('cal-head').innerHTML =
+    '<span></span>' + MONTH_LETTERS.map((L, i) => `<span class="${i+1===m?'now':''}">${L}</span>`).join('');
+
+  document.getElementById('cal-rows').innerHTML = SPECIES.map(sp => {
+    const cells = ALL_YEAR.map(mo => {
+      const on  = inSeason(sp, mo);
+      const cls = sp.chance === 'rare' ? 'unk' : on ? sp.chance : '';
+      return `<div class="cal-cell ${cls} ${mo===m?'now':''}"></div>`;
+    }).join('');
+    return `<div class="cal-row" id="cal-${sp.id}" onclick="showSpecies('${sp.id}')">
+      <div class="cal-name">${esc(sp.name)}</div>${cells}
+    </div>`;
   }).join('');
-
-  showMinimap(state.lat,state.lng,ranked[0]);
 }
 
-function showBestSpots(lat, lng, flightScore) {
-  const section   = document.getElementById('spots-section');
-  const spSection = document.getElementById('species-section');
-  if (flightScore < 35) { section.style.display='none'; spSection.style.display='none'; return; }
-  renderSpeciesSelector();
-  renderSpeciesCondition();
-  renderSpots();
-  fetchSightings(selectedSpecies);
-}
-
-function navigate(url) { window.open(url,'_blank'); }
-function showMinimap(lat,lng,nearest) {
-  const wrap=document.getElementById('minimap-wrap'),frame=document.getElementById('minimap'),label=document.getElementById('minimap-label');
-  frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
-  wrap.style.display='block';
-  label.textContent=nearest?`#1: ${nearest.name} (${fmtDist(nearest.km)})`:'Your area';
+function showSpecies(id) {
+  const sp = SPECIES.find(s => s.id === id);
+  if (!sp) return;
+  document.querySelectorAll('.cal-row').forEach(r => r.classList.toggle('sel', r.id === 'cal-' + id));
+  const box = document.getElementById('cal-detail');
+  box.style.display = 'block';
+  box.innerHTML = `<strong>${esc(sp.name)}</strong> <span style="font-style:italic">${esc(sp.sci)}</span><br>
+    📅 ${esc(sp.window)} · 🕐 ${esc(sp.time)} · Chance: ${CHANCE_LABEL[sp.chance]}<br>${esc(sp.note)}`;
 }
 
 // ── Score ────────────────────────────────────────────────
-function calcScore(temp,humidity,wind,precip,eve) {
-  const r=precip>=5?35:precip>=1?25:precip>=0.1?12:0;
-  const h=humidity>=85?25:humidity>=75?18:humidity>=65?8:0;
-  const t=(temp>=26&&temp<=33)?20:(temp>=24)?10:0;
-  const w=wind<=8?12:wind<=15?6:0;
-  const e=eve?8:0;
-  return { score:Math.min(100,r+h+t+w+e), factors:[
-    {name:'Recent rain',    pts:r,max:35,val:precip.toFixed(1)+'mm'},
-    {name:'Humidity',       pts:h,max:25,val:Math.round(humidity)+'%'},
-    {name:'Temperature',    pts:t,max:20,val:temp.toFixed(1)+'°C'},
-    {name:'Low wind',       pts:w,max:12,val:wind.toFixed(0)+'km/h'},
-    {name:'Evening 6–11pm', pts:e,max:8, val:eve?'✓ active':'not yet'},
+// rain3 = millimetres of rain in the last 3 hours (so the score stays high
+// right AFTER a storm stops, which is when queens fly)
+function calcScore(temp, humidity, wind, rain3, eve) {
+  const r = rain3 >= 5 ? 35 : rain3 >= 1 ? 25 : rain3 >= 0.1 ? 12 : 0;
+  const h = humidity >= 85 ? 25 : humidity >= 75 ? 18 : humidity >= 65 ? 8 : 0;
+  const t = (temp >= 26 && temp <= 33) ? 20 : (temp >= 24) ? 10 : 0;
+  const w = wind <= 8 ? 12 : wind <= 15 ? 6 : 0;
+  const e = eve ? 8 : 0;
+  const score = Math.min(100, r+h+t+w+e);
+  return { score, factors: [
+    { name: 'Rain (last 3h)', pts: r, max: 35, val: rain3.toFixed(1)+'mm' },
+    { name: 'Humidity',       pts: h, max: 25, val: Math.round(humidity)+'%' },
+    { name: 'Temperature',    pts: t, max: 20, val: temp.toFixed(1)+'°C' },
+    { name: 'Low wind',       pts: w, max: 12, val: wind.toFixed(0)+'km/h' },
+    { name: 'Evening 6–11pm', pts: e, max: 8,  val: eve ? '✓ active' : 'not yet' },
   ]};
 }
-function verdict(s) {
-  if (s>=70) return {text:'🔥 Get outside NOW!',color:'#1D9E75',ring:'#1D9E75'};
-  if (s>=55) return {text:'✅ Good conditions', color:'#1D9E75',ring:'#5DCAA5'};
-  if (s>=35) return {text:'🟡 Possible flights',color:'#BA7517',ring:'#EF9F27'};
-  return            {text:'⬜ Low chance',       color:'#888780',ring:'#B4B2A9'};
-}
-function distKm(lat1,lng1,lat2,lng2) {
-  const R=6371,d=Math.PI/180,dLat=(lat2-lat1)*d,dLng=(lng2-lng1)*d;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*d)*Math.cos(lat2*d)*Math.sin(dLng/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-function fmtDist(km){return km<1?Math.round(km*1000)+'m':km.toFixed(1)+'km';}
-function walkMin(km){const m=Math.round(km/0.083);return m<2?'<2 min':m+'min walk';}
 
-// ── Location ─────────────────────────────────────────────
-function startLocation(){locAttempts=0;document.getElementById('location-screen').style.display='none';tryGetPosition(true);}
-function retryLocation(){locAttempts=0;tryGetPosition(true);}
-function tryGetPosition(hi){
-  setDot('searching');setName(hi?'Locating you...':'Locating (fallback)...');
-  if (!navigator.geolocation){useDefault();return;}
-  navigator.geolocation.getCurrentPosition(
-    pos=>onPos(pos),
-    err=>{
-      if (err.code===1){setDot('error');setName('Location denied — tap to retry');document.getElementById('location-screen').style.display='block';}
-      else if (hi&&locAttempts<2){locAttempts++;setTimeout(()=>tryGetPosition(false),500);}
-      else loadCachedOrDefault();
-    },
-    {enableHighAccuracy:hi,timeout:hi?12000:20000,maximumAge:hi?30000:120000}
-  );
-}
-function loadCachedOrDefault(){
-  try{const s=JSON.parse(localStorage.getItem('ant-coords')||'null');if(s&&Date.now()-s.ts<7200000){Object.assign(state,{lat:s.lat,lng:s.lng,locationName:s.name+' (cached)'});document.getElementById('main-content').style.display='block';setDot('ok');setName(state.locationName);fetchWeather();return;}}catch(e){}
-  useDefault();
-}
-async function onPos(pos){
-  state.lat=pos.coords.latitude;state.lng=pos.coords.longitude;
-  document.getElementById('location-screen').style.display='none';
-  document.getElementById('main-content').style.display='block';
-  setDot('ok');setName('Resolving...');
-  reverseGeocode(state.lat,state.lng);fetchWeather();
-}
-function useDefault(){
-  Object.assign(state,{lat:FALLBACK.lat,lng:FALLBACK.lng,locationName:FALLBACK.name});
-  document.getElementById('location-screen').style.display='none';
-  document.getElementById('main-content').style.display='block';
-  setDot('ok');setName(FALLBACK.name);fetchWeather();
-}
-async function reverseGeocode(lat,lng){
-  try{
-    const res=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=14`,{headers:{'Accept-Language':'en'}});
-    const data=await res.json(),a=data.address;
-    const name=a.suburb||a.neighbourhood||a.district||a.town||a.city||'Your location';
-    state.locationName=a.city?`${name}, ${a.city}`:name;setName(state.locationName);saveCoords();
-  }catch(e){state.locationName=`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`;setName(state.locationName);saveCoords();}
-}
-function saveCoords(){
-  try{localStorage.setItem('ant-coords',JSON.stringify({lat:state.lat,lng:state.lng,name:state.locationName,ts:Date.now()}));}catch(e){}
-  if('serviceWorker'in navigator)navigator.serviceWorker.ready.then(r=>r.active?.postMessage({type:'SAVE_COORDS',lat:state.lat,lng:state.lng,locationName:state.locationName}));
+function sumRain(arr, idx) {
+  let s = 0;
+  for (let k = Math.max(0, idx - 2); k <= idx; k++) s += (arr[k] || 0);
+  return s;
 }
 
-// ── Weather ──────────────────────────────────────────────
-async function fetchWeather(){
-  if(!state.lat)return;
-  const btn=document.getElementById('refresh-btn');btn.innerHTML='<span class="spinning">↻</span>';
-  try{
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lng}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&forecast_days=2&timezone=auto`;
-    const data=await(await fetch(url)).json(),c=data.current;
-    const h=new Date().getHours(),eve=h>=18&&h<=23;
-    const{score,factors}=calcScore(c.temperature_2m,c.relative_humidity_2m,c.wind_speed_10m,c.precipitation,eve);
-    const v=verdict(score);
-    currentWeather={temp:c.temperature_2m,humidity:c.relative_humidity_2m,wind:c.wind_speed_10m,precip:c.precipitation};
-    document.getElementById('w-temp').textContent=c.temperature_2m.toFixed(1)+'°C';
-    document.getElementById('w-humid').textContent=Math.round(c.relative_humidity_2m)+'%';
-    document.getElementById('w-wind').textContent=c.wind_speed_10m.toFixed(0)+'km/h';
-    document.getElementById('w-rain').textContent=c.precipitation.toFixed(1)+'mm';
-    const ring=document.getElementById('score-ring');
-    ring.style.strokeDasharray=CIRC.toFixed(1);ring.style.strokeDashoffset=(CIRC*(1-score/100)).toFixed(1);ring.setAttribute('stroke',v.ring);
-    const num=document.getElementById('score-num');num.textContent=Math.round(score);num.style.color=v.ring;
-    document.getElementById('verdict-text').textContent=v.text;document.getElementById('verdict-text').style.color=v.color;
-    document.getElementById('time-window').textContent=eve?'🌙 Evening window active':h<18?'Next window: today 6pm':'Next window: tomorrow 6pm';
-    const banner=document.getElementById('alert-banner');
-    if(score>=60){banner.className='alert-banner alert-go';banner.style.display='block';banner.textContent=`🐜 High flight chance near ${state.locationName}! Pick your target species below and go.`;}
-    else if(score>=35){banner.className='alert-banner alert-mid';banner.style.display='block';banner.textContent=`Moderate conditions — pick your species and check the best ranked spots.`;}
-    else banner.style.display='none';
-    renderFactors(factors);renderHourly(data.hourly);
-    setName(state.locationName+' · '+new Date().toLocaleTimeString('en-SG',{hour:'2-digit',minute:'2-digit'}));
-    showBestSpots(state.lat,state.lng,score);
-  }catch(e){setName('Error — tap ↻ to retry');}
-  btn.innerHTML='↻';
-}
-function renderFactors(factors){
-  document.getElementById('factor-list').innerHTML=factors.map(f=>{
-    const pct=f.max>0?Math.round((f.pts/f.max)*100):0;
-    const col=f.pts>=f.max*0.66?'#1D9E75':f.pts>=f.max*0.33?'#EF9F27':'#E24B4A';
-    return `<div class="factor-row"><span class="factor-name">${f.name}</span><div class="factor-bar-bg"><div class="factor-bar" style="width:${f.pts>0?Math.max(6,pct):0}%;background:${f.pts>0?col:'transparent'}"></div></div><span class="factor-val">${f.val}</span><span class="factor-pts" style="color:${f.pts>0?'var(--text)':'var(--text-3)'}">${f.pts}</span></div>`;
-  }).join('');
-}
-function renderHourly(hourly){
-  const now=Date.now();
-  const rows=hourly.time.map((t,i)=>({time:t,temp:hourly.temperature_2m[i],humidity:hourly.relative_humidity_2m[i],wind:hourly.wind_speed_10m[i],rain:hourly.precipitation[i]})).filter(h=>new Date(h.time).getTime()>=now-1800000).slice(0,12);
-  document.getElementById('hourly-row').innerHTML=rows.map(h=>{
-    const hr=new Date(h.time).getHours();const{score}=calcScore(h.temp,h.humidity,h.wind,h.rain,hr>=18&&hr<=23);const v=verdict(score);const cls=score>=60?'high':score>=35?'mid':'';
-    return `<div class="hour-pill ${cls}"><div class="hour-time">${hr.toString().padStart(2,'0')}:00</div><div class="hour-score" style="color:${v.color}">${Math.round(score)}</div><div class="hour-rain">${h.rain>0.05?h.rain.toFixed(1)+'mm':'dry'}</div></div>`;
-  }).join('');
-}
-async function toggleNotifications(){
-  if(state.notifEnabled){state.notifEnabled=false;updateNotifUI(false);return;}
-  if(!('Notification'in window)){alert('Install to home screen first.');return;}
-  const perm=await Notification.requestPermission();
-  if(perm==='granted'){state.notifEnabled=true;updateNotifUI(true);new Notification('Ant Alert active 🐜',{body:`Watching ${state.locationName} — alerts fire at 60+.`,icon:'/icon-192.png'});
-    if('serviceWorker'in navigator){const reg=await navigator.serviceWorker.ready;if('periodicSync'in reg){try{await reg.periodicSync.register('ant-weather-check',{minInterval:15*60*1000});}catch(e){}}}
-  }else alert('Notifications blocked. Enable in browser settings.');
-}
-function updateNotifUI(on){
-  document.getElementById('notif-toggle').className='toggle'+(on?' on':'');
-  document.getElementById('notif-title').textContent=on?'Alerts enabled':'Enable alerts';
-  document.getElementById('notif-icon').textContent=on?'🔔':'🔕';
-  document.getElementById('notif-sub').textContent=on?`Watching ${state.locationName} · 60+ triggers alert`:'Notify when flight chance ≥ 60/100';
+function verdict(score) {
+  if (score >= 70) return { text: '🔥 Get outside NOW!', color: '#1D9E75', ring: '#1D9E75' };
+  if (score >= 55) return { text: '✅ Good conditions',  color: '#1D9E75', ring: '#5DCAA5' };
+  if (score >= 35) return { text: '🟡 Possible flights', color: '#BA7517', ring: '#EF9F27' };
+  return              { text: '⬜ Low chance',           color: '#888780', ring: '#B4B2A9' };
 }
 
-// ── Sightings feed ──────────────────────────────────────
-function timeAgo(ts) {
-  const mins = Math.floor((Date.now()-ts)/60000);
-  if (mins < 2)  return 'just now';
-  if (mins < 60) return mins+'m ago';
-  const hrs = Math.floor(mins/60);
-  if (hrs < 24)  return hrs+'h ago';
-  const days = Math.floor(hrs/24);
-  if (days < 7)  return days+'d ago';
-  return Math.floor(days/7)+'w ago';
+// ── Distance helpers ─────────────────────────────────────
+function distKm(lat1, lng1, lat2, lng2) {
+  const R = 6371, d2r = Math.PI/180;
+  const dLat = (lat2-lat1)*d2r, dLng = (lng2-lng1)*d2r;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function fmtDist(km) { return km < 1 ? Math.round(km*1000)+'m' : km.toFixed(1)+'km'; }
+function walkMin(km) {
+  const m = Math.round(km / 0.08); // ~5km/h walking
+  return m < 2 ? '< 2 min walk' : m+'min walk';
 }
 
-async function fetchSightings(speciesId) {
-  const section = document.getElementById('sightings-section');
-  const listEl  = document.getElementById('sightings-list');
-  const subEl   = document.getElementById('sightings-sub');
-  section.style.display = 'block';
-  listEl.innerHTML = '<div class="sightings-loading">🔍 Searching recent posts...</div>';
-  subEl.textContent = 'Searching Reddit and forums...';
-  try {
-    const res  = await fetch('/api/sightings?species=' + speciesId);
-    const data = await res.json();
-    if (!data.posts || !data.posts.length) {
-      listEl.innerHTML = '<div class="sightings-empty">No recent posts found — try r/antkeeping or Singapore ant keeping Facebook groups.</div>';
-      subEl.textContent = 'No recent posts found';
-      return;
-    }
-    subEl.textContent = data.posts.length + ' recent posts found';
-    listEl.innerHTML = data.posts.map(p => {
-      const snippet = p.snippet ? '<div class="sighting-snippet">' + p.snippet + '...</div>' : '';
-      return '<div class="sighting-card">' +
-        '<div class="sighting-source">' + p.source + '</div>' +
-        '<div class="sighting-title">' + p.title + '</div>' +
-        snippet +
-        '<div class="sighting-meta">' +
-          '<span class="sighting-time">' + timeAgo(p.created) + '</span>' +
-          '<a class="sighting-link" href="' + p.url + '" target="_blank" rel="noopener">Read post →</a>' +
-        '</div>' +
-      '</div>';
-    }).join('');
-  } catch(e) {
-    listEl.innerHTML = '<div class="sightings-empty">Could not load sightings — check your connection.</div>';
-    subEl.textContent = 'Search failed';
+// ── Spot kinds ───────────────────────────────────────────
+const KIND = {
+  park:       { icon:'🌳', type:'Park',            tip:'Check lit signboards and walls near grass after rain' },
+  nature:     { icon:'🌿', type:'Nature area',     tip:'Forest edge paths. Bring a headlamp and check after rain' },
+  garden:     { icon:'🌸', type:'Garden',          tip:'Ornamental plants attract alates. Check wall lights' },
+  pitch:      { icon:'⚽', type:'Sports field',    tip:'Grassy field edges near any flood-lit areas' },
+  recreation: { icon:'🏞', type:'Recreation area', tip:'Lit car park edges and grassy borders' },
+  pool:       { icon:'🏊', type:'Swimming pool',   tip:'Bright pool lights are a proven queen magnet. Scan the lit deck edge, walls and the water\'s edge after rain' },
+  sports:     { icon:'💡', type:'Sports centre',   tip:'Floodlit courts and halls draw alates. Check lit walls, drains and car-park edges' },
+  stadium:    { icon:'🏟', type:'Stadium',         tip:'Floodlights draw alates in numbers. Check walls, pitch edges and drains' },
+  fuel:       { icon:'⛽', type:'Petrol station',  tip:'Bright canopy lights. Scan the ground and lit walls, especially if grass is nearby' },
+  fastfood:   { icon:'🍔', type:'Fast food',       tip:'Backlit signs and glass fronts attract alates. Check walls and the ground near any grass' },
+};
+const GREEN_KINDS = ['park','nature','garden','recreation','pitch'];
+const LIGHT_KINDS = ['pool','sports','stadium','fuel','fastfood'];
+
+function classify(tags) {
+  const l = tags?.leisure, a = tags?.amenity;
+  if (l === 'swimming_pool')     return 'pool';
+  if (l === 'sports_centre')     return 'sports';
+  if (l === 'stadium')           return 'stadium';
+  if (l === 'nature_reserve')    return 'nature';
+  if (l === 'garden')            return 'garden';
+  if (l === 'pitch')             return 'pitch';
+  if (l === 'recreation_ground') return 'recreation';
+  if (a === 'fuel')              return 'fuel';
+  if (a === 'fast_food')         return 'fastfood';
+  return 'park';
+}
+const isGreen = s => GREEN_KINDS.includes(s.kind);
+const isLight = s => LIGHT_KINDS.includes(s.kind) || (s.kind === 'pitch' && s.lit);
+
+function baseScore(s) {
+  switch (s.kind) {
+    case 'pool': case 'stadium': return 40;
+    case 'sports':               return 35;
+    case 'pitch':                return s.lit ? 35 : 15;
+    case 'nature':               return 25;
+    case 'fuel': case 'fastfood':return 22;
+    default:                     return 20;
   }
 }
 
-function setDot(s){document.getElementById('loc-dot').className='location-dot'+(s==='searching'?' searching':s==='error'?' error':'');}
-function setName(n){document.getElementById('loc-name').textContent=n;}
-function fullRefresh(){locAttempts=0;tryGetPosition(true);}
+// ── Load nearby spots from Overpass (cached 10 min) ──────
+let spotCache = null;   // { key, ts, spots }
+let topSpots  = [];
 
-async function init(){
-  if('serviceWorker'in navigator){try{await navigator.serviceWorker.register('/sw.js');}catch(e){}}
-  const isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-  if(!isStandalone)document.getElementById('install-hint').style.display='block';
-  try{
-    const saved=JSON.parse(localStorage.getItem('ant-coords')||'null');
-    if(saved&&Date.now()-saved.ts<3600000){Object.assign(state,{lat:saved.lat,lng:saved.lng,locationName:saved.name});document.getElementById('main-content').style.display='block';setName(saved.name+' (updating...)');fetchWeather();}
-  }catch(e){}
-  const perm=await navigator.permissions?.query({name:'geolocation'}).catch(()=>null);
-  if(perm?.state==='denied'){setDot('error');if(!state.lat)document.getElementById('location-screen').style.display='block';}
-  else if(!state.lat)document.getElementById('location-screen').style.display='block';
-  else tryGetPosition(true);
-  clearInterval(refreshTimer);refreshTimer=setInterval(fullRefresh,15*60*1000);
+async function loadSpots(lat, lng) {
+  const key = lat.toFixed(3) + ',' + lng.toFixed(3);
+  if (spotCache && spotCache.key === key && Date.now() - spotCache.ts < 10*60*1000) return spotCache.spots;
+
+  const R = 2500;
+  const query = `
+    [out:json][timeout:25];
+    (
+      nwr["leisure"~"^(park|nature_reserve|garden|recreation_ground|pitch|stadium)$"](around:${R},${lat},${lng});
+      nwr["leisure"~"^(swimming_pool|sports_centre)$"]["name"](around:${R},${lat},${lng});
+      nwr["amenity"~"^(fuel|fast_food)$"]["name"](around:${R},${lat},${lng});
+    );
+    out center 300;
+  `;
+  const res  = await fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST', body: 'data=' + encodeURIComponent(query)
+  });
+  const data = await res.json();
+
+  const raw = data.elements.map(el => {
+    const slat = el.lat ?? el.center?.lat;
+    const slng = el.lon ?? el.center?.lon;
+    if (!slat || !slng) return null;
+    const kind  = classify(el.tags);
+    const named = el.tags?.name || el.tags?.['name:en'];
+    return {
+      name: named || KIND[kind].type, hasName: !!named, kind,
+      lit: el.tags?.lit === 'yes', lat: slat, lng: slng,
+      km: distKm(lat, lng, slat, slng),
+    };
+  }).filter(s => s && s.km <= 2.5).sort((a, b) => a.km - b.km);
+
+  // The same venue can show up twice (pool + sports centre): keep the nearest
+  const seen = new Set();
+  const spots = raw.filter(s => {
+    if (!s.hasName) return true;
+    const k = s.name.toLowerCase();
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+
+  spotCache = { key, ts: Date.now(), spots };
+  return spots;
+}
+
+// ── Rank spots into "best bets" ──────────────────────────
+function rankSpots() {
+  const listEl = document.getElementById('spot-list');
+  const subEl  = document.getElementById('spots-sub');
+  if (!spotCache) return;
+
+  const spots   = spotCache.spots.map(s => ({ ...s }));
+  const lights  = spots.filter(isLight);
+  const greens  = spots.filter(isGreen);
+  const myPins  = finds.filter(f => f.lat != null && f.lng != null);
+
+  spots.forEach(s => {
+    let sc = baseScore(s);
+    const why = [];
+
+    if (isLight(s)) why.push('💡 Bright lights');
+
+    if (isLight(s) && s.kind === 'pitch') {
+      sc += 20; why.push('🌳 Lit field with grass');
+    } else if (isLight(s)) {
+      if (greens.some(g => g !== s && distKm(s.lat, s.lng, g.lat, g.lng) <= 0.25)) { sc += 20; why.push('🌳 Grass within 250m'); }
+    } else if (isGreen(s)) {
+      if (lights.some(l => l !== s && distKm(s.lat, s.lng, l.lat, l.lng) <= 0.25)) { sc += 20; why.push('💡 Lit venue next door'); }
+    }
+
+    const nearFinds = myPins.filter(f => distKm(s.lat, s.lng, f.lat, f.lng) <= 0.4).length;
+    if (nearFinds >= 1) { sc += nearFinds >= 2 ? 35 : 25; s.star = true; why.push(`⭐ ${nearFinds} of your finds within 400m`); }
+
+    sc -= Math.round(s.km * 4); // nearer is slightly better
+    s.hot = Math.max(0, Math.min(100, sc));
+    s.why = why;
+  });
+
+  spots.sort((a, b) => b.hot - a.hot || a.km - b.km);
+  topSpots = spots.slice(0, 8);
+
+  if (!topSpots.length) {
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">No spots found within 2.5km.</div>';
+    subEl.textContent = 'No nearby spots found';
+    return;
+  }
+
+  subEl.textContent = lastScore >= 35
+    ? `${topSpots.length} best bets within 2.5km, ranked by lights, nearby grass and your own finds.`
+    : `Conditions are quiet right now (score ${Math.round(lastScore)}). Scout these by day so you know exactly where to go on the right night.`;
+
+  listEl.innerHTML = topSpots.map((s, i) => {
+    const k   = KIND[s.kind];
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=walking`;
+    const hc  = s.hot >= 70 ? 'h3' : s.hot >= 50 ? 'h2' : 'h1';
+    const tip = s.kind === 'pitch' && s.lit ? 'Floodlit field: check the light poles, walls and grass edges after rain' : k.tip;
+    const chips = s.why.map(w => `<span class="chip ${w.startsWith('⭐')?'star':''}">${esc(w)}</span>`).join('');
+    return `
+      <div class="spot-card ${i===0?'top':''}">
+        <div class="spot-top">
+          <div class="spot-rank">${i+1}</div>
+          <div class="spot-info">
+            <div class="spot-name">${k.icon} ${esc(s.name)}</div>
+            <div class="spot-type">${k.type}</div>
+            <div class="spot-meta">
+              <span class="spot-dist">${fmtDist(s.km)}</span>
+              <span class="spot-walk">· ${walkMin(s.km)}</span>
+            </div>
+          </div>
+          <div class="hot ${hc}"><b>${s.hot}</b><span>hotspot</span></div>
+        </div>
+        ${chips ? `<div class="chips">${chips}</div>` : ''}
+        <div class="spot-tip">${esc(tip)}</div>
+        <div class="spot-actions">
+          <button class="btn-go" onclick="navigate('${url}')">🧭 Go</button>
+          <button class="btn-log" onclick="openFind(${i})">⭐ Log a find here</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  showMinimap(state.lat, state.lng, topSpots[0]);
+}
+
+async function refreshSpots() {
+  if (state.lat == null) return;
+  const listEl = document.getElementById('spot-list');
+  if (!spotCache) listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Finding spots near you...</div>';
+  try {
+    await loadSpots(state.lat, state.lng);
+    rankSpots();
+  } catch(e) {
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Couldn\'t load nearby spots. Check your connection and tap ↻.</div>';
+  }
+}
+
+function navigate(url) { window.open(url, '_blank'); }
+
+function showMinimap(lat, lng, nearest) {
+  const wrap  = document.getElementById('minimap-wrap');
+  const frame = document.getElementById('minimap');
+  const label = document.getElementById('minimap-label');
+  frame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng-0.02},${lat-0.015},${lng+0.02},${lat+0.015}&layer=mapnik&marker=${lat},${lng}`;
+  wrap.style.display = 'block';
+  label.textContent  = nearest ? `Top bet: ${nearest.name} (${fmtDist(nearest.km)})` : 'Your area';
+}
+
+// ── MY FINDS ─────────────────────────────────────────────
+const FINDS_KEY = 'ant-finds';
+const FIND_KINDS = {
+  pool:   { icon:'🏊', label:'Pool' },
+  lights: { icon:'💡', label:'Lit wall / signboard' },
+  grass:  { icon:'🌳', label:'Park / grass' },
+  estate: { icon:'🏢', label:'HDB / condo area' },
+  other:  { icon:'📍', label:'Other' },
+};
+const SEED_FIND = {
+  id: 'seed-ssc', species: 'campo', kind: 'pool',
+  place: 'Singapore Swimming Club (pool)', lat: null, lng: null,
+  date: '2026-11-11', time: '',
+  notes: 'Silver carpenter queen under bright pool lights. Wings shed and eggs laid by 17 Nov.',
+  wx: null,
+};
+
+let finds = [];
+
+function saveFinds() { try { localStorage.setItem(FINDS_KEY, JSON.stringify(finds)); } catch(e) {} }
+
+function initFinds() {
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem(FINDS_KEY) || '[]') || []; } catch(e) {}
+  let seeded = false;
+  try { seeded = localStorage.getItem('ant-finds-seeded') === '1'; } catch(e) {}
+  if (!seeded) {
+    list.push({ ...SEED_FIND });
+    try { localStorage.setItem('ant-finds-seeded', '1'); } catch(e) {}
+  }
+  finds = list;
+  saveFinds();
+}
+
+function todayStr() {
+  return new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0, 10);
+}
+function nowTimeStr() {
+  const d = new Date();
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+function fmtDate(s) {
+  try { return new Date(s + 'T00:00:00').toLocaleDateString('en-SG', { day:'numeric', month:'short', year:'numeric' }); }
+  catch(e) { return s; }
+}
+function speciesName(f) {
+  const sp = SPECIES.find(s => s.id === f.species);
+  return sp ? sp.name : 'Unknown ant';
+}
+
+async function geocodePlace(q) {
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=sg`);
+    const j = await r.json();
+    if (j && j[0]) return { lat: parseFloat(j[0].lat), lng: parseFloat(j[0].lon) };
+  } catch(e) {}
+  return null;
+}
+
+// Weather for the evening a queen was found
+async function attachWeather(f) {
+  f.wxTried = true;
+  const lat = f.lat ?? FALLBACK.lat, lng = f.lng ?? FALLBACK.lng;
+  const d = f.date;
+  const mk = (host, path) =>
+    `https://${host}${path}?latitude=${lat}&longitude=${lng}&start_date=${d}&end_date=${d}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&timezone=Asia%2FSingapore`;
+  let data = null;
+  for (const u of [mk('api.open-meteo.com', '/v1/forecast'), mk('archive-api.open-meteo.com', '/v1/archive')]) {
+    try {
+      const j = await (await fetch(u)).json();
+      if (j?.hourly?.time?.length) { data = j; break; }
+    } catch(e) {}
+  }
+  if (data) {
+    const H = data.hourly;
+    const scoreAt = h => {
+      if (H.temperature_2m[h] == null || H.relative_humidity_2m[h] == null || H.wind_speed_10m[h] == null) return null;
+      const r3 = sumRain(H.precipitation, h);
+      const sc = calcScore(H.temperature_2m[h], H.relative_humidity_2m[h], H.wind_speed_10m[h], r3, h >= 18 && h <= 23).score;
+      return { h, score: sc, temp: H.temperature_2m[h], hum: H.relative_humidity_2m[h], rain3: r3 };
+    };
+    let best = null;
+    if (f.time) {
+      best = scoreAt(Math.min(23, parseInt(f.time.split(':')[0], 10)));
+      if (best) best.peak = false;
+    } else {
+      for (let h = 17; h <= 22; h++) {
+        const s = scoreAt(h);
+        if (s && (!best || s.score > best.score)) best = s;
+      }
+      if (best) best.peak = true;
+    }
+    if (best) f.wx = best;
+  }
+  saveFinds();
+  renderFinds();
+}
+
+async function ensureFind(f) {
+  if (f.lat == null && f.place && !f.geoTried) {
+    f.geoTried = true;
+    const g = await geocodePlace(f.place.replace(/\s*\(.*?\)\s*/g, ' ').trim());
+    if (g) { f.lat = g.lat; f.lng = g.lng; f.approx = true; saveFinds(); renderFinds(); if (spotCache) rankSpots(); }
+  }
+  if (!f.wx && !f.wxTried) await attachWeather(f);
+}
+
+function renderFinds() {
+  const listEl = document.getElementById('finds-list');
+  document.getElementById('finds-sub').textContent = finds.length
+    ? `${finds.length} queen${finds.length===1?'':'s'} logged. Spots near your finds get a boost in Best bets.`
+    : 'Log every queen you catch. The app learns which spots and nights work for you.';
+
+  const sorted = [...finds].sort((a, b) => (b.date + (b.time||'')).localeCompare(a.date + (a.time||'')));
+  listEl.innerHTML = sorted.map(f => {
+    const fk = FIND_KINDS[f.kind] || FIND_KINDS.other;
+    let wx = '';
+    if (f.wx) {
+      const when = f.wx.peak ? 'best of 5–10pm' : `${String(f.wx.h).padStart(2,'0')}:00`;
+      wx = `<div class="find-wx">🌦 Weather score <b>${f.wx.score}</b> (${when}) · ${f.wx.rain3.toFixed(1)}mm rain in 3h · ${Math.round(f.wx.hum)}% humid</div>`;
+    } else if (!f.wxTried) {
+      wx = '<div class="find-wx">🌦 Checking the weather that night...</div>';
+    }
+    return `<div class="find">
+      <div class="find-icon">${fk.icon}</div>
+      <div class="find-main">
+        <div class="find-title">${esc(speciesName(f))} queen</div>
+        <div class="find-sub">${esc(f.place || fk.label)} · ${fmtDate(f.date)}${f.time ? ' · ' + esc(f.time) : ''}</div>
+        ${wx}
+        ${f.notes ? `<div class="find-notes">${esc(f.notes)}</div>` : ''}
+      </div>
+      <div class="find-btns">
+        ${f.lat != null ? `<button class="mini" title="Directions" onclick="navigate('https://www.google.com/maps/dir/?api=1&destination=${f.lat},${f.lng}&travelmode=walking')">🧭</button>` : ''}
+        <button class="mini" title="Delete" onclick="deleteFind('${esc(f.id)}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderInsights();
+}
+
+function renderInsights() {
+  const el = document.getElementById('finds-insight');
+  if (finds.length < 3) {
+    el.innerHTML = '<div class="insight">Log 3 or more finds and I\'ll start showing patterns here: which kinds of spots you do best at, and the weather scores behind your catches.</div>';
+    return;
+  }
+  const parts = [];
+  const wx = finds.filter(f => f.wx);
+  if (wx.length) {
+    const avg = Math.round(wx.reduce((a, f) => a + f.wx.score, 0) / wx.length);
+    const hi  = wx.filter(f => f.wx.score >= 55).length;
+    parts.push(`🌦 ${hi} of ${wx.length} finds were on evenings scoring 55 or more (average ${avg}).`);
+    if (hi / wx.length < 0.5) parts.push('That is low, so the score may be too strict for you. Tell me and I\'ll retune it.');
+  }
+  const kinds = {};
+  finds.forEach(f => { kinds[f.kind] = (kinds[f.kind] || 0) + 1; });
+  const [topK, topN] = Object.entries(kinds).sort((a, b) => b[1] - a[1])[0];
+  const fk = FIND_KINDS[topK] || FIND_KINDS.other;
+  parts.push(`${fk.icon} Most of your finds: ${fk.label} (${topN} of ${finds.length}).`);
+  const sp = {};
+  finds.forEach(f => { const n = speciesName(f); sp[n] = (sp[n] || 0) + 1; });
+  parts.push('🐜 ' + Object.entries(sp).map(([n, c]) => `${n} ×${c}`).join(', ') + '.');
+  el.innerHTML = '<div class="insight">' + parts.map(esc).join('<br>') + '</div>';
+}
+
+function deleteFind(id) {
+  if (!confirm('Delete this find?')) return;
+  finds = finds.filter(f => f.id !== id);
+  saveFinds(); renderFinds();
+  if (spotCache) rankSpots();
+}
+
+function exportFinds() {
+  const txt = JSON.stringify(finds, null, 2);
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(txt).then(() => alert('Backup copied. Paste it somewhere safe, like Notes.')).catch(() => alert(txt));
+  } else { alert(txt); }
+}
+
+// ── Log-a-find sheet ─────────────────────────────────────
+let modalCtx = { lat: null, lng: null, fromSpot: false };
+
+function kindToFind(k) {
+  if (k === 'pool') return 'pool';
+  if (LIGHT_KINDS.includes(k)) return 'lights';
+  return 'grass';
+}
+
+function buildFindForm() {
+  document.getElementById('f-species').innerHTML =
+    '<option value="">Not sure / other</option>' + SPECIES.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  document.getElementById('f-kind').innerHTML =
+    Object.entries(FIND_KINDS).map(([k, v]) => `<option value="${k}">${v.icon} ${esc(v.label)}</option>`).join('');
+}
+
+function openFind(spotIdx) {
+  const s = spotIdx != null ? topSpots[spotIdx] : null;
+  modalCtx = s ? { lat: s.lat, lng: s.lng, fromSpot: true } : { lat: null, lng: null, fromSpot: false };
+  document.getElementById('f-species').value = '';
+  document.getElementById('f-kind').value    = s ? kindToFind(s.kind) : 'other';
+  document.getElementById('f-place').value   = s ? s.name : (state.locationName || '');
+  document.getElementById('f-date').value    = todayStr();
+  document.getElementById('f-time').value    = nowTimeStr();
+  document.getElementById('f-notes').value   = '';
+  document.getElementById('f-loc').textContent = s
+    ? '📍 This spot\'s location will be attached, so nearby spots get a boost.'
+    : '📍 Finds dated today use your current GPS location. For older finds I\'ll look the place up by name.';
+  document.getElementById('find-modal').classList.add('open');
+}
+function closeFind() { document.getElementById('find-modal').classList.remove('open'); }
+
+async function saveFind() {
+  const f = {
+    id: 'f' + Date.now(),
+    species: document.getElementById('f-species').value,
+    kind:    document.getElementById('f-kind').value,
+    place:   document.getElementById('f-place').value.trim(),
+    date:    document.getElementById('f-date').value || todayStr(),
+    time:    document.getElementById('f-time').value || '',
+    notes:   document.getElementById('f-notes').value.trim(),
+    lat: null, lng: null, wx: null,
+  };
+  if (modalCtx.fromSpot)                          { f.lat = modalCtx.lat; f.lng = modalCtx.lng; }
+  else if (f.date === todayStr() && state.lat != null) { f.lat = state.lat; f.lng = state.lng; }
+  finds.push(f);
+  saveFinds();
+  closeFind();
+  renderFinds();
+  if (spotCache) rankSpots();
+  await ensureFind(f);
+}
+
+// ── GPS ──────────────────────────────────────────────────
+function requestLocation() {
+  setDot('searching'); setName('Locating you...');
+  if (!navigator.geolocation) { useDefault(); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos => onPos(pos),
+    err => { err.code === 1 ? (document.getElementById('location-screen').style.display='block', setDot('error'), setName('Location denied')) : useDefault(); },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+}
+
+async function onPos(pos) {
+  state.lat = pos.coords.latitude;
+  state.lng = pos.coords.longitude;
+  document.getElementById('location-screen').style.display = 'none';
+  document.getElementById('main-content').style.display    = 'block';
+  setDot('ok'); setName('Resolving...');
+  reverseGeocode(state.lat, state.lng);
+  fetchWeather();
+}
+
+function useDefault() {
+  Object.assign(state, { lat: FALLBACK.lat, lng: FALLBACK.lng, locationName: FALLBACK.name });
+  document.getElementById('location-screen').style.display = 'none';
+  document.getElementById('main-content').style.display    = 'block';
+  setDot('ok'); setName(FALLBACK.name);
+  fetchWeather();
+}
+
+async function reverseGeocode(lat, lng) {
+  try {
+    const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=14`, { headers: { 'Accept-Language': 'en' } });
+    const data = await res.json();
+    const a    = data.address;
+    const name = a.suburb || a.neighbourhood || a.district || a.town || a.city || 'Your location';
+    state.locationName = a.city ? `${name}, ${a.city}` : name;
+    setName(state.locationName);
+    saveCoords();
+  } catch(e) {
+    state.locationName = 'Your location';
+    setName(`${lat.toFixed(3)}°N, ${lng.toFixed(3)}°E`);
+    saveCoords();
+  }
+}
+
+function saveCoords() {
+  try { localStorage.setItem('ant-coords', JSON.stringify({ lat: state.lat, lng: state.lng, name: state.locationName, ts: Date.now() })); } catch(e) {}
+  if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(r => r.active?.postMessage({ type: 'SAVE_COORDS', lat: state.lat, lng: state.lng, locationName: state.locationName }));
+}
+
+// ── Weather ──────────────────────────────────────────────
+async function fetchWeather() {
+  if (state.lat == null) return;
+  const btn = document.getElementById('refresh-btn');
+  btn.innerHTML = '<span class="spinning">↻</span>';
+  try {
+    const url  = `https://api.open-meteo.com/v1/forecast?latitude=${state.lat}&longitude=${state.lng}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation&forecast_days=2&timezone=auto`;
+    const data = await (await fetch(url)).json();
+    const c    = data.current;
+    const H    = data.hourly;
+    const h    = new Date().getHours();
+    const eve  = h >= 18 && h <= 23;
+
+    let idx = H.time.indexOf(String(c.time).slice(0, 13) + ':00');
+    if (idx < 0) idx = Math.min(h, H.time.length - 1);
+    const rain3 = Math.max(sumRain(H.precipitation, idx), c.precipitation || 0);
+
+    const { score, factors } = calcScore(c.temperature_2m, c.relative_humidity_2m, c.wind_speed_10m, rain3, eve);
+    const v = verdict(score);
+    lastScore = score;
+
+    document.getElementById('w-temp').textContent  = c.temperature_2m.toFixed(1)+'°C';
+    document.getElementById('w-humid').textContent = Math.round(c.relative_humidity_2m)+'%';
+    document.getElementById('w-wind').textContent  = c.wind_speed_10m.toFixed(0)+'km/h';
+    document.getElementById('w-rain').textContent  = rain3.toFixed(1)+'mm';
+
+    const ring = document.getElementById('score-ring');
+    ring.style.strokeDasharray  = CIRC.toFixed(1);
+    ring.style.strokeDashoffset = (CIRC*(1-score/100)).toFixed(1);
+    ring.setAttribute('stroke', v.ring);
+
+    const num = document.getElementById('score-num');
+    num.textContent = Math.round(score);
+    num.style.color = v.ring;
+
+    document.getElementById('verdict-text').textContent = v.text;
+    document.getElementById('verdict-text').style.color = v.color;
+    document.getElementById('time-window').textContent  = eve ? '🌙 Evening window active' : h < 18 ? 'Next window: today 6pm' : 'Next window: tomorrow 6pm';
+
+    const banner = document.getElementById('alert-banner');
+    if (score >= 60) {
+      banner.className     = 'alert-banner alert-go';
+      banner.style.display = 'block';
+      banner.textContent   = `🐜 High flight chance near ${state.locationName}! Head for the top Best bet below, ideally somewhere with bright lights and grass, and bring your containers.`;
+    } else if (score >= 35) {
+      banner.className     = 'alert-banner alert-mid';
+      banner.style.display = 'block';
+      banner.textContent   = `Moderate conditions. Worth checking the top Best bets tonight.`;
+    } else {
+      banner.style.display = 'none';
+    }
+
+    renderFactors(factors);
+    renderHourly(H);
+    setName(state.locationName + ' · ' + new Date().toLocaleTimeString('en-SG', { hour:'2-digit', minute:'2-digit' }));
+
+    refreshSpots();
+
+  } catch(e) { setName('Error. Tap ↻ to retry'); }
+  btn.innerHTML = '↻';
+}
+
+function renderFactors(factors) {
+  document.getElementById('factor-list').innerHTML = factors.map(f => {
+    const pct = f.max > 0 ? Math.round((f.pts/f.max)*100) : 0;
+    const col = f.pts >= f.max*0.66 ? '#1D9E75' : f.pts >= f.max*0.33 ? '#EF9F27' : '#E24B4A';
+    return `<div class="factor-row">
+      <span class="factor-name">${f.name}</span>
+      <div class="factor-bar-bg"><div class="factor-bar" style="width:${f.pts>0?Math.max(6,pct):0}%;background:${f.pts>0?col:'transparent'}"></div></div>
+      <span class="factor-val">${f.val}</span>
+      <span class="factor-pts" style="color:${f.pts>0?'var(--text)':'var(--text-3)'}">${f.pts}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderHourly(H) {
+  const now  = Date.now();
+  const rows = H.time
+    .map((t, i) => ({ time:t, temp:H.temperature_2m[i], humidity:H.relative_humidity_2m[i], wind:H.wind_speed_10m[i], rain:sumRain(H.precipitation, i), rain1:H.precipitation[i] }))
+    .filter(h => new Date(h.time).getTime() >= now - 1800000)
+    .slice(0, 12);
+
+  document.getElementById('hourly-row').innerHTML = rows.map(h => {
+    const hr  = new Date(h.time).getHours();
+    const { score } = calcScore(h.temp, h.humidity, h.wind, h.rain, hr>=18&&hr<=23);
+    const v   = verdict(score);
+    const cls = score >= 60 ? 'high' : score >= 35 ? 'mid' : '';
+    return `<div class="hour-pill ${cls}">
+      <div class="hour-time">${hr.toString().padStart(2,'0')}:00</div>
+      <div class="hour-score" style="color:${v.color}">${Math.round(score)}</div>
+      <div class="hour-rain">${h.rain1>0.05?h.rain1.toFixed(1)+'mm':'dry'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Notifications ────────────────────────────────────────
+async function toggleNotifications() {
+  if (state.notifEnabled) { state.notifEnabled=false; updateNotifUI(false); return; }
+  if (!('Notification' in window)) { alert('Install to home screen first, then enable notifications.'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    state.notifEnabled = true; updateNotifUI(true);
+    new Notification('Ant Alert active 🐜', { body:`Watching ${state.locationName}. Alerts fire at 60+.`, icon:'/icon-192.png' });
+    if ('serviceWorker' in navigator) {
+      const reg = await navigator.serviceWorker.ready;
+      if ('periodicSync' in reg) { try { await reg.periodicSync.register('ant-weather-check',{minInterval:15*60*1000}); } catch(e){} }
+    }
+  } else { alert('Notifications blocked. Enable in browser settings.'); }
+}
+
+function updateNotifUI(on) {
+  document.getElementById('notif-toggle').className = 'toggle'+(on?' on':'');
+  document.getElementById('notif-title').textContent = on ? 'Alerts enabled' : 'Enable alerts';
+  document.getElementById('notif-icon').textContent  = on ? '🔔' : '🔕';
+  document.getElementById('notif-sub').textContent   = on ? `Watching ${state.locationName} · 60+ triggers alert` : 'Notify when flight chance ≥ 60/100';
+}
+
+// ── Helpers ──────────────────────────────────────────────
+function setDot(s)  { document.getElementById('loc-dot').className  = 'location-dot'+(s==='searching'?' searching':s==='error'?' error':''); }
+function setName(n) { document.getElementById('loc-name').textContent = n; }
+function fullRefresh() { requestLocation(); }
+
+// ── Init ─────────────────────────────────────────────────
+async function init() {
+  renderSeason();
+  buildFindForm();
+  initFinds();
+  renderFinds();
+  finds.forEach(f => ensureFind(f));
+
+  if ('serviceWorker' in navigator) { try { await navigator.serviceWorker.register('/sw.js'); } catch(e){} }
+
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if (!isStandalone) document.getElementById('install-hint').style.display = 'block';
+
+  // Restore cached coords for instant load
+  try {
+    const saved = JSON.parse(localStorage.getItem('ant-coords')||'null');
+    if (saved && Date.now()-saved.ts < 3600000) {
+      Object.assign(state, { lat:saved.lat, lng:saved.lng, locationName:saved.name });
+      document.getElementById('main-content').style.display = 'block';
+      setName(saved.name+' (updating...)');
+      fetchWeather();
+    }
+  } catch(e) {}
+
+  const perm = await navigator.permissions?.query({name:'geolocation'}).catch(()=>null);
+  if (perm?.state === 'granted')       { requestLocation(); }
+  else if (perm?.state === 'denied')   { setDot('error'); if (state.lat == null) document.getElementById('location-screen').style.display='block'; }
+  else if (state.lat == null)          { document.getElementById('location-screen').style.display = 'block'; }
+  else                                 { requestLocation(); }
+
+  clearInterval(refreshTimer);
+  refreshTimer = setInterval(fullRefresh, 15*60*1000);
 }
 init();
 </script>
