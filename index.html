@@ -718,20 +718,25 @@ async function loadSpots(lat, lng) {
     'https://overpass.private.coffee/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter'
   ];
+  // Ask all servers at once and use whichever answers first
   let data = null;
-  for (let attempt = 0; attempt < 2 && !data; attempt++) {
-    for (const url of ENDPOINTS) {
+  try {
+    const ctls = [];
+    const asks = ENDPOINTS.map(async url => {
+      const ctl = new AbortController();
+      ctls.push(ctl);
+      const timer = setTimeout(() => ctl.abort(), 20000);
       try {
-        const ctl = new AbortController();
-        const timer = setTimeout(() => ctl.abort(), 15000);
         const res = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(query), signal: ctl.signal });
-        clearTimeout(timer);
-        if (!res.ok) continue;
+        if (!res.ok) throw new Error('bad status');
         const j = await res.json();
-        if (j && Array.isArray(j.elements)) { data = j; break; }
-      } catch (e) { /* try the next server */ }
-    }
-  }
+        if (!j || !Array.isArray(j.elements)) throw new Error('bad data');
+        return j;
+      } finally { clearTimeout(timer); }
+    });
+    data = await Promise.any(asks);
+    ctls.forEach(c => { try { c.abort(); } catch (e) {} });
+  } catch (e) { data = null; }
   if (!data) {
     // Fall back to the last spots saved for roughly this area
     try {
