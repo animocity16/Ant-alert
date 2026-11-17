@@ -711,10 +711,38 @@ async function loadSpots(lat, lng) {
     );
     out center 300;
   `;
-  const res  = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST', body: 'data=' + encodeURIComponent(query)
-  });
-  const data = await res.json();
+  // The free map servers are sometimes busy, so try several in turn
+  const ENDPOINTS = [
+    'https://overpass-api.de/api/interpreter',
+    'https://lz4.overpass-api.de/api/interpreter',
+    'https://overpass.private.coffee/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter'
+  ];
+  let data = null;
+  for (let attempt = 0; attempt < 2 && !data; attempt++) {
+    for (const url of ENDPOINTS) {
+      try {
+        const ctl = new AbortController();
+        const timer = setTimeout(() => ctl.abort(), 15000);
+        const res = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(query), signal: ctl.signal });
+        clearTimeout(timer);
+        if (!res.ok) continue;
+        const j = await res.json();
+        if (j && Array.isArray(j.elements)) { data = j; break; }
+      } catch (e) { /* try the next server */ }
+    }
+  }
+  if (!data) {
+    // Fall back to the last spots saved for roughly this area
+    try {
+      const saved = JSON.parse(localStorage.getItem('ant-spots-saved') || 'null');
+      if (saved && distKm(lat, lng, saved.lat, saved.lng) < 1 && Date.now() - saved.ts < 7*24*3600*1000) {
+        spotCache = { key, ts: Date.now() - 9*60*1000, spots: saved.spots, stale: true };
+        return saved.spots;
+      }
+    } catch (e) {}
+    throw new Error('overpass unavailable');
+  }
 
   const raw = data.elements.map(el => {
     const slat = el.lat ?? el.center?.lat;
@@ -740,6 +768,7 @@ async function loadSpots(lat, lng) {
   });
 
   spotCache = { key, ts: Date.now(), spots };
+  try { localStorage.setItem('ant-spots-saved', JSON.stringify({ lat, lng, ts: Date.now(), spots })); } catch (e) {}
   return spots;
 }
 
