@@ -697,11 +697,12 @@ function baseScore(s) {
 let spotCache = null;   // { key, ts, spots }
 let topSpots  = [];
 
+let lastSpotError = '';
 async function loadSpots(lat, lng) {
   const key = lat.toFixed(3) + ',' + lng.toFixed(3);
   if (spotCache && spotCache.key === key && Date.now() - spotCache.ts < 10*60*1000) return spotCache.spots;
 
-  const R = 2500;
+  const R = 2200;
   const query = `
     [out:json][timeout:25];
     (
@@ -709,7 +710,7 @@ async function loadSpots(lat, lng) {
       nwr["leisure"~"^(swimming_pool|sports_centre)$"]["name"](around:${R},${lat},${lng});
       nwr["amenity"~"^(fuel|fast_food)$"]["name"](around:${R},${lat},${lng});
     );
-    out center 300;
+    out center 200;
   `;
   // The free map servers are sometimes busy, so try several in turn
   const ENDPOINTS = [
@@ -728,15 +729,22 @@ async function loadSpots(lat, lng) {
       const timer = setTimeout(() => ctl.abort(), 20000);
       try {
         const res = await fetch(url, { method: 'POST', body: 'data=' + encodeURIComponent(query), signal: ctl.signal });
-        if (!res.ok) throw new Error('bad status');
+        if (!res.ok) throw new Error(new URL(url).host + ' → HTTP ' + res.status);
         const j = await res.json();
-        if (!j || !Array.isArray(j.elements)) throw new Error('bad data');
+        if (!j || !Array.isArray(j.elements)) throw new Error(new URL(url).host + ' → bad data');
         return j;
+      } catch (err) {
+        if (err.name === 'AbortError') throw new Error(new URL(url).host + ' → timed out');
+        if (err instanceof TypeError) throw new Error(new URL(url).host + ' → blocked/offline');
+        throw err;
       } finally { clearTimeout(timer); }
     });
     data = await Promise.any(asks);
     ctls.forEach(c => { try { c.abort(); } catch (e) {} });
-  } catch (e) { data = null; }
+  } catch (e) {
+    data = null;
+    lastSpotError = (e && e.errors ? e.errors.map(x => x.message).join(' · ') : (e && e.message) || 'unknown');
+  }
   if (!data) {
     // Fall back to the last spots saved for roughly this area
     try {
@@ -858,12 +866,26 @@ function rankSpots() {
 async function refreshSpots() {
   if (state.lat == null) return;
   const listEl = document.getElementById('spot-list');
-  if (!spotCache) listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Finding spots near you...</div>';
+  const subEl  = document.getElementById('spots-sub');
+  // Show the map straight away, it doesn't depend on the spot lookup
+  showMinimap(state.lat, state.lng, null);
+  if (!spotCache) {
+    listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Finding spots near you...</div>';
+    subEl.textContent = 'Finding spots near you...';
+  }
   try {
     await loadSpots(state.lat, state.lng);
     rankSpots();
   } catch(e) {
-    listEl.innerHTML = '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Couldn\'t load nearby spots. Check your connection and tap ↻.</div>';
+    const q = t => `https://www.google.com/maps/search/${encodeURIComponent(t)}/@${state.lat},${state.lng},15z`;
+    subEl.textContent = 'Spot lookup is unavailable right now.';
+    listEl.innerHTML =
+      '<div style="font-size:13px;color:var(--text-3);padding:8px 0;">Couldn\'t load the ranked list. Tap the refresh arrow to retry, or open these in Google Maps (look for bright lights next to grass):</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;">' +
+      [['🏊 Pools','swimming pool'],['🌳 Parks','park'],['⚽ Sports fields','sports field'],['⛽ Petrol stations','petrol station'],['🍔 Fast food','fast food']]
+        .map(([l,t]) => `<a href="${q(t)}" target="_blank" rel="noopener" style="padding:8px 12px;border:1px solid var(--border);border-radius:999px;font-size:13px;text-decoration:none;color:inherit;">${l}</a>`).join('') +
+      '</div>' +
+      (lastSpotError ? `<div style="font-size:11px;color:var(--text-3);word-break:break-word;">Why: ${String(lastSpotError).replace(/</g,'&lt;')}</div>` : '');
   }
 }
 
